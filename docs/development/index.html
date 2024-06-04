@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="generator" content="Docusaurus v3.0.1">
 <title data-rh="true">Environment | Nexus Graph</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:image" content="https://nexusgraph.qubitpi.org/img/docusaurus-social-card.jpg"><meta data-rh="true" name="twitter:image" content="https://nexusgraph.qubitpi.org/img/docusaurus-social-card.jpg"><meta data-rh="true" property="og:url" content="https://nexusgraph.qubitpi.org/docs/development"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" property="og:locale:alternate" content="zh_cn"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="Environment | Nexus Graph"><meta data-rh="true" name="description" content="This guide steps you through configuring a local development environment for the Nexus Graph on macOS and Linux. If"><meta data-rh="true" property="og:description" content="This guide steps you through configuring a local development environment for the Nexus Graph on macOS and Linux. If"><link data-rh="true" rel="icon" href="/img/favicon.ico"><link data-rh="true" rel="canonical" href="https://nexusgraph.qubitpi.org/docs/development"><link data-rh="true" rel="alternate" href="https://nexusgraph.qubitpi.org/docs/development" hreflang="en"><link data-rh="true" rel="alternate" href="https://nexusgraph.qubitpi.org/zh-cn/docs/development" hreflang="zh-cn"><link data-rh="true" rel="alternate" href="https://nexusgraph.qubitpi.org/docs/development" hreflang="x-default"><link rel="stylesheet" href="/assets/css/styles.f0ff90cb.css">
-<script src="/assets/js/runtime~main.91792a56.js" defer="defer"></script>
+<script src="/assets/js/runtime~main.2c407d9b.js" defer="defer"></script>
 <script src="/assets/js/main.698c9e25.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
@@ -188,7 +188,12 @@ the code will pass the automated checks online:</p>
 </li>
 </ol>
 <h2 class="anchor anchorWithStickyNavbar_LWe7" id="cicd">CI/CD<a href="#cicd" class="hash-link" aria-label="Direct link to CI/CD" title="Direct link to CI/CD">​</a></h2>
-<p>We use GitHub Actions for CI/CD.</p>
+<p>We use GitHub Actions for CI/CD, which contains 3 parts:</p>
+<ol>
+<li>Code style check</li>
+<li>Tests</li>
+<li>Release &amp; Deployment</li>
+</ol>
 <h2 class="anchor anchorWithStickyNavbar_LWe7" id="troubleshooting">Troubleshooting<a href="#troubleshooting" class="hash-link" aria-label="Direct link to Troubleshooting" title="Direct link to Troubleshooting">​</a></h2>
 <h3 class="anchor anchorWithStickyNavbar_LWe7" id="react-cannot-assign-to-read-only-property-xxx-of-object-object">React: Cannot assign to read only property <code>xxx</code> of object <code>#&lt;Object&gt;</code><a href="#react-cannot-assign-to-read-only-property-xxx-of-object-object" class="hash-link" aria-label="Direct link to react-cannot-assign-to-read-only-property-xxx-of-object-object" title="Direct link to react-cannot-assign-to-read-only-property-xxx-of-object-object">​</a></h3>
 <p>This was caused by immer&#x27;s <code>produce</code> function which builds read-only deep copy of object. In Nexus Graph, all redux
