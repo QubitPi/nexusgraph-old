@@ -329,6 +329,29 @@ the code will pass the automated checks online:
    yarn test
    ```
 
+CI/CD
+-----
+
+We use [GitHub Actions] for CI/CD, which contains 3 parts in the following order:
+
+1. Code style check
+
+   - [YAML & Markdown style checks](https://hashicorp-aws.com/blog/yml-and-md-style-checks)
+   - [React & TypeScript code style checks by Prettier and ESLint](https://hashicorp-aws.com/blog/ui-code-style)
+
+2. Tests
+
+   - [Unit tests](https://hashicorp-aws.com/blog/ui-unit-test)
+   - E2E tests via [Cypress](https://cypress.qubitpi.org)
+
+3. [Release to NPM](https://hashicorp-aws.com/blog/npm-release)
+
+Each part doesn't run until its previous dependency finishes successfully
+
+### E2E Tests
+
+The E2E tests spins up an [in-memory database](design#json-graphql-server) to store the test graphs.
+
 Troubleshooting
 ---------------
 
@@ -375,6 +398,7 @@ doesn't know what type `node` is
 [`.env` file]: https://create-react-app.dev/docs/adding-custom-environment-variables/
 [`.env.test` file]: https://github.com/QubitPi/nexusgraph/blob/master/.env.test
 
+[GitHub Actions]: https://docs.github.com/en/actions
 [GitHub - gpg signing erro]: https://github.com/keybase/keybase-issues/issues/2798#issue-205008630
 [GitHub - uploading GPG key]: https://docs.github.com/en/authentication/managing-commit-signature-verification/adding-a-gpg-key-to-your-github-account
 
