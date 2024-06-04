@@ -1,4 +1,4 @@
-# Copyright Jiaqi Liu
+# Copyright 2024 Jiaqi Liu. All rights reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,6 +19,8 @@ name: CI/CD
   push:
     branches:
       - master
+  repository_dispatch:
+    types: [runbook-changes]
 
 env:
   USER: QubitPi
@@ -27,24 +29,20 @@ env:
 
 jobs:
   yml-md-style:
-    uses: QubitPi/hashicorp-aws/.github/workflows/yml-and-md-style-checks.yml@master
+    uses: QubitPi/hashicorp-aws/.github/workflows/yml-md-style-and-link-checks.yml@master
 
   code-style:
-    name: Code Style Check
-    runs-on: ubuntu-latest
-    steps:
-      - uses: QubitPi/hashicorp-aws/auxiliary/github/actions/ui-code-style@master
-        with:
-          node-version: ${{ env.NODE_VERSION }}
+    name: React & TS Code Style Check
+    uses: QubitPi/hashicorp-aws/.github/workflows/ui-code-style.yml@master
+    with:
+      node-version: 18
 
   unit-tests:
     name: Unit Tests
     needs: [yml-md-style, code-style]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: QubitPi/hashicorp-aws/auxiliary/github/actions/ui-unit-test@master
-        with:
-          node-version: ${{ env.NODE_VERSION }}
+    uses: QubitPi/hashicorp-aws/.github/workflows/ui-unit-test.yml@master
+    with:
+      node-version: 18
 
   list-e2e-specs:
     needs: unit-tests
@@ -81,44 +79,14 @@ jobs:
         run: yarn
       - name: Load test .env file
         run: mv .env.test .env
-      - uses: QubitPi/hashicorp-aws/auxiliary/github/actions/cypress-e2e@master
+      - name: Start test backend
+        run: yarn start:json-graphql-server-test &
+      - uses: QubitPi/hashicorp-aws/.github/actions/cypress-e2e@master
         with:
           node-version: ${{ env.NODE_VERSION }}
           start-strategy: ${{ matrix.start_strategy }}
           spec-relative-path: ${{ matrix.test_spec }}
-      # - run: npm exec -- argos upload --token ${{ secrets.ARGOS_TOKEN }} cypress/screenshots
-
-  documentation-ci-cd:
-    name: Test and Deploy Documentation to GitHub Pages
-    needs: e2e-tests
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: docs
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-      - name: Install nexusgraph dependencies so that TypeDoc process source files properly
-        run: cd ../ && yarn install
-        env:
-          YARN_ENABLE_IMMUTABLE_INSTALLS: false
-      - name: Install doc dependencies
-        run: yarn install
-        env:
-          YARN_ENABLE_IMMUTABLE_INSTALLS: false
-      - name: Build documentation
-        run: yarn build
-      - name: Deploy to GitHub Pages
-        if: github.ref == 'refs/heads/master'
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./docs/build
-          enable_jekyll: false
-          user_name: ${{ env.USER }}
-          user_email: ${{ env.EMAIL }}
+      - run: npm exec -- argos upload --token ${{ secrets.ARGOS_TOKEN }} cypress/screenshots
 
   lighthouse:
     if: github.ref != 'refs/heads/master'
@@ -166,37 +134,47 @@ jobs:
           header: lighthouse
           message: ${{ steps.format_lighthouse_score.outputs.comment }}
 
-  # hashicorp:
-  #   name: Publish AMI Image and Deploy It to EC2 through HashiCorp
-  #   needs: e2e-tests
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v3
-  #     - name: Set node version to ${{ env.NODE_VERSION }}
-  #       uses: actions/setup-node@v3
-  #       with:
-  #         node-version: ${{ env.NODE_VERSION }}
-  #     - name: Checkout HashiCorp deployment tool
-  #       shell: bash
-  #       run: git clone https://github.com/QubitPi/hashicorp-aws.git ../hashicorp-aws
-  #     - name: Checkout HashiCorp deployment config files
-  #       shell: bash
-  #       run: git clone https://${{ secrets.RUNBOOKS_REPO_TOKEN }}@github.com/QubitPi/hashicorp-aws-runbooks.git ../hashicorp-aws-runbooks
-  #     - name: Load Packer variable file
-  #       shell: bash
-  #       run: cp ../hashicorp-aws-runbooks/paion-data/nexusgraph/aws-react.pkrvars.hcl ../hashicorp-aws/hashicorp/react/images/aws-react.auto.pkrvars.hcl
-  #     - name: Load Terraform variable file
-  #       shell: bash
-  #       run: cp ../hashicorp-aws-runbooks/paion-data/nexusgraph/aws-react.tfvars ../hashicorp-aws/hashicorp/react/instances/aws-react.auto.tfvars
-  #     - name: Generate dist
-  #       run: cp ../hashicorp-aws-runbooks/paion-data/nexusgraph/.env . && yarn && yarn build
-  #     - name: Move dist to a location for HashiCorp deployment to pickup
-  #       run: mv dist ../
-  #     - name: QubitPi/hashicorp-aws
-  #       uses: QubitPi/hashicorp-aws@master
-  #       with:
-  #         hashicorp-dir: ../hashicorp-aws/hashicorp/react
-  #         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-  #         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-  #         aws-region: ${{ secrets.AWS_REGION }}
+  json-scheam-test:
+    name: Check JSON schema syntax
+    needs: [yml-md-style, code-style]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: json-syntax-check
+        uses: limitusus/json-syntax-check@v2
+        with:
+          pattern: "packages/nexusgraph-db/graph.schema"
+
+  documentation-ci-cd:
+    name: Test and Deploy Documentation to GitHub Pages
+    # needs: e2e-tests
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: docs
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Install nexusgraph dependencies so that TypeDoc process source files properly
+        run: cd ../ && yarn install
+        env:
+          YARN_ENABLE_IMMUTABLE_INSTALLS: false
+      - name: Install doc dependencies
+        run: yarn install
+        env:
+          YARN_ENABLE_IMMUTABLE_INSTALLS: false
+      - name: Build documentation
+        run: yarn build
+      - name: Load CNAME
+        run: cp CNAME build/
+      - name: Deploy to GitHub Pages
+        # if: github.ref == 'refs/heads/master'
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs/build
+          enable_jekyll: false
+          user_name: ${{ env.USER }}
+          user_email: ${{ env.EMAIL }}

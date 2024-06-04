@@ -1,5 +1,5 @@
-/**
- * Copyright Jiaqi Liu
+/*
+ * Copyright 2024 Jiaqi Liu. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,16 +26,19 @@ async function main() {
 
   app.options.addReader(new TypeDoc.TSConfigReader());
   app.options.addReader(new TypeDoc.TypeDocReader());
-  
+
   const project = await app.convert();
-  
+
   if (!project) {
     throw new Error(`app.convert() was not successful`); // early return
   }
-  
+
   const outputDir = "./build/api";
   app.generateDocs(project, outputDir);
   app.generateJson(project, outputDir + "/documentation.json");
 }
 
-main().catch(console.error);
+main().catch((error) => {
+  console.log(error);
+  process.exit(1);
+});

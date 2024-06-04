@@ -2,15 +2,27 @@
   "compilerOptions": {
     "target": "es6",
     "module": "es6",
-
-    "strict": true,
-    "allowJs": true,
     "jsx": "react-jsx",
+    "sourceMap": true,
+
     "outDir": "./dist/",
     "noImplicitAny": true,
-    "esModuleInterop": true,
+    "allowJs": true,
     "moduleResolution": "node",
-    "allowSyntheticDefaultImports": true
+    "strict": true,
+
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
   },
-  "include": ["packages"]
+  "include": ["packages", "custom.d.ts"]
 }

@@ -1,0 +1,45 @@
+{
+  "name": "nexusgraph-graph",
+  "version": "0.1.0",
+  "main": "dist/nexusgraph-graph.js",
+  "engines": {
+    "node": ">=16.0.0 <18.0.0"
+  },
+  "author": "Jiaqi Liu",
+  "license": "Apache-2.0",
+  "typings": "dist/nexusgraph-graph.d.ts",
+  "scripts": {
+    "build": "rollup -c --failAfterWarnings",
+    "test": "tsc --noEmit",
+    "prepublishOnly": "npm run test && npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/QubitPi/nexusgraph.git"
+  },
+  "files": [
+    "dist",
+    "package.json",
+    "README.md",
+    "LICENSE"
+  ],
+  "dependencies": {
+    "@juggle/resize-observer": "^3.4.0",
+    "@neo4j-devtools/word-color": "^0.0.8",
+    "canvg": "^4.0.1",
+    "d3": "^7.8.2",
+    "d3-force": "^3.0.0",
+    "file-saver": "^2.0.5",
+    "lodash": "^4.17.21",
+    "neo4j-devtools-arc": "^0.0.82",
+    "neo4j-driver-core": "5.9.2",
+    "re-resizable": "^6.9.9",
+    "semantic-ui-react": "^2.1.4"
+  },
+  "devDependencies": {
+    "@types/d3": "^7.4.0",
+    "@types/d3-force": "^3.0.4",
+    "@types/file-saver": "^2.0.5",
+    "@types/lodash": "^4.14.191"
+  }
+}
