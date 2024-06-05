@@ -343,6 +343,10 @@ We use [GitHub Actions] for CI/CD, which contains 3 parts in the following order
 
    - [Unit tests](https://hashicorp-aws.com/blog/ui-unit-test)
    - E2E tests via [Cypress](https://cypress.qubitpi.org)
+   - [JSON schema](https://github.com/QubitPi/nexusgraph/blob/master/packages/nexusgraph-db/src/graph/default/DefaultGraphClient.ts#L28-L67)
+     tests
+   - Lighthouse test, an idea learned from
+     [Docusaurus](https://github.com/facebook/docusaurus/blob/main/.github/workflows/lighthouse-report.yml)
 
 3. [Release to NPM](https://hashicorp-aws.com/blog/npm-release)
 
