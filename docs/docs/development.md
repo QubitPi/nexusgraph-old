@@ -1,6 +1,6 @@
 ---
 sidebar_position: 5
-title: Environment
+title: Development
 ---
 
 This guide steps you through configuring a local development environment for the Nexus Graph on macOS and Linux. If
