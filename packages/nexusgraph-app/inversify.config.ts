@@ -13,7 +13,7 @@
 // limitations under the License.
 import { Container } from "inversify";
 
-import { NLPClient, TheresaClient } from "../nexusgraph-nlp";
+import { JsonServerClient, NLPClient, TheresaClient } from "../nexusgraph-nlp";
 
 /**
  * Define the types identifier to get dependency
@@ -27,13 +27,19 @@ const TYPES = {
 };
 
 /**
- * Instantiate a inversify container for dependency injection
+ * Instantiate an inversify container for dependency injection
  */
 const container = new Container();
 
 /**
  * Bind the class we use to implement the interface
  */
-container.bind<NLPClient>(TYPES.NLPClient).to(TheresaClient).inSingletonScope();
+if (process.env.NLP_CLIENT == "TheresaClient") {
+  container.bind<NLPClient>(TYPES.NLPClient).to(TheresaClient).inSingletonScope();
+} else if (process.env.NLP_CLIENT == "JsonServerClient") {
+  container.bind<NLPClient>(TYPES.NLPClient).to(JsonServerClient).inSingletonScope();
+} else {
+  throw new Error("Unknown NLP_CLIENT implementation");
+}
 
 export { container, TYPES };

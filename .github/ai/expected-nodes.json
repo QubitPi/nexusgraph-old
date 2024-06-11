@@ -1,0 +1,16 @@
+[
+  {
+    "fields": {
+      "name": "我",
+      "type": "entity"
+    },
+    "id": "nojchzzhfk8wqftekbufl"
+  },
+  {
+    "fields": {
+      "name": "中国",
+      "type": "entity"
+    },
+    "id": "nl8uppsqmkg586x5u71q9"
+  }
+]
