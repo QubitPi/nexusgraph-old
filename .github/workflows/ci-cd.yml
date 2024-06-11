@@ -44,8 +44,35 @@ jobs:
     with:
       node-version: 18
 
+  test-ai:
+    name: Integration Test on Dev AI server
+    needs: [yml-md-style, code-style]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set node version to ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - name: Install dependencies
+        run: yarn
+      - name: Start dev AI server
+        run: yarn start:ai &
+      - name: Wait until dev AI server is up
+        run: yarn wait-on-ai
+      - name: Run tests
+        run: |
+          curl localhost:3001/nodes > actual-nodes.json
+          curl localhost:3001/links > actual-links.json
+
+          echo "" >> actual-nodes.json
+          echo "" >> actual-links.json
+
+          diff .github/ai/expected-nodes.json actual-nodes.json
+          diff .github/ai/expected-links.json actual-links.json
+
   list-e2e-specs:
-    needs: unit-tests
+    needs: [unit-tests, test-ai]
     runs-on: ubuntu-latest
     outputs:
       paths: ${{ steps.list-e2e-specs.outputs.paths }}

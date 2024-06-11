@@ -3,20 +3,35 @@ sidebar_position: 5
 title: Development
 ---
 
-This guide steps you through configuring a local development environment for the Nexus Graph on macOS and Linux. If
-you're using another operating system (Plan 9, BeOS, Windows, ...) the instructions are still roughly the same, but we
-don't maintain any official documentation for anything else for now.
+The following guide is intended to help developers who maintain or want to make changes to the Nexus Graph.
 
-Read about known issues in [the troubleshooting section](#troubleshooting).
+Prerequisites
+-------------
 
-Development Environment
------------------------
+- Node 18 (Install instruction can be found [here](https://deb.nodesource.com/))
+- Yarn (`npm install --global yarn`)
 
-This will guide you through manually setting up your development environment.
+:::tip[Extra prerequisites for Mac users]
 
-### Clone the Repository
+- __Xcode CLI tools__: We'll need to first install Xcode CLI tools. Run this command and follow the instructions
 
-To get started, clone the [repo](https://github.com/QubitPi/nexusgraph) or your fork.
+  ```shell
+  xcode-select --install
+  ```
+
+- __Homebrew__: Install [Homebrew](http://brew.sh), and then run the following command to install
+  [GPG](https://formulae.brew.sh/formula/gnupg) as we will [need it later](#signing-commits-with-gpg-key)
+
+  ```shell
+  brew install gnupg
+  ```
+
+:::
+
+Getting the Source Codes
+------------------------
+
+To get started, clone the [repo](https://github.com/QubitPi/nexusgraph):
 
 ```bash
 git clone git@github.com:QubitPi/nexusgraph.git
@@ -25,116 +40,59 @@ cd nexusgraph
 
 We're going to be working out of this repository for the remainder of the setup.
 
-### System Dependencies
+Configuring Environment Variables
+---------------------------------
 
-Let's make sure that our system is ready for Nexus Graph.
+:::tip[Shortcutting this step]
 
-#### Xcode CLI tools (Mac specific)
+Simply use the [.env.test](https://github.com/QubitPi/nexusgraph/blob/master/.env.test):
 
-We'll need to first install Xcode CLI tools. Run this command and follow the instructions:
-
-```shell
-xcode-select --install
+```console
+cp .env.test .env
 ```
 
-#### Brew
+We can now skip the rest of the section. In case one needs more details, however, the details below discusses each them
 
-Install [Homebrew](http://brew.sh), and then run the following command to install
-[GPG](https://formulae.brew.sh/formula/gnupg) as we will [need it later](#signing-commits-with-gpg-key)
-
-```shell
-brew install gnupg
-```
-
-### Node 18 & Yarn
-
-Installing [node.js][node.js] and [Yarn][yarn install]:
-
-```bash
-npm install --global yarn
-```
-
-### Configure environment variables
+:::
 
 Create a [`.env` file][`.env` file] which contains all runtime variables Nexus Graph needs. The following variables
 needs to be defined:
 
-- **THERESA_API_URL** The URL of [Theresa API](https://theresa-api.com) instance, Used turning Natural Language Texts
+- __THERESA_API_URL__ The URL of [Theresa API](https://theresa-api.com) instance, Used turning Natural Language Texts
   into Knowledge Graphs
-- **LOGTO_ENDPOINT_URL**
+- __LOGTO_ENDPOINT_URL__
+
   - [Logto](https://docs.logto.io/) offers a comprehensive identity solution covering both the front and backend,
     complete with pre-built infrastructure and enterprise-grade solutions.
   - In the Nexus Graph we use Logto to verify that the user has logged in and automatically generate the user login page
-  - **LOGTO_ENDPOINT_URL** is the URL of your server that will receive the [webhook][Webhook] POST requests when the
+  - __LOGTO_ENDPOINT_URL__ is the URL of your server that will receive the [webhook][Webhook] POST requests when the
     event occurs.
-- **LOGTO_SIGN_IN_CALLBACK_URL**
+
+- __LOGTO_SIGN_IN_CALLBACK_URL__
+
   - [Redirect URI][Redirect URI] is an OAuth 2.0 concept which implies the location should redirect after authentication
-  - **LOGTO_SIGN_IN_CALLBACK_URL** is the redirect url after authentication
-- **TEST_USER_EMAIL**
+  - __LOGTO_SIGN_IN_CALLBACK_URL__ is the redirect url after authentication
+
+- __TEST_USER_EMAIL__
+
   - [Email][Username] is used for sign-in with username and password.
-  - In Nexus Graph the **TEST_USER_EMAIL** defines a user name dedicated to local login
-- **TEST_USER_PASSWORD**
+  - In Nexus Graph the __TEST_USER_EMAIL__ defines a user name dedicated to local login
+
+- __TEST_USER_PASSWORD__
+
   - Password is used for sign-in with username and password.
-  - In Nexus Graph the **TEST_USER_PASSWORD** defines a password dedicated to local login
-- **ASTRAIOS_GRAPHQL_API_ENDPOINT**
+  - In Nexus Graph the __TEST_USER_PASSWORD__ defines a password dedicated to local login
+
+- __ASTRAIOS_GRAPHQL_API_ENDPOINT__
+
   - [Astraios][Astraios] is a JSR 370 web service template that lets us spin up model driven GraphQL or JSON API web
     service with minimal effort.
-  - **ASTRAIOS_GRAPHQL_API_ENDPOINT** Define the endpoint that sends GraphQL requests to Astraios
-- **ASTRAIOS_JSON_API_ENDPOINT** Define the endpoint that sends JSON requests to Astraios
+  - __ASTRAIOS_GRAPHQL_API_ENDPOINT__ Define the endpoint that sends GraphQL requests to Astraios
 
-#### Used
+- __ASTRAIOS_JSON_API_ENDPOINT__ Define the endpoint that sends JSON requests to Astraios
 
-An example `.env` file is provided in [`.env.test` file][`.env.test` file]
-
-```bash
-THERESA_API_URL=http://localhost:5000/
-LOGTO_ENDPOINT_URL=https://u4v5ne.logto.app/
-LOGTO_SIGN_IN_CALLBACK_URL=http://localhost:8080/login
-LOGTO_APP_ID=ypon89z8rtrjdg5ta669l
-TEST_USER_EMAIL=test123
-TEST_USER_PASSWORD=test123123
-ASTRAIOS_GRAPHQL_API_ENDPOINT=http://localhost:8080/v1/data/
-ASTRAIOS_JSON_API_ENDPOINT=http://localhost:8080/v1/data/
-NODE_ENV=development
-```
-
-locally and copy the contents of the `.env.test` file to the `.env` file.
-
-### Start Docker Compose to support Astraios requests
-
-You can refer to [Astraios Docs][Astraios Development] to learn how to run Webservice in Docker Compose
-
-### Load Neo4J Arc from Local
-
-Nexus Graph's graphing capabilities is externalized to Neo4J's. When we update the library and would like to see it's
-immediate effects, we could have nexusgraph manually depend on the local version:
-
-```bash
-git clone https://github.com/QubitPi/neo4j-browser.git
-cd neo4j-browser/src/neo4j-arc
-yarn && yarn build
-```
-
-In nexusgraph, delete the `"neo4j-devtools-arc": "^x.y.z",` from `dependencies` section in
-[`packages/nexusgraph-graph/package.json`](https://github.com/QubitPi/nexusgraph/blob/master/packages/nexusgraph-graph/package.json)
-and run
-
-```bash
-yarn add /abs/path/to/neo4j-browser/src/neo4j-arc/
-```
-
-```bash
-yarn && yarn start
-```
-
-:::caution
-
-When we are done, do not forget to put `"neo4j-devtools-arc": "^x.y.z"` back into `package.json`
-
-:::
-
-Bootstrap
----------
+Installing Dependencies
+-----------------------
 
 Nexus Graph uses [yarn workspace](https://classic.yarnpkg.com/lang/en/docs/workspaces/) to manage different components.
 The command below shall install all the dependencies and put them in `node_modules`:
@@ -148,13 +106,38 @@ Once this command has finished we'll have Nexus Graph ready in development mode 
 Running the Development Server
 ------------------------------
 
-Now we can run the development server at `http://localhost:3000`:
+### Starting Dev AI Server
 
-```bash
-mv .env.test .env && yarn start
+```console
+yarn start:ai
 ```
 
-### Available Scripts
+NER data source is backed by [json-server] mock. They can be viewed by the following 3 links:
+
+1. `http://localhost:3001/nodes`
+2. `http://localhost:3001/links`
+3. `http://localhost:3001`
+
+### Starting Dev Backend Services
+
+```console
+yarn start:json-graphql-server-dev
+```
+
+Entering `http://localhost:5000/` will open up the GraphiQL for dev testing:
+
+![Error loading json-graphql-server-graphiql.png)](img/json-graphql-server-graphiql.png)
+
+### Starting Nexus Graph
+
+Now we can run the development server at `http://localhost:3000`:
+
+```console
+yarn start
+```
+
+Available Scripts
+-----------------
 
 After that, inside _nexusgraph_ directory, we can run several commands:
 
@@ -207,7 +190,7 @@ In terminal, execute
 gpg --full-generate-key
 ```
 
-- key size must be **4096** bits
+- key size must be __4096__ bits
 - email must be the one associated with your GitHub account
 
 To obtain the GPG key ID created just now:
@@ -227,7 +210,7 @@ uid                          Hubot <hubot@example.com>
 ssb   4096R/4BB6D45482678BE3 2016-03-10
 ```
 
-In the example above, the **GPG key ID is 3AA5C34371567BD2**; _we will be using this key ID in the following
+In the example above, the __GPG key ID is 3AA5C34371567BD2__; _we will be using this key ID in the following
 discussion_
 
 :::info
@@ -256,8 +239,8 @@ Printout the GPG key in ASCII armor format:
 gpg --armor --export 3AA5C34371567BD2
 ```
 
-Copy the command output, i.e. the GPG key, including the **-----BEGIN PGP PUBLIC KEY BLOCK-----**, the
-**-----END PGP PUBLIC KEY BLOCK-----**, as well as the contents in between.
+Copy the command output, i.e. the GPG key, including the __-----BEGIN PGP PUBLIC KEY BLOCK-----__, the
+__-----END PGP PUBLIC KEY BLOCK-----__, as well as the contents in between.
 
 Then following the [official documentation][GitHub - uploading GPG key] to upload the GPG key onto your GitHub account.
 
@@ -289,7 +272,7 @@ where
 
 :::tip
 
-If the commit command above errors with **gpg: signing failed: Inappropriate ioctl for device** message,
+If the commit command above errors with __gpg: signing failed: Inappropriate ioctl for device__ message,
 [execute][GitHub - gpg signing erro]:
 
 ```bash
@@ -356,6 +339,37 @@ Each part doesn't run until its previous dependency finishes successfully
 
 The E2E tests spins up an [in-memory database](design#json-graphql-server) to store the test graphs.
 
+Neo4J Arc Library
+-----------------
+
+### Load Neo4J Arc from Local
+
+Nexus Graph's graphing capabilities is externalized to
+[Neo4J's graphing library](https://github.com/QubitPi/neo4j-browser/tree/master/src/neo4j-arc). When we update the
+library and would like to see its immediate effects, we could have Nexus Graph manually depend on the local version:
+
+```bash
+git clone https://github.com/QubitPi/neo4j-browser.git
+cd neo4j-browser/src/neo4j-arc
+yarn && yarn build
+```
+
+In nexusgraph, delete the `"neo4j-devtools-arc": "^x.y.z",` from `dependencies` section in
+[`packages/nexusgraph-graph/package.json`](https://github.com/QubitPi/nexusgraph/blob/master/packages/nexusgraph-graph/package.json)
+and run
+
+```bash
+yarn add /absolute/path/to/neo4j-browser/src/neo4j-arc/
+yarn
+yarn start
+```
+
+:::caution
+
+When we are done, do not forget to put `"neo4j-devtools-arc": "^x.y.z"` back into `package.json`
+
+:::
+
 Troubleshooting
 ---------------
 
@@ -365,17 +379,6 @@ This was caused by immer's `produce` function which builds read-only deep copy o
 states are make immutable using [immer], because, by experience, immutable states prevents bugs. As a result, all
 in-memory state mutations should utilize our dedicated `immutable.ts` module. Failed to do that could result in the
 error above because that indictes one is directly mutating our immutable states
-
-### Docusaurus Relative Linking is Treated False-Negative by CI Markdown Link check
-
-CI check for Markdown link (`markdown-link-check`) is turned on and it's not smart enough to detect relative linking by
-Docusaurus. The workaround is to disable the link check at the relevant line. For example:
-
-```markdown
-<!-- markdown-link-check-disable -->
-known. Additionally, this process makes it easy to implement a [blue-green deployment](continuous-delivery) or
-<!-- markdown-link-check-enable -->
-```
 
 ### ESLint Reports False-Negative
 
@@ -395,12 +398,14 @@ And we are sure that `node.radius` by definition is a `number`. This could happe
 results `node` type not properly imported. As a result, TypeScript sees `node.radius` as to type `any` because it
 doesn't know what type `node` is
 
+### GitHub Actions Doesn't Start
+
+If all syntax are correct, simply cancelled the job and re-run. It might be something on GitHub's end.
+
 [API]: https://nexusgraph.qubitpi.org/api
 [Astraios]: https://astraios.io/
-[Astraios Development]: https://astraios.io/docs/development#running-webservice-in-docker-compose
 
 [`.env` file]: https://create-react-app.dev/docs/adding-custom-environment-variables/
-[`.env.test` file]: https://github.com/QubitPi/nexusgraph/blob/master/.env.test
 
 [GitHub Actions]: https://docs.github.com/en/actions
 [GitHub - gpg signing erro]: https://github.com/keybase/keybase-issues/issues/2798#issue-205008630
@@ -408,9 +413,7 @@ doesn't know what type `node` is
 
 [immer]: https://immerjs.github.io/immer/
 
-[node.js]: https://nodejs.org/en
-
-[onchange]: https://www.npmjs.com/package/onchange
+[json-server]: https://github.com/QubitPi/json-server
 
 [Redirect URI]: https://www.oauth.com/oauth2-servers/redirect-uris/
 
@@ -419,5 +422,3 @@ doesn't know what type `node` is
 [Username]: https://docs.logto.io/docs/references/users/#username
 
 [Webhook]: https://docs.logto.io/docs/recipes/webhooks/configure-webhooks-in-console/
-
-[yarn install]: https://classic.yarnpkg.com/lang/en/docs/install/#mac-stable
