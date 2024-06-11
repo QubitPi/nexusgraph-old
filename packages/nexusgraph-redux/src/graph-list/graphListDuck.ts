@@ -19,6 +19,14 @@ const UPDATE_GRAPH_LIST = GRAPH_LIST_STATE + "/UPDATE_GRAPH_LIST";
 const APPEND_GRAPH_LIST = GRAPH_LIST_STATE + "/APPEND_GRAPH_LIST";
 const UPDATE_SINGLE_ITEM = GRAPH_LIST_STATE + "/UPDATE_SINGLE_ITEM";
 
+/**
+ * The Redux representation of a single graph among a list of graph info
+ *
+ * Each includes 2 pieces of information
+ *
+ * 1. Graph ID
+ * 2. Display name of that graph
+ */
 export interface GraphMetaData {
   id: string;
   name: string;
@@ -31,12 +39,46 @@ interface GraphListAction {
 
 const initialState: GraphMetaData[] = [];
 
+/**
+ * A standard [selector function](https://redux.qubitpi.org/usage/deriving-data-selectors/#basic-selector-concepts) that
+ * proxies read operation on {@link GraphMetaData} list
+ */
 export function selectGraphList() {
   return useSelector((state: GlobalState) => state.graphList);
 }
 
 /**
- * Graph list reducer
+ * A standard [action creator](https://redux.qubitpi.org/style-guide/#use-action-creators) that prepares the data and
+ * performs additional logic before mutating the displayed graph list
+ *
+ * @param graphListState  The new graph list to be flushed into Redux
+ */
+export function updateGraphList(graphListState: GraphMetaData[]) {
+  return { type: UPDATE_GRAPH_LIST, payload: graphListState };
+}
+
+/**
+ * A standard [action creator](https://redux.qubitpi.org/style-guide/#use-action-creators) that prepares the data and
+ * performs additional logic before appending a new graph metadata object to the displayed graph list
+ *
+ * @param metadata  The object representing the new provided graph metadata
+ */
+export function appendToGraphList(metadata: GraphMetaData) {
+  return { type: APPEND_GRAPH_LIST, payload: [metadata] };
+}
+
+/**
+ * A standard [action creator](https://redux.qubitpi.org/style-guide/#use-action-creators) that prepares the data and
+ * performs additional logic before updating an existing metadata object in displayed graph list
+ *
+ * @param metadata  The object representing the new provided graph metadata
+ */
+export function updateSingleItem(metadata: GraphMetaData) {
+  return { type: UPDATE_SINGLE_ITEM, payload: [metadata] };
+}
+
+/**
+ * Graph list slice reducer
  *
  * @param state The current {@link GraphMetaData[]}
  * @param action {@link GraphListAction} for updating a directory
@@ -56,16 +98,4 @@ export default function graphListReducer(state = initialState, action: GraphList
     default:
       return state;
   }
-}
-
-export function updateGraphList(graphListState: GraphMetaData[]) {
-  return { type: UPDATE_GRAPH_LIST, payload: graphListState };
-}
-
-export function appendToGraphList(metadata: GraphMetaData) {
-  return { type: APPEND_GRAPH_LIST, payload: [metadata] };
-}
-
-export function updateSingleItem(metadata: GraphMetaData) {
-  return { type: UPDATE_SINGLE_ITEM, payload: [metadata] };
 }

@@ -38,7 +38,8 @@ import { theme } from "./themes";
  * {@link GraphBrowser} abstracts away the graphing capabilities of Nexus Graph and is the "config" component on top of
  * neo4j-arc graphing library.
  *
- * It is logically the same component as neo4j-browser's VisualizationView.tsx
+ * It is logically the same component as [neo4j-browser](https://github.com/QubitPi/neo4j-browser)'s
+ * [VisualizationView.tsx](https://github.com/QubitPi/neo4j-browser/blob/master/src/browser/modules/Stream/CypherFrame/VisualizationView/VisualizationView.tsx)
  *
  * @returns a React DOM object
  */

@@ -24,6 +24,15 @@ interface ReduxChildren {
 const reducer = combineReducers<GlobalState>({ ...(rootReducers as any) });
 const store = createStore<GlobalState>(reducer);
 
+/**
+ * A wrapper of the original [React Redux Provider](https://react-redux.qubitpi.org/api/provider/) with a pre-configured
+ * store defined by {@link rootReducer}
+ *
+ * @param children  A React component tree that needs to access the pre-configured Redux store
+ *
+ * @returns a native and fully initialized [React Redux Provider](https://react-redux.qubitpi.org/api/provider/) for
+ * nexus graph
+ */
 const ReduxStoreProvider = ({ children }: ReduxChildren) => {
   return <Provider store={store}>{children}</Provider>;
 };
