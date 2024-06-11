@@ -41,8 +41,22 @@ const initialState: OAuthState = {
   userInfo: { sub: "initialUserId" },
 };
 
-export function selectOAuth() {
-  return useSelector((state: GlobalState) => state.oAuth);
+/**
+ * A [selector function](https://redux.qubitpi.org/usage/deriving-data-selectors/#basic-selector-concepts) as a proxy
+ * that returns the user ID in the system.
+ *
+ * This ID is effectively the OIDC ID of this OAuth user
+ */
+export function selectUserId() {
+  return useSelector((state: GlobalState) => state.oAuth.userInfo.sub);
+}
+
+/**
+ * A [selector function](https://redux.qubitpi.org/usage/deriving-data-selectors/#basic-selector-concepts) as a proxy
+ * that returns the OAuth 2 access token of the currently logged-in user.
+ */
+export function selectAccessToken() {
+  return useSelector((state: GlobalState) => state.oAuth.accessToken);
 }
 
 /**
