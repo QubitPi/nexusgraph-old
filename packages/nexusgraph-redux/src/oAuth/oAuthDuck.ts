@@ -56,7 +56,7 @@ export function selectUserId() {
  * that returns the OAuth 2 access token of the currently logged-in user.
  */
 export function selectAccessToken() {
-  return useSelector((state: GlobalState) => state.oAuth.accessToken)
+  return useSelector((state: GlobalState) => state.oAuth.accessToken);
 }
 
 /**
