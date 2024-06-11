@@ -1,4 +1,4 @@
-Nexus Graph <sup>![Node Version Badge is Missing][node version badge]</sup>
+Nexus Graph <sup>![Node Version badge][node version badge] ![TS version badge][TS version badge]</sup>
 ===========
 
 <img src="https://raw.githubusercontent.com/QubitPi/nexusgraph/master/docs/static/img/logo.svg" height="300px" align="right"/>
@@ -13,26 +13,17 @@ Nexus Graph <sup>![Node Version Badge is Missing][node version badge]</sup>
 >
 > Aristotle, _The Nicomachean Ethics_
 
-_Nexus Graph is a personal knowledge management tool for young ages_.
+__Nexus Graph is under active development and will become online as soon as it's ready__.
 
 The world is complex and fast-changing; we feel little control of it. We need a tool that helps us navigate through
 challenges, such as tackling hard problems, lie detection, and connecting effectively with others. Nexus Graph
-revolutionizing our daily "ritual" such as reading, analyzing, and knowledge exploration, to make our lives more
+revolutionizes our daily "ritual" such as reading, analyzing, and knowledge exploration, to make our lives more
 controllable.
 
 Documentation
 -------------
 
-The documentation of this package is hosted at [GitHub Pages](https://nexusgraph.qubitpi.org)
-
-Contribute
-----------
-
-- clone the immer repo.
-- install the dependencies with `yarn`.
-- run `yarn start`.
-
-so that one can start coding straight away.
+The documentation, which is still under construction, is hosted [here](https://nexusgraph.qubitpi.org)
 
 License
 -------
@@ -55,3 +46,5 @@ The use and distribution terms for [nexusgraph][nexusgraph documentation] are co
 [GitHub Last Commit badge]: https://img.shields.io/github/last-commit/QubitPi/nexusgraph/master?logo=github&style=for-the-badge
 [GitHub Workflow Status badge]: https://img.shields.io/github/actions/workflow/status/QubitPi/nexusgraph/ci-cd.yml?branch=master&logo=github&style=for-the-badge
 [GitHub Workflow Status URL]: https://github.com/QubitPi/nexusgraph/actions/workflows/ci-cd.yml
+
+[TS version badge]: https://img.shields.io/badge/TypeScript-≥4.6.2-3178C6?style=for-the-badge&logo=typescript&logoColor=white&labelColor=358EF1
