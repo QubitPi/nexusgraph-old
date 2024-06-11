@@ -11,7 +11,7 @@ Prerequisites
 - Node 18 (Install instruction can be found [here](https://deb.nodesource.com/))
 - Yarn (`npm install --global yarn`)
 
-:::tip[Extra prerequisites for Mac users]
+:::tip[For Mac]
 
 - __Xcode CLI tools__: We'll need to first install Xcode CLI tools. Run this command and follow the instructions
 
@@ -43,9 +43,9 @@ We're going to be working out of this repository for the remainder of the setup.
 Configuring Environment Variables
 ---------------------------------
 
-:::tip[Shortcutting this step]
+:::tip[Shortcut]
 
-Simply use the [.env.test](https://github.com/QubitPi/nexusgraph/blob/master/.env.test):
+Simply use the [.env.dev](https://github.com/QubitPi/nexusgraph/blob/master/.env.test):
 
 ```console
 cp .env.test .env
