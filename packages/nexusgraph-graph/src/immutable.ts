@@ -15,18 +15,44 @@
 import { produce } from "immer";
 import { GraphState, Link, Node } from "../../nexusgraph-redux";
 
+/**
+ * Add a new node to the specified graph.
+ *
+ * @param oldGraphState  A Redux state of the provided graph
+ * @param node  The new node to add to the provided graph
+ *
+ * @returns a new graph state with the new node added
+ */
 export const addNode = (oldGraphState: GraphState, node: Node): GraphState => {
   return produce(oldGraphState, (draft) => {
     draft.nodes.push(node);
   });
 };
 
+/**
+ * Add a new link to the specified graph.
+ *
+ * @param oldGraphState  A Redux state of the provided graph
+ * @param link  The new link to add to the provided graph
+ *
+ * @returns a new graph state with the new link added
+ */
 export const addLink = (oldGraphState: GraphState, link: Link): GraphState => {
   return produce(oldGraphState, (draft) => {
     draft.links.push(link);
   });
 };
 
+/**
+ * Updates a property of a node in a specified graph and returns the graph with the updated node.
+ *
+ * @param oldGraphState  A Redux state of the provided graph
+ * @param nodeId  The ID of the node to be modified
+ * @param fieldName  The name of the field to modify
+ * @param newFieldValue  The new value for the field
+ *
+ * @returns a new graph state with the updated node
+ */
 export const mutateNodeFieldById = (
   oldGraphState: GraphState,
   nodeId: string,
@@ -42,6 +68,16 @@ export const mutateNodeFieldById = (
   });
 };
 
+/**
+ * Updates a property of a link in a specified graph and returns the graph with the updated link.
+ *
+ * @param oldGraphState  A Redux state of the provided graph
+ * @param linkId  The ID of the link to be modified
+ * @param fieldName  The name of the field to modify
+ * @param newFieldValue  The new value for the field
+ *
+ * @returns a new graph state with the updated link
+ */
 export const mutateLinkFieldById = (
   oldGraphState: GraphState,
   linkId: string,

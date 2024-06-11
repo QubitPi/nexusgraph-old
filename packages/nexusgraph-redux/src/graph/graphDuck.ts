@@ -14,10 +14,18 @@
 import { produce } from "immer";
 import { useSelector } from "react-redux";
 import { GlobalState, Link, Node } from "../..";
-
 export const GRAPH_DATA = "graphData";
 const UPDATE_GRAPH_DATA = GRAPH_DATA + "/UPDATE_GRAPH_DATA";
 
+/**
+ * The Redux representation of a directed graph state.
+ *
+ * It has 3 fields:
+ *
+ * 1. An ID
+ * 2. A display name
+ * 3. The graph data structure that stores all node/link information about this graph
+ */
 export interface GraphState {
   id?: string;
   name?: string;
@@ -26,6 +34,11 @@ export interface GraphState {
   links: Link[];
 }
 
+/**
+ * The initial state of the currently displayed graph.
+ *
+ * The ID and display name is undefined and the graph is initially empty
+ */
 export const initialState: GraphState = {
   id: undefined,
   name: undefined,
@@ -41,18 +54,28 @@ interface GraphAction {
   payload: GraphState;
 }
 
+/**
+ * A standard [selector function](https://redux.qubitpi.org/usage/deriving-data-selectors/#basic-selector-concepts) that
+ * proxies read operation on {@link GraphState}
+ */
 export function selectGraphData() {
   return useSelector((state: GlobalState) => {
     return state.graphData;
   });
 }
 
+/**
+ * A standard [action creator](https://redux.qubitpi.org/style-guide/#use-action-creators) that prepares the data and
+ * performs additional logic before mutating a {@link GraphState} in Redux
+ *
+ * @param graphState  The new graph state to be flushed into Redux
+ */
 export function updateGraphData(graphState: GraphState) {
   return { type: UPDATE_GRAPH_DATA, payload: graphState };
 }
 
 /**
- * Update graph state
+ * The graph slice reducer
  *
  * [Reducers](https://redux.js.org/tutorials/fundamentals/part-3-state-actions-reducers#writing-reducers) are functions
  * that take the current state and an action as arguments

@@ -1,25 +1,104 @@
 ---
-sidebar_position: 5
-title: Graph API
+sidebar_position: 2
+title: Design
 ---
 
 import Tabs from "@theme/Tabs";
 import TabItem from "@theme/TabItem";
 
-Graph API
-=========
+The following guide is intended for developers who want to make changes to the Nexus Graph. It will cover the design of
+various subsystems.
 
-Custom GraphClient
-------------------
+Module Layout
+-------------
 
-Custom API Server
+Elide is a [mono-repo](https://qubitpi.github.io/monorepo.tools/) consisting of the following published modules:
+
+| Module Name      | Description                                                       |
+|------------------|-------------------------------------------------------------------|
+| nexusgraph-app   | The user interface where user can use all features of Nexus Graph |
+| nexusgraph-db    | Graph Data storage for nexusgraph CRUD API queries                |
+| nexusgraph-graph | The core module that handles Graph rendering                      |
+| nexusgraph-nlp   | The AI module that transforms text/audio into knowledge graphs    |
+| nexusgraph-oauth | Handles Authentication                                            |
+| nexusgraph-redux | The state management of the entire app                            |
+
+High Level Design
 -----------------
+
+The following diagram represents a high level component breakout of Nexus Graph. Names in italics represent class names
+whereas other names represent functional blocks (made up of many classes). Gray arrows represent client request and
+response flow through the system.
+
+![Error loading high-level-design.png](./img/high-level-design.png)
+
+Redux Module
+------------
+
+We are not using [Redux Toolkit](https://redux-toolkit.qubitpi.org/) because we want greater control over our
+application states
+
+We employ redux by defining a GlobalState and a bunch of slices, which include reduces, to manipulate these states.
+
+The module also maintains the domain model of a "Graph" which includes 3 representations:
+
+1. A [Node][Graph Node]
+2. A [Link][Graph Link]
+3. A [Graph][Graph]
+
+Basically, all Nexus Graph components agree on such data structure to model a graph. If a different representation is
+needed, such as in nexusgraph-graph module, where a node needs to encode its position on a graph canvas, a
+[separate transformation](https://nexusgraph.qubitpi.org/api/functions/nexusgraph_graph_src_mappers.mapToBasicNodes.html)
+would be needed
+
+Please keep in mind that Nexus Graph uses intensively 2 of the Redux's recommended practices:
+
+1. [Selector Functions][Redux Action Creators]
+2. [Action Creators][Redux Selector Functions]
+
+Graph Module
+------------
+
+Our graph model is deeply nested, which causes a
+[huge pain on Redux state update](https://stackoverflow.com/questions/62373936/component-not-updating-on-deeply-nested-redux-object).
+We take an
+[immutable approach](https://redux.qubitpi.org/usage/structuring-reducers/immutable-update-patterns/#immutable-update-utility-libraries)
+to address such issue.
+
+Database Module
+---------------
+
+Nexus Graph is storage agnostic.
+
+Semantic layer: `GraphClient`.
+
+Our free version comes with an in-memory [json-graphql-server]. We can host our own on-premise production version with
+[astraios.io], our official supported backend for storing graphs. Or we can implement our own [graph API](#graph-api)
+
+### json-graphql-server
+
+```bash
+cd nexusgraph
+yarn start:json-graphql-server-dev
+```
+
+The server will be running at `http://localhost:5000/`.
+
+:::tip
+
+There is a very useful debugging technique: if you click the axios request to the server from browser console, it will
+take you directly to the `http://localhost:5000/` with the actual query printed on it, ready to be re-sent for debugging
+purposes.
+
+:::
+
+### Graph API
 
 The Graph API server should support the following Operations with specified GraphQL query and response schema:
 
-### Saving or Updating
+#### Saving or Updating
 
-#### Nodes
+##### Nodes
 
 <Tabs>
   <TabItem value="graphql-query" label="GraphQL Query" default>
@@ -72,7 +151,7 @@ The Graph API server should support the following Operations with specified Grap
     mutation {
         link(
             op:UPSERT
-            data: [     
+            data: [
               {
                 sourceNode:{id:15},
                 targetNode:{id:16},
@@ -118,7 +197,7 @@ The Graph API server should support the following Operations with specified Grap
   </TabItem>
 </Tabs>
 
-#### Graph
+##### Graph
 
 <Tabs>
   <TabItem value="graphql-query" label="GraphQL Query" default>
@@ -187,7 +266,7 @@ The Graph API server should support the following Operations with specified Grap
   </TabItem>
 </Tabs>
 
-### Getting Graph By ID
+#### Getting Graph By ID
 
 <Tabs>
   <TabItem value="graphql-query" label="GraphQL Query" default>
@@ -316,9 +395,9 @@ The Graph API server should support the following Operations with specified Grap
   </TabItem>
 </Tabs>
 
-### Deleting Graph By ID
+#### Deleting Graph By ID
 
-#### Nodes
+##### Nodes
 
 <Tabs>
   <TabItem value="graphql-query" label="GraphQL Query" default>
@@ -350,7 +429,7 @@ The Graph API server should support the following Operations with specified Grap
   </TabItem>
 </Tabs>
 
-### Getting Graph Metadata list by User ID
+#### Getting Graph Metadata list by User ID
 
 <Tabs>
   <TabItem value="graphql-query" label="GraphQL Query" default>
@@ -390,3 +469,14 @@ The Graph API server should support the following Operations with specified Grap
     ```
   </TabItem>
 </Tabs>
+
+[astraios.io]: https://astraios.io
+
+[json-graphql-server]: https://github.com/QubitPi/json-graphql-server
+
+[Graph]: https://nexusgraph.qubitpi.org/api/interfaces/nexusgraph_redux.Graph.html
+[Graph Link]: https://nexusgraph.qubitpi.org/api/interfaces/nexusgraph_redux.Link.html
+[Graph Node]: https://nexusgraph.qubitpi.org/api/interfaces/nexusgraph_redux.Node.html
+
+[Redux Action Creators]: https://redux.qubitpi.org/style-guide/#use-action-creators
+[Redux Selector Functions]: https://redux.qubitpi.org/usage/deriving-data-selectors/#basic-selector-concepts
