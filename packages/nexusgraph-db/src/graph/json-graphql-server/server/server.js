@@ -11,11 +11,19 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-module.exports = {
+import cors from "cors";
+import express from "express";
+import jsonGraphqlExpress from "json-graphql-server";
+
+const PORT = 5000;
+const app = express();
+
+export const USER_ID = 10000;
+export const data = {
   graphs: [
     {
       id: 1,
-      user: 10000,
+      user: USER_ID,
       name: "My First Graph",
       nodes: [
         { id: 1000, fields: { name: "Nexus Graph" } },
@@ -27,3 +35,7 @@ module.exports = {
     },
   ],
 };
+
+app.use(cors());
+app.use("/", jsonGraphqlExpress.default(data));
+app.listen(PORT);
