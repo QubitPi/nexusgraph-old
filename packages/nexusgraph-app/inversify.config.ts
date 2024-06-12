@@ -19,7 +19,6 @@ import { JsonServerClient, NLPClient, TheresaClient } from "../nexusgraph-nlp";
  * Define the types identifier to get dependency
  */
 const TYPES = {
-  DefaultGraphClient: Symbol("DefaultGraphClient"),
   accessToken: Symbol("accessToken"),
   userId: Symbol("userId"),
 

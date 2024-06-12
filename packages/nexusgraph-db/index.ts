@@ -12,6 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export { DefaultGraphClient } from "./src/graph/default/DefaultGraphClient";
+export { AstraiosGraphClient } from "./src/graph/astraios/AstraiosGraphClient";
 export type { GraphClient } from "./src/graph/GraphClient";
 export { JsonGraphQLServerClient } from "./src/graph/json-graphql-server/JsonGraphQLServerClient";

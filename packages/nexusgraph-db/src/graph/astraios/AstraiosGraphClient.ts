@@ -66,7 +66,7 @@ const RESPONSE_SCHEMA = `
   }
 `;
 
-export class DefaultGraphClient implements GraphClient {
+export class AstraiosGraphClient implements GraphClient {
   private _userId;
   private _accessToken;
 

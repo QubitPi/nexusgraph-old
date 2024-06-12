@@ -17,7 +17,7 @@ import { useLogto } from "@logto/react";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 
-import { DefaultGraphClient, GraphClient } from "../../nexusgraph-db";
+import { AstraiosGraphClient, GraphClient } from "../../nexusgraph-db";
 import { Callback } from "../../nexusgraph-oauth";
 import { updateOAuthState } from "../../nexusgraph-redux";
 import App from "./App";
@@ -60,7 +60,7 @@ export default function ProdApp(props: ProdAppProps): JSX.Element {
 
         const userId = userInfo["sub"];
         const accessToken = token;
-        const graphClient = new DefaultGraphClient(userId, accessToken);
+        const graphClient = new AstraiosGraphClient(userId, accessToken);
         props.initReduxStore(userId, graphClient, dispatch);
       });
     });
