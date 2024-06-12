@@ -25,8 +25,8 @@ export default defineConfig({
       password: process.env.TEST_USER_PASSWORD as string,
       logtoEndpointUrl: process.env.LOGTO_ENDPOINT_URL as string,
       nodeEnv: process.env.NODE_ENV as string,
-      entityExtractionServer: (process.env.THERESA_API_URL as string) + "entityExtraction",
-      nodeExpand: (process.env.THERESA_API_URL as string) + "expand/",
+      nlpApiUrl: (process.env.NLP_API_URL as string) + "entityExtraction",
+      nodeExpand: (process.env.NLP_API_URL as string) + "expand/",
       graphApiEndpoint: process.env.GRAPH_API_ENDPOINT as string,
     },
     retries: {
