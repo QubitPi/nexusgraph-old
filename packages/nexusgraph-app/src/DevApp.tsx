@@ -17,6 +17,8 @@ import { updateOAuthState } from "../../nexusgraph-redux";
 import App from "./App";
 import { GraphClientContext } from "./Contexts";
 
+import initialData from "../../nexusgraph-db/src/graph/json-graphql-server/server/initial-data.json";
+
 interface DevAppProps {
   initReduxStore: (userId: string, graphClient: GraphClient, dispatch: any) => void;
 }
@@ -32,7 +34,7 @@ export default function DevApp(props: DevAppProps): JSX.Element {
   const dispatch = useDispatch();
 
   const devToken = "devToken";
-  const devUserId = process.env.DEV_USER_ID as string;
+  const devUserId = initialData[0].user.toString();
   const devUserInfo = { sub: devUserId };
 
   dispatch(
