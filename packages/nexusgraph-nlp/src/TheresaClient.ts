@@ -54,7 +54,7 @@ export class TheresaClient implements NLPClient {
    */
   private fetchRemote = async (text: string) => {
     const instanceAxios = axios.create({
-      baseURL: process.env.THERESA_API_URL as string,
+      baseURL: process.env.NLP_API_URL as string,
     });
     const config = {
       headers: {

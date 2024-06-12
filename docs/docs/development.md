@@ -58,7 +58,7 @@ We can now skip the rest of the section. In case one needs more details, however
 Create a [`.env` file][`.env` file] which contains all runtime variables Nexus Graph needs. The following variables
 needs to be defined:
 
-- __THERESA_API_URL__ The URL of [Theresa API](https://theresa-api.com) instance, Used turning Natural Language Texts
+- __NLP_API_URL__ The URL of [Theresa API](https://theresa-api.com) instance, Used turning Natural Language Texts
   into Knowledge Graphs
 - __LOGTO_ENDPOINT_URL__
 
