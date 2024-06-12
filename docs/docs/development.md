@@ -55,41 +55,57 @@ We can now skip the rest of the section. In case one needs more details, however
 
 :::
 
-Create a [`.env` file][`.env` file] which contains all runtime variables Nexus Graph needs. The following variables
-needs to be defined:
+Create a [`.env` file][`.env` file] which contains all __Dev__ runtime variables Nexus Graph needs. The following table
+summarizes all of the variables Nexus Graph possibily needs:
 
-- __NLP_API_URL__ The URL of [Theresa API](https://theresa-api.com) instance, Used turning Natural Language Texts
-  into Knowledge Graphs
-- __LOGTO_ENDPOINT_URL__
+|             **name**              | **Required in Dev** | **Required in Test** | **Required in Prod** |
+|:---------------------------------:|:-------------------:|:--------------------:|:--------------------:|
+|          **NLP_CLIENT**           |          ✅          |          ✅           |          ✅           |
+|          **NLP_API_URL**          |          ❌          |          ❌           |          ✅           |
+|      **GRAPH_API_ENDPOINT**       |          ❌          |          ❌           |          ✅           |
+|         **SKIP_SIGN_IN**          |          ✅          |          ✅           |          ✅           |
+|         **LOGTO_APP_ID**          |          ❌          |          ✅           |          ✅           |
+|      **LOGTO_ENDPOINT_URL**       |          ❌          |          ✅           |          ✅           |
+| **LOGTO_API_RESOURCE_IDENTIFIER** |          ❌          |          ✅           |          ✅           |
+|  **LOGTO_SIGN_IN_CALLBACK_URL**   |          ❌          |          ✅           |          ✅           |
+|  **LOGTO_SIGN_OUT_REDIRECT_URL**  |          ❌          |          ✅           |          ✅           |
+|        **TEST_USER_EMAIL**        |          ❌          |          ✅           |          ❌           |
+|      **TEST_USER_PASSWORD**       |          ❌          |          ✅           |          ❌           |
 
-  - [Logto](https://docs.logto.io/) offers a comprehensive identity solution covering both the front and backend,
-    complete with pre-built infrastructure and enterprise-grade solutions.
-  - In the Nexus Graph we use Logto to verify that the user has logged in and automatically generate the user login page
-  - __LOGTO_ENDPOINT_URL__ is the URL of your server that will receive the [webhook][Webhook] POST requests when the
+- __NLP_CLIENT__ is the type of AI client for AI Named Entity Extraction. Allowed values are
+
+  - `JsonServerClient` is for dev and test
+  - `TheresaClient` is our paid AI service
+
+- __NLP_API_URL__ is the URL of AI Named Entity Extraction service
+- __GRAPH_API_ENDPOINT__ is the URL of the [Graph API service](design#graph-api). Define the endpoint that sends GraphQL
+  requests to Astraios in our paid service.
+
+  :::tip
+  [Astraios][Astraios] is a JSR 370 web service template that lets us spin up model driven GraphQL or JSON API web
+  service with minimal effort.
+  :::
+
+- Authentication: [Logto](https://docs.logto.io/) offers a comprehensive identity solution covering both the front and
+  backend, complete with pre-built infrastructure and enterprise-grade solutions. In the Nexus Graph we use Logto to
+  verify that the user has logged in and automatically generate the user login page
+
+  - __SKIP_SIGN_IN__ is a flag variable which must be set to 'true' in dev and 'false' in test & prod
+  - __LOGTO_APP_ID__ is the standard logto app ID
+  - __LOGTO_ENDPOINT_URL__ is the URL of our server that will receive the [webhook][Webhook] POST requests when the
     event occurs.
+  - __LOGTO_API_RESOURCE_IDENTIFIER__ is the ID of Logto API resource associated with the access token
+  - __LOGTO_SIGN_IN_CALLBACK_URL__ is the redirect URL after authentication
 
-- __LOGTO_SIGN_IN_CALLBACK_URL__
+    :::tip
+    [Redirect URI][Redirect URI] is an OAuth 2.0 concept which implies the location should redirect after authentication
+    :::
 
-  - [Redirect URI][Redirect URI] is an OAuth 2.0 concept which implies the location should redirect after authentication
-  - __LOGTO_SIGN_IN_CALLBACK_URL__ is the redirect url after authentication
-
-- __TEST_USER_EMAIL__
-
-  - [Email][Username] is used for sign-in with username and password.
-  - In Nexus Graph the __TEST_USER_EMAIL__ defines a user name dedicated to local login
-
-- __TEST_USER_PASSWORD__
-
-  - Password is used for sign-in with username and password.
-  - In Nexus Graph the __TEST_USER_PASSWORD__ defines a password dedicated to local login
-
-- __ASTRAIOS_GRAPHQL_API_ENDPOINT__
-
-  - [Astraios][Astraios] is a JSR 370 web service template that lets us spin up model driven GraphQL or JSON API web
-    service with minimal effort.
-  - __ASTRAIOS_GRAPHQL_API_ENDPOINT__ Define the endpoint that sends GraphQL requests to Astraios
-
-- __ASTRAIOS_JSON_API_ENDPOINT__ Define the endpoint that sends JSON requests to Astraios
+  - __LOGTO_SIGN_OUT_REDIRECT_URL__ is, similarly, the redirect URL after logging out of Nexus Graph
+  - __TEST_USER_EMAIL__ defines a user name dedicated to local login in test. [Email][Username] is used for sign-in with
+    username and password.
+  - __TEST_USER_PASSWORD__ is used for sign-in with username and password. In Nexus Graph the __TEST_USER_PASSWORD__
+    defines a password dedicated to local login
 
 Installing Dependencies
 -----------------------
@@ -121,7 +137,7 @@ NER data source is backed by [json-server] mock. They can be viewed by the follo
 ### Starting Dev Backend Services
 
 ```console
-yarn start:json-graphql-server-dev
+yarn start:graph-api
 ```
 
 Entering `http://localhost:5000/` will open up the GraphiQL for dev testing:
@@ -326,7 +342,7 @@ We use [GitHub Actions] for CI/CD, which contains 3 parts in the following order
 
    - [Unit tests](https://hashicorp-aws.com/blog/ui-unit-test)
    - E2E tests via [Cypress](https://cypress.qubitpi.org)
-   - [JSON schema](https://github.com/QubitPi/nexusgraph/blob/master/packages/nexusgraph-db/src/graph/default/DefaultGraphClient.ts#L28-L67)
+   - [JSON schema](https://github.com/QubitPi/nexusgraph/blob/master/packages/nexusgraph-db/src/graph/astraios/AstraiosGraphClient.ts#L28-L67)
      tests
    - Lighthouse test, an idea learned from
      [Docusaurus](https://github.com/facebook/docusaurus/blob/main/.github/workflows/lighthouse-report.yml)

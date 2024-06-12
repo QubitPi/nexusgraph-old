@@ -11,19 +11,14 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-module.exports = {
-  graphs: [
-    {
-      id: 1,
-      user: 10000,
-      name: "My First Graph",
-      nodes: [
-        { id: 1000, fields: { name: "Nexus Graph" } },
-        { id: 1001, fields: { name: "People's lives" } },
-      ],
-      links: [{ id: 2000, source: 1000, target: 1001, fields: { type: "changes" } }],
-      created_on: new Date("2023-12-21"),
-      last_updated_on: new Date("2023-12-22"),
-    },
-  ],
-};
+import cors from "cors";
+import express from "express";
+import jsonGraphqlExpress from "json-graphql-server";
+
+import initialData from "./initial-data.json" assert { type: "json" };
+
+const PORT = 5000;
+const app = express();
+app.use(cors());
+app.use("/", jsonGraphqlExpress.default({ graphs: initialData }));
+app.listen(PORT);

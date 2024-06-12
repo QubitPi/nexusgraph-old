@@ -117,7 +117,7 @@ jobs:
       - name: Load test .env file
         run: mv .env.test .env
       - name: Start test backend
-        run: yarn start:json-graphql-server-test &
+        run: yarn start:graph-api &
       - uses: QubitPi/hashicorp-aws/.github/actions/cypress-e2e@master
         with:
           node-version: ${{ env.NODE_VERSION }}

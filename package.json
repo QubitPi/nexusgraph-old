@@ -16,8 +16,7 @@
   "scripts": {
     "start": "node scripts/start.js",
     "start:ai": "json-server --watch packages/nexusgraph-nlp/src/json-server/ner.json --port 3001",
-    "start:json-graphql-server-dev": "json-graphql-server packages/nexusgraph-db/src/graph/json-graphql-server/db.js -p 5000",
-    "start:json-graphql-server-test": "node .github/json-graphql-server/server.js",
+    "start:graph-api": "node packages/nexusgraph-db/src/graph/json-graphql-server/server/server.js",
     "build": "node scripts/build.js",
     "test": "jest",
     "cypress:open": "cypress open",
