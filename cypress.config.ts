@@ -27,7 +27,7 @@ export default defineConfig({
       nodeEnv: process.env.NODE_ENV as string,
       entityExtractionServer: (process.env.THERESA_API_URL as string) + "entityExtraction",
       nodeExpand: (process.env.THERESA_API_URL as string) + "expand/",
-      graphApiEndpoint: process.env.GRAPH_API_RESOURCE as string,
+      graphApiEndpoint: process.env.GRAPH_API_ENDPOINT as string,
     },
     retries: {
       runMode: 10,

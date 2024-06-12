@@ -48,8 +48,8 @@ export default function ProdApp(props: ProdAppProps): JSX.Element {
   }
 
   useEffect(() => {
-    const graphApiResource = process.env.GRAPH_API_RESOURCE as string;
-    getAccessToken(graphApiResource).then((token: any) => {
+    const logtoApiResource = process.env.LOGTO_API_RESOURCE_IDENTIFIER as string;
+    getAccessToken(logtoApiResource).then((token: any) => {
       fetchUserInfo().then((userInfo: any) => {
         dispatch(
           updateOAuthState({
