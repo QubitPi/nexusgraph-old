@@ -1,0 +1,6 @@
+mutation {
+  removeGraph(id: 1) {
+    id
+    name
+  }
+}

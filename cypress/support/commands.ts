@@ -16,32 +16,26 @@ Cypress.Commands.add("openApp", () => {
   if (Cypress.env("skipSignIn") == "true") {
     cy.visit("http://localhost:3000/");
   } else {
-    cy.login(Cypress.env("userEmail"), Cypress.env("password")).then(() => {
-      cy.request("http://localhost:3000/").then((resp) => {
-        expect(resp.status).to.eq(200);
-      });
-    });
+    cy.login(Cypress.env("userEmail"), Cypress.env("password"))
+      .then(() => {
+        cy.request("http://localhost:3000/").then((resp) => {
+          expect(resp.status).to.eq(200);
+        });
+      })
+      .wait(10000); // wait before login redirection completes
   }
 });
 
 Cypress.Commands.add("login", (userEmail: string, password: string) => {
-  cy.origin(
-    Cypress.env("logtoEndpointUrl").concat("/sign-in"),
-    { args: { userEmail, password } },
-    ({ userEmail, password }) => {
-      cy.visit("http://localhost:3000", { failOnStatusCode: false });
-
-      cy.get('input[name="identifier"]').type(userEmail);
-      cy.get('button[type="submit"]').click();
-      cy.get('input[name="password"]').type(password);
-      cy.get('button[type="submit"]').click();
-    }
-  );
+  cy.origin(Cypress.env("logtoEndpointUrl"), { args: { userEmail, password } }, ({ userEmail, password }) => {
+    cy.visit("http://localhost:3000").wait(5000); // The reason we need to wait for few secs is https://github.com/cypress-io/cypress/issues/25255#issuecomment-1383156758
+    cy.get('input[name="identifier"]').type(userEmail);
+    cy.get('input[name="password"]').type(password);
+    cy.get('button[type="submit"]').click();
+  });
 });
 
 Cypress.Commands.add("newGraph", () => {
-  cy.intercept("POST", Cypress.env("nlpApiUrl"), { fixture: "single-rdf-tuple-from-theresa.json" });
-
   cy.get("button[id='newGraphButton']")
     .click({ force: true })
     .get("[data-testid='newGraphMethodButton-NLP']")
@@ -49,6 +43,7 @@ Cypress.Commands.add("newGraph", () => {
     .get("textarea", { timeout: 10000 })
     .click({ force: true })
     .type("我爱中国")
+    .wait(3000) // needs to wait before MethodModal is fully initialized
     .get("[data-testid='newGraphButton-NLP']", { timeout: 10000 })
     .click({ force: true })
     .get('[data-testid^="graphListItem-"]', { timeout: 10000 })

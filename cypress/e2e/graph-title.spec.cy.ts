@@ -12,12 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 describe("Graph title", () => {
-  before(() => {
-    cy.openApp();
-  });
-
   beforeEach(() => {
-    cy.visit("http://localhost:3000/");
+    cy.openApp().deleteAllGraphs();
   });
 
   it("if user has no graph (e.g. first-time login or graph list is empty), title section is not shown", () => {
@@ -26,11 +22,11 @@ describe("Graph title", () => {
 
   it("when user creates a graph, title section shows up", () => {
     cy.newGraph();
-
     cy.get('[data-testid="graphTitle"]').should("exist");
   });
 
-  it("reflects the updated title immediately in sidebase list when user update title", () => {
+  it("reflects the updated title immediately in sidebar list when user update title", () => {
+    cy.newGraph();
     cy.get('[data-testid="graphTitle"]')
       .click({ force: true })
       .clear()
@@ -39,7 +35,8 @@ describe("Graph title", () => {
       .contains("Modified Title");
   });
 
-  it("still preserves the updated title after a page reloadl; i.e. change gets persisted into database", () => {
+  it("still preserves the updated title after a page reloads; i.e. change gets persisted into database", () => {
+    cy.newGraph();
     cy.get('[data-testid="graphTitle"]')
       .click({ force: true })
       .clear()

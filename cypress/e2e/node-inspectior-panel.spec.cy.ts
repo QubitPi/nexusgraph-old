@@ -12,20 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 describe("Node Inspector Panel rendering", () => {
-  before(() => {
-    cy.openApp();
-  });
-
   beforeEach(() => {
-    cy.visit("http://localhost:3000/");
-    cy.deleteAllGraphs();
+    cy.openApp().deleteAllGraphs();
   });
 
   afterEach(() => {
     cy.deleteAllGraphs();
   });
 
-  it("Updating pane title instantly changes the correspoinding node caption on canvas", () => {
+  it("Updating pane title instantly changes the corresponding node caption on canvas", () => {
     cy.get('[data-testid="graphCanvas"]')
       .trigger("click", 200, 200, { force: true })
       .trigger("dblclick", 200, 200, { force: true });

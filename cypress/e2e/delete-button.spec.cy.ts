@@ -12,29 +12,28 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 describe("Delete button removes displaying graph both from UI and database", () => {
-  before(() => {
+  beforeEach(() => {
     cy.openApp();
   });
 
-  beforeEach(() => {
-    cy.visit("http://localhost:3000/");
+  afterEach(() => {
+    cy.deleteAllGraphs();
   });
 
-  it("if user has no graph (e.g. first-time login or graph list is empty), button is disabled", () => {
-    cy.get('[data-testid="deleteButton"]').should("not.exist");
-  });
-
-  it("when user creates a graph, button becomes active", () => {
-    cy.newGraph();
-    cy.get('[data-testid="deleteButton"]').should("exist");
-  });
-
-  it("when user deletes the graph, the button becomes in-active again", () => {
-    cy.get('[data-testid="deleteButton"]').click();
-
-    cy.get('[data-testid^="graphListItem-"]').should("not.exist");
-    cy.get("svg").find(`[aria-label^="graph-node"]`).should("not.exist");
-
-    cy.get('[data-testid="deleteButton"]').should("not.exist");
+  it("Putting everything together", () => {
+    cy.get('[data-testid="deleteButton"]')
+      .should("not.exist")
+      .newGraph()
+      .get('[data-testid="deleteButton"]')
+      .should("exist")
+      .get('[data-testid="deleteButton"]')
+      .click()
+      .get('[data-testid^="graphListItem-"]')
+      .should("not.exist")
+      .get("svg")
+      .find(`[aria-label^="graph-node"]`)
+      .should("not.exist")
+      .get('[data-testid="deleteButton"]')
+      .should("not.exist");
   });
 });

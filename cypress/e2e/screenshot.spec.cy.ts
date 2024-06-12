@@ -15,12 +15,12 @@
 import "@argos-ci/cypress/support";
 
 describe("Argos tests", () => {
-  before(() => {
-    cy.openApp();
+  beforeEach(() => {
+    cy.openApp().deleteAllGraphs();
   });
 
-  beforeEach(() => {
-    cy.visit("http://localhost:3000/");
+  afterEach(() => {
+    cy.deleteAllGraphs();
   });
 
   it("test", () => {

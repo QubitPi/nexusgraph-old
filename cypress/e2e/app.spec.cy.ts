@@ -12,12 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 describe("'Integration'-style tests", () => {
-  before(() => {
-    cy.openApp();
+  beforeEach(() => {
+    cy.openApp().deleteAllGraphs();
   });
 
-  beforeEach(() => {
-    cy.visit("http://localhost:3000/");
+  afterEach(() => {
+    cy.deleteAllGraphs();
   });
 
   it("deleting graph when there is only 1 graph", () => {

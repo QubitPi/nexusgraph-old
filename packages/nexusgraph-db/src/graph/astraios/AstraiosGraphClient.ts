@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 import axios from "axios";
+import { inject, injectable } from "inversify";
+import TYPES from "nexusgraph-app/types";
 import { GraphMetaData, GraphState, Link, Node } from "../../../../nexusgraph-redux";
 import { GraphClient } from "../GraphClient";
 
@@ -66,11 +68,12 @@ const RESPONSE_SCHEMA = `
   }
 `;
 
+@injectable()
 export class AstraiosGraphClient implements GraphClient {
   private _userId;
   private _accessToken;
 
-  public constructor(userId: string, accessToken: string) {
+  public constructor(@inject(TYPES.userId) userId: string, @inject(TYPES.accessToken) accessToken: string) {
     this._userId = userId;
     this._accessToken = accessToken;
   }

@@ -13,7 +13,7 @@
 // limitations under the License.
 import { useNavigate } from "react-router-dom";
 
-import { LogtoConfig, LogtoProvider, useHandleSignInCallback } from "@logto/react";
+import { LogtoConfig, LogtoProvider, useHandleSignInCallback, useLogto } from "@logto/react";
 
 /**
  * Creat LogtoProvider to provide a Logto context
@@ -29,6 +29,12 @@ const OAuth2Provider = ({ children }: any): JSX.Element => {
     resources: [process.env.LOGTO_API_RESOURCE_IDENTIFIER as string],
   };
   return <LogtoProvider config={config}>{children}</LogtoProvider>;
+};
+
+export const Signout = () => {
+  const { signOut } = useLogto();
+  signOut(process.env.LOGTO_SIGN_OUT_REDIRECT_URL as string);
+  return <></>;
 };
 
 /**
