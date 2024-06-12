@@ -26,7 +26,7 @@ const OAuth2Provider = ({ children }: any): JSX.Element => {
   const config: LogtoConfig = {
     endpoint: process.env.LOGTO_ENDPOINT_URL as string,
     appId: process.env.LOGTO_APP_ID as string,
-    resources: [process.env.GRAPH_API_RESOURCE as string],
+    resources: [process.env.LOGTO_API_RESOURCE_IDENTIFIER as string],
   };
   return <LogtoProvider config={config}>{children}</LogtoProvider>;
 };

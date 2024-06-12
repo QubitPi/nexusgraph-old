@@ -15,7 +15,7 @@ import axios from "axios";
 import { GraphMetaData, GraphState, Link, Node } from "../../../../nexusgraph-redux";
 import { GraphClient } from "../GraphClient";
 
-const GRAPH_API_ENDPOINT = process.env.GRAPH_API_RESOURCE as string;
+const GRAPH_API_ENDPOINT = process.env.GRAPH_API_ENDPOINT as string;
 
 const RESPONSE_FRAGMENT = `
   fragment nodeAttributes on Node {
