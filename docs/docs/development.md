@@ -45,10 +45,10 @@ Configuring Environment Variables
 
 :::tip[Shortcut]
 
-Simply use the [.env.dev](https://github.com/QubitPi/nexusgraph/blob/master/.env.test):
+Simply use the [.env.dev]:
 
 ```console
-cp .env.test .env
+cp .env.dev .env
 ```
 
 We can now skip the rest of the section. In case one needs more details, however, the details below discusses each them
@@ -448,6 +448,7 @@ If all syntax are correct, simply cancelled the job and re-run. It might be some
 
 [Cypress]: https://cypress.qubitpi.org/
 
+[.env.dev]: https://github.com/QubitPi/nexusgraph/blob/master/.env.dev
 [`.env` file]: https://create-react-app.dev/docs/adding-custom-environment-variables/
 
 [GitHub Actions]: https://docs.github.com/en/actions
