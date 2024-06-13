@@ -28,6 +28,7 @@ export default function SideBar(props: SideBarProps): JSX.Element {
       <NewGraphButton />
       {props.graphList.map((metaData) => (
         <StyledGraphListItem
+          key={metaData.id}
           data-testid={`graphListItem-${metaData.id}`}
           onClick={() => props.onClick(metaData.id)}
           displayedItem={metaData.id == graphId}

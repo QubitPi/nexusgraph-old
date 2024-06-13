@@ -161,6 +161,18 @@ yarn start
 which Runs the app in the development mode. The page will reload if you make edits. You will also see any lint errors in
 the console.
 
+:::info
+
+Note that Logto Login is disabled by default in dev mode. To turn it on, make sure to put
+
+```text
+SKIP_SIGN_IN=false
+```
+
+in `.env`
+
+:::
+
 Writing TypeDoc
 ---------------
 

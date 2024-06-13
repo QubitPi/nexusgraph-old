@@ -32,6 +32,20 @@ response flow through the system.
 
 ![Error loading high-level-design.png](./img/high-level-design.png)
 
+Dependency Injection
+--------------------
+
+In order to optimize our developer's experience, Nexus Graph runs against very different configurations in
+Dev/Test/Prod environments. This puts some challenges on the design of system. Dependency injection is one of them.
+For example, in dev mode, we want our UI engineer to go completely free by decoupling backend developments. We do that
+by running in-memory backend services. This means for those services, we need to automatically wire up different
+implementations in Dev and Prod environment.
+
+To address that, we use [Inversify] to dynamically load 2 of our components:
+
+1. AI Entity Extraction Service
+2. Graph API Webservice
+
 Redux Module
 ------------
 
@@ -477,6 +491,8 @@ The Graph API server should support the following Operations with specified Grap
 [Graph]: https://nexusgraph.qubitpi.org/api/interfaces/nexusgraph_redux.Graph.html
 [Graph Link]: https://nexusgraph.qubitpi.org/api/interfaces/nexusgraph_redux.Link.html
 [Graph Node]: https://nexusgraph.qubitpi.org/api/interfaces/nexusgraph_redux.Node.html
+
+[Inversify]:https://inversify.qubitpi.org/
 
 [Redux Action Creators]: https://redux.qubitpi.org/style-guide/#use-action-creators
 [Redux Selector Functions]: https://redux.qubitpi.org/usage/deriving-data-selectors/#basic-selector-concepts
