@@ -15,13 +15,13 @@
  */
 
 import * as Sentry from "@sentry/react";
+import { GraphClient } from "nexusgraph-db";
+import { NLPClient } from "nexusgraph-nlp";
+import { appendToGraphList, updateGraphData } from "nexusgraph-redux";
 import { useContext, useEffect, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { useDispatch } from "react-redux";
-import { GraphClient } from "../../../../../nexusgraph-db";
-import { NLPClient } from "../../../../../nexusgraph-nlp";
-import { appendToGraphList, updateGraphData } from "../../../../../nexusgraph-redux";
 import { container } from "../../../../inversify.config";
 import TYPES from "../../../../types";
 import { GraphClientContext } from "../../../Contexts";

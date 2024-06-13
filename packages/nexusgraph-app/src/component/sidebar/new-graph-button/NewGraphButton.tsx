@@ -30,8 +30,6 @@ import { MethodsSelectionModal } from "./MethodsSelectionModal";
  * Only one of the two modals pops up at a specific time and {@link NewGraphButton} controls which one to display using
  * `showMethodsSelectionModal` and `showMethodModal` React states
  *
- * @param props  The regular React props for {@link NewGraphButton}
- *
  * @returns a DOM object
  */
 export default function NewGraphButton(): JSX.Element {

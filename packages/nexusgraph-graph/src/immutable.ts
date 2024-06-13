@@ -15,7 +15,7 @@
  */
 
 import { produce } from "immer";
-import { GraphState, Link, Node } from "../../nexusgraph-redux";
+import { GraphState, Link, Node } from "nexusgraph-redux";
 
 /**
  * Add a new node to the specified graph.

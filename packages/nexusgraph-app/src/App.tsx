@@ -16,10 +16,7 @@
 
 import * as Sentry from "@sentry/react";
 import { produce } from "immer";
-import { useContext } from "react";
-import { useDispatch } from "react-redux";
-import { GraphClient } from "../../nexusgraph-db";
-import { GraphBrowser } from "../../nexusgraph-graph";
+import { GraphClient } from "nexusgraph-db";
 import {
   GraphMetaData,
   GraphState,
@@ -29,7 +26,10 @@ import {
   updateGraphData,
   updateGraphList,
   updateSingleItem,
-} from "../../nexusgraph-redux";
+} from "nexusgraph-redux";
+import { useContext } from "react";
+import { useDispatch } from "react-redux";
+import { GraphBrowser } from "../../nexusgraph-graph";
 import logo from "../public/logo.svg";
 import user from "../public/user.svg";
 import { DeleteButton } from "./component";
@@ -91,9 +91,15 @@ export default function App(): JSX.Element {
       draft.name = newTitle;
     });
 
-    graphClient.saveOrUpdate(newGraphData).then((response) => {
-      dispatch(updateSingleItem({ id: graphId, name: newTitle }));
-    });
+    graphClient
+      .saveOrUpdate(newGraphData)
+      .then((response) => {
+        dispatch(updateSingleItem({ id: graphId, name: newTitle }));
+      })
+      .catch((error) => {
+        Sentry.captureException(error);
+        throw error;
+      });
   };
 
   const deleteGraphById = (graphId: string) => {
@@ -103,27 +109,33 @@ export default function App(): JSX.Element {
       throw error;
     }
 
-    graphClient.deleteGraphById(graphId).then((response) => {
-      const nextDisplayedGraphId = getNextDisplayedGraphId(graphList, graphId);
+    graphClient
+      .deleteGraphById(graphId)
+      .then((response) => {
+        const nextDisplayedGraphId = getNextDisplayedGraphId(graphList, graphId);
 
-      if (nextDisplayedGraphId == null) {
-        dispatch(updateGraphList([]));
-        dispatch(updateGraphData(initialState));
-        return;
-      }
+        if (nextDisplayedGraphId == null) {
+          dispatch(updateGraphList([]));
+          dispatch(updateGraphData(initialState));
+          return;
+        }
 
-      graphClient.getGraphById(nextDisplayedGraphId).then((graph) => {
-        dispatch(
-          updateGraphData({
-            id: graph.id,
-            name: graph.name,
-            nodes: graph.nodes,
-            links: graph.links,
-          })
-        );
-        dispatch(updateGraphList(graphList.filter((metadata) => metadata.id != graphId)));
+        graphClient.getGraphById(nextDisplayedGraphId).then((graph) => {
+          dispatch(
+            updateGraphData({
+              id: graph.id,
+              name: graph.name,
+              nodes: graph.nodes,
+              links: graph.links,
+            })
+          );
+          dispatch(updateGraphList(graphList.filter((metadata) => metadata.id != graphId)));
+        });
+      })
+      .catch((error) => {
+        Sentry.captureException(error);
+        throw error;
       });
-    });
   };
 
   return (

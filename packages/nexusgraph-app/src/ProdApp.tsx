@@ -18,8 +18,9 @@ import { useLogto } from "@logto/react";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 
-import { GraphClient } from "../../nexusgraph-db";
-import { updateOAuthState } from "../../nexusgraph-redux";
+import * as Sentry from "@sentry/react";
+import { GraphClient } from "nexusgraph-db";
+import { updateOAuthState } from "nexusgraph-redux";
 import { bindGraphClient, container } from "../inversify.config";
 import TYPES from "../types";
 import App from "./App";
@@ -56,25 +57,30 @@ export default function ProdApp(props: ProdAppProps): JSX.Element {
     (async () => {
       if (isAuthenticated) {
         const logtoApiResource = process.env.LOGTO_API_RESOURCE_IDENTIFIER as string;
-        getAccessToken(logtoApiResource).then((token: any) => {
-          fetchUserInfo().then((userInfo: any) => {
-            dispatch(
-              updateOAuthState({
-                accessToken: token,
-                userInfo: { sub: userInfo["sub"] },
-              })
-            );
+        getAccessToken(logtoApiResource)
+          .then((token: any) => {
+            fetchUserInfo().then((userInfo: any) => {
+              dispatch(
+                updateOAuthState({
+                  accessToken: token,
+                  userInfo: { sub: userInfo["sub"] },
+                })
+              );
 
-            const userId = userInfo["sub"];
-            const accessToken = token;
+              const userId = userInfo["sub"];
+              const accessToken = token;
 
-            bindGraphClient(userId, accessToken);
-            const graphClient: GraphClient = container.get<GraphClient>(TYPES.GraphApiClient);
-            props.initReduxStore(userId, graphClient, dispatch);
+              bindGraphClient(userId, accessToken);
+              const graphClient: GraphClient = container.get<GraphClient>(TYPES.GraphApiClient);
+              props.initReduxStore(userId, graphClient, dispatch);
 
-            setGraphClient(graphClient);
+              setGraphClient(graphClient);
+            });
+          })
+          .catch((error) => {
+            Sentry.captureException(error);
+            throw error;
           });
-        });
       }
     })();
   }, [isAuthenticated, fetchUserInfo, graphClient]);

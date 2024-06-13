@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { GraphMetaData, selectGraphData } from "../../../../nexusgraph-redux";
+import { GraphMetaData, selectGraphData } from "nexusgraph-redux";
 import { NewGraphButton } from "./new-graph-button";
 import { StyledGraphListItem } from "./styled";
 

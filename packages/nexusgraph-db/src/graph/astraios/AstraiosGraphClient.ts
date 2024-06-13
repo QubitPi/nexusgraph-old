@@ -17,7 +17,7 @@
 import axios from "axios";
 import { inject, injectable } from "inversify";
 import TYPES from "nexusgraph-app/types";
-import { GraphMetaData, GraphState, Link, Node } from "../../../../nexusgraph-redux";
+import { GraphMetaData, GraphState, Link, Node } from "nexusgraph-redux";
 import { GraphClient } from "../GraphClient";
 
 const GRAPH_API_ENDPOINT = process.env.GRAPH_API_ENDPOINT as string;

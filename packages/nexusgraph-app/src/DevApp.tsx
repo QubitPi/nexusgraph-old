@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
+import { GraphClient } from "nexusgraph-db";
+import { updateOAuthState } from "nexusgraph-redux";
 import { useDispatch } from "react-redux";
-import { GraphClient } from "../../nexusgraph-db";
-import { updateOAuthState } from "../../nexusgraph-redux";
 import App from "./App";
 import { GraphClientContext } from "./Contexts";
 

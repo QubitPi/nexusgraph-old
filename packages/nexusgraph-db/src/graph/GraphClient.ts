@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { GraphMetaData, GraphState } from "../../../nexusgraph-redux";
+import { GraphMetaData, GraphState } from "nexusgraph-redux";
 
 /**
  * Webservice interface library.
