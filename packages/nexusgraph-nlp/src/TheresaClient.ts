@@ -17,8 +17,8 @@
 import * as Sentry from "@sentry/react";
 import axios from "axios";
 import { injectable } from "inversify";
+import { Graph } from "nexusgraph-redux";
 import "reflect-metadata";
-import { Graph } from "../../nexusgraph-redux";
 import { NLPClient } from "./NLPClient";
 
 const ENTITY_EXTRACTION_PATH_PARAM = "entityExtraction";

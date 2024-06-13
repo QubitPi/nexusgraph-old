@@ -27,12 +27,12 @@ import {
   REL_TYPE_UPDATE,
   resources,
 } from "neo4j-devtools-arc";
+import { GraphClientContext } from "nexusgraph-app/src/Contexts";
+import { GraphClient } from "nexusgraph-db";
+import { Link, Node, selectGraphData, updateGraphData } from "nexusgraph-redux";
 import { useContext, useState } from "react";
 import { useDispatch } from "react-redux";
 import { ThemeProvider } from "styled-components";
-import { GraphClientContext } from "../../nexusgraph-app/src/Contexts";
-import { GraphClient } from "../../nexusgraph-db";
-import { Link, Node, selectGraphData, updateGraphData } from "../../nexusgraph-redux";
 import { addLink, addNode, mutateLinkFieldById, mutateNodeFieldById } from "./immutable";
 import { mapToBasicNodes, mapToBasicRelationships } from "./mappers";
 import { theme } from "./themes";

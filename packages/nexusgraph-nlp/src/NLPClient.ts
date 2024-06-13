@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Graph } from "../../nexusgraph-redux";
+import { Graph } from "nexusgraph-redux";
 
 export interface NLPClient {
   /**

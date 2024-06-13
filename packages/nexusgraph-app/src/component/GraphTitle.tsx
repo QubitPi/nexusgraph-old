@@ -14,12 +14,10 @@
  * limitations under the License.
  */
 
+import { selectGraphData } from "nexusgraph-redux";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { selectGraphData } from "../../../nexusgraph-redux";
 import { StyledInput } from "./styled";
-
-export const INITIAL_GRAPH_NAME = "Unamed Graph";
 
 interface GraphTitleProps {
   graphId: string;

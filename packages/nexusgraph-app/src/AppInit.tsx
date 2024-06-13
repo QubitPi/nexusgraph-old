@@ -15,9 +15,9 @@
  */
 
 import * as Sentry from "@sentry/react";
+import { GraphClient } from "nexusgraph-db";
 import { I18nextProvider } from "react-i18next";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { GraphClient } from "../../nexusgraph-db";
 import OAuth2Provider, { Callback, Signout } from "../../nexusgraph-oauth/src/OAuth2Provider";
 import { ReduxStoreProvider, updateGraphData, updateGraphList } from "../../nexusgraph-redux";
 import DevApp from "./DevApp";

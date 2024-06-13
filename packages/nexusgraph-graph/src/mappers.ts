@@ -15,12 +15,12 @@
  */
 
 import { BasicNode, BasicRelationship } from "neo4j-devtools-arc";
-import { Link, Node } from "../../nexusgraph-redux";
+import { Link, Node } from "nexusgraph-redux";
 
 /**
  * Converts Redux-shaped graph nodes into format compatible with Neo4J graphing library.
  *
- * @param links  A list of nodes stored in Redux
+ * @param nodes  A list of nodes stored in Redux
  *
  * @returns a new array of newly constructed objects
  */
