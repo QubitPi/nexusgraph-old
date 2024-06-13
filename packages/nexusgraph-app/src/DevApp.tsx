@@ -12,12 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 import { useDispatch } from "react-redux";
-import { GraphClient, JsonGraphQLServerClient } from "../../nexusgraph-db";
+import { GraphClient } from "../../nexusgraph-db";
 import { updateOAuthState } from "../../nexusgraph-redux";
 import App from "./App";
 import { GraphClientContext } from "./Contexts";
 
 import initialData from "../../nexusgraph-db/src/graph/json-graphql-server/server/initial-data.json";
+import { bindGraphClient, container } from "../inversify.config";
+import TYPES from "../types";
 
 interface DevAppProps {
   initReduxStore: (userId: string, graphClient: GraphClient, dispatch: any) => void;
@@ -44,7 +46,8 @@ export default function DevApp(props: DevAppProps): JSX.Element {
     })
   );
 
-  const graphClient = new JsonGraphQLServerClient(devUserId);
+  bindGraphClient(devUserId, devToken);
+  const graphClient = container.get<GraphClient>(TYPES.GraphApiClient);
   props.initReduxStore(devUserId, graphClient, dispatch);
 
   return (

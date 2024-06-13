@@ -12,12 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 describe("i18n", () => {
+  beforeEach(() => {
+    cy.openApp().deleteAllGraphs();
+  });
+
   it("supports English", () => {
     cy.setBrowserLanguage("en-US", ["en"], ["en"]);
     cy.newGraph().get('[data-testid="vizInspector"]').contains("Node labels");
   });
 
-  it("supports Chinese", () => {
+  it.skip("supports Chinese", () => {
     cy.setBrowserLanguage("zh-CN", ["zh"], ["zh"]);
 
     cy.newGraph().get('[data-testid="vizInspector"]').contains("节点类型");

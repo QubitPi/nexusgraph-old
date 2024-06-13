@@ -11,16 +11,16 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-
 import { useLogto } from "@logto/react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 
-import { AstraiosGraphClient, GraphClient } from "../../nexusgraph-db";
-import { Callback } from "../../nexusgraph-oauth";
+import { GraphClient } from "../../nexusgraph-db";
 import { updateOAuthState } from "../../nexusgraph-redux";
+import { bindGraphClient, container } from "../inversify.config";
+import TYPES from "../types";
 import App from "./App";
+import { GraphClientContext } from "./Contexts";
 import { StyledSpinner } from "./styled";
 
 interface ProdAppProps {
@@ -37,6 +37,8 @@ interface ProdAppProps {
 export default function ProdApp(props: ProdAppProps): JSX.Element {
   const dispatch = useDispatch();
 
+  const [graphClient, setGraphClient] = useState<GraphClient>();
+
   const { signIn, signOut, isAuthenticated, isLoading, getAccessToken, fetchUserInfo, error } = useLogto();
 
   if (error && isAuthenticated) {
@@ -48,34 +50,43 @@ export default function ProdApp(props: ProdAppProps): JSX.Element {
   }
 
   useEffect(() => {
-    const logtoApiResource = process.env.LOGTO_API_RESOURCE_IDENTIFIER as string;
-    getAccessToken(logtoApiResource).then((token: any) => {
-      fetchUserInfo().then((userInfo: any) => {
-        dispatch(
-          updateOAuthState({
-            accessToken: token,
-            userInfo: { sub: userInfo["sub"] },
-          })
-        );
+    (async () => {
+      if (isAuthenticated) {
+        const logtoApiResource = process.env.LOGTO_API_RESOURCE_IDENTIFIER as string;
+        getAccessToken(logtoApiResource).then((token: any) => {
+          fetchUserInfo().then((userInfo: any) => {
+            dispatch(
+              updateOAuthState({
+                accessToken: token,
+                userInfo: { sub: userInfo["sub"] },
+              })
+            );
 
-        const userId = userInfo["sub"];
-        const accessToken = token;
-        const graphClient = new AstraiosGraphClient(userId, accessToken);
-        props.initReduxStore(userId, graphClient, dispatch);
-      });
-    });
-  }, [isAuthenticated]);
+            const userId = userInfo["sub"];
+            const accessToken = token;
+
+            bindGraphClient(userId, accessToken);
+            const graphClient: GraphClient = container.get<GraphClient>(TYPES.GraphApiClient);
+            props.initReduxStore(userId, graphClient, dispatch);
+
+            setGraphClient(graphClient);
+          });
+        });
+      }
+    })();
+  }, [isAuthenticated, fetchUserInfo, graphClient]);
 
   if (!isAuthenticated) {
     return <StyledSpinner />;
   }
 
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<App />} />
-        <Route path="/login" element={<Callback />} />
-      </Routes>
-    </Router>
+    <>
+      {isAuthenticated && graphClient && (
+        <GraphClientContext.Provider value={graphClient}>
+          <App />
+        </GraphClientContext.Provider>
+      )}
+    </>
   );
 }

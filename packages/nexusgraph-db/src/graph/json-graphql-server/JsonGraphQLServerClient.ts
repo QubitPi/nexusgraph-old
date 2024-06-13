@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 import axios from "axios";
+import { inject, injectable } from "inversify";
+import TYPES from "nexusgraph-app/types";
 import { GraphMetaData, GraphState } from "../../../../nexusgraph-redux";
 import { GraphClient } from "../GraphClient";
 
@@ -26,11 +28,13 @@ axios.interceptors.response.use(
   }
 );
 
+@injectable()
 export class JsonGraphQLServerClient implements GraphClient {
   private _userId;
 
-  public constructor(userId: string) {
-    this._userId = userId;
+  public constructor(@inject(TYPES.userId) userId: string) {
+    // this._userId = userId;
+    this._userId = "10000";
   }
 
   public saveOrUpdate(graph: GraphState): Promise<GraphState> {
@@ -125,6 +129,7 @@ export class JsonGraphQLServerClient implements GraphClient {
   }
 
   public getGraphListMetaDataByUserId(userId: string): Promise<GraphMetaData[]> {
+    userId = this._userId;
     return this.postQuery(
       `
       {

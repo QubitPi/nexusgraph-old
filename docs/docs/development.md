@@ -1,5 +1,5 @@
 ---
-sidebar_position: 5
+sidebar_position: 3
 title: Development
 ---
 
@@ -58,19 +58,20 @@ We can now skip the rest of the section. In case one needs more details, however
 Create a [`.env` file][`.env` file] which contains all __Dev__ runtime variables Nexus Graph needs. The following table
 summarizes all of the variables Nexus Graph possibily needs:
 
-|             **name**              | **Required in Dev** | **Required in Test** | **Required in Prod** |
+|          __Config Name__          | __Required in Dev__ | __Required in Test__ | __Required in Prod__ |
 |:---------------------------------:|:-------------------:|:--------------------:|:--------------------:|
-|          **NLP_CLIENT**           |          ✅          |          ✅           |          ✅           |
-|          **NLP_API_URL**          |          ❌          |          ❌           |          ✅           |
-|      **GRAPH_API_ENDPOINT**       |          ❌          |          ❌           |          ✅           |
-|         **SKIP_SIGN_IN**          |          ✅          |          ✅           |          ✅           |
-|         **LOGTO_APP_ID**          |          ❌          |          ✅           |          ✅           |
-|      **LOGTO_ENDPOINT_URL**       |          ❌          |          ✅           |          ✅           |
-| **LOGTO_API_RESOURCE_IDENTIFIER** |          ❌          |          ✅           |          ✅           |
-|  **LOGTO_SIGN_IN_CALLBACK_URL**   |          ❌          |          ✅           |          ✅           |
-|  **LOGTO_SIGN_OUT_REDIRECT_URL**  |          ❌          |          ✅           |          ✅           |
-|        **TEST_USER_EMAIL**        |          ❌          |          ✅           |          ❌           |
-|      **TEST_USER_PASSWORD**       |          ❌          |          ✅           |          ❌           |
+|          __NLP_CLIENT__           |          ✅          |          ✅           |          ✅           |
+|          __NLP_API_URL__          |          ❌          |          ❌           |          ✅           |
+|       __GRAPH_API_CLIENT__        |          ✅          |          ✅           |          ✅           |
+|      __GRAPH_API_ENDPOINT__       |          ❌          |          ❌           |          ✅           |
+|         __SKIP_SIGN_IN__          |          ✅          |          ✅           |          ✅           |
+|         __LOGTO_APP_ID__          |          ❌          |          ✅           |          ✅           |
+|      __LOGTO_ENDPOINT_URL__       |          ❌          |          ✅           |          ✅           |
+| __LOGTO_API_RESOURCE_IDENTIFIER__ |          ❌          |          ✅           |          ✅           |
+|  __LOGTO_SIGN_IN_CALLBACK_URL__   |          ❌          |          ✅           |          ✅           |
+|  __LOGTO_SIGN_OUT_REDIRECT_URL__  |          ❌          |          ✅           |          ✅           |
+|        __TEST_USER_EMAIL__        |          ❌          |          ✅           |          ❌           |
+|      __TEST_USER_PASSWORD__       |          ❌          |          ✅           |          ❌           |
 
 - __NLP_CLIENT__ is the type of AI client for AI Named Entity Extraction. Allowed values are
 
@@ -78,6 +79,11 @@ summarizes all of the variables Nexus Graph possibily needs:
   - `TheresaClient` is our paid AI service
 
 - __NLP_API_URL__ is the URL of AI Named Entity Extraction service
+- __GRAPH_API_CLIENT__ is the type of Graph API client for CRUD operations. Allowed values are
+
+  - `JsonGraphQLServerClient` is for dev and test
+  - `AstraiosGraphClient` is our paid Graph API serivce
+
 - __GRAPH_API_ENDPOINT__ is the URL of the [Graph API service](design#graph-api). Define the endpoint that sends GraphQL
   requests to Astraios in our paid service.
 
@@ -90,7 +96,7 @@ summarizes all of the variables Nexus Graph possibily needs:
   backend, complete with pre-built infrastructure and enterprise-grade solutions. In the Nexus Graph we use Logto to
   verify that the user has logged in and automatically generate the user login page
 
-  - __SKIP_SIGN_IN__ is a flag variable which must be set to 'true' in dev and 'false' in test & prod
+  - __SKIP_SIGN_IN__ is a flag variable which must be set to `true` in Dev and `false` in Test & Prod environments
   - __LOGTO_APP_ID__ is the standard logto app ID
   - __LOGTO_ENDPOINT_URL__ is the URL of our server that will receive the [webhook][Webhook] POST requests when the
     event occurs.
@@ -119,8 +125,8 @@ yarn
 
 Once this command has finished we'll have Nexus Graph ready in development mode with all its required dependencies.
 
-Running the Development Server
-------------------------------
+Starting Nexus Graph
+--------------------
 
 ### Starting Dev AI Server
 
@@ -134,41 +140,26 @@ NER data source is backed by [json-server] mock. They can be viewed by the follo
 2. `http://localhost:3001/links`
 3. `http://localhost:3001`
 
-### Starting Dev Backend Services
+### Starting Graph API Services
 
 ```console
 yarn start:graph-api
 ```
 
-Entering `http://localhost:5000/` will open up the GraphiQL for dev testing:
+Entering `http://localhost:5000/` will open up the GraphiQL:
 
 ![Error loading json-graphql-server-graphiql.png)](img/json-graphql-server-graphiql.png)
 
-### Starting Nexus Graph
+### Starting Nexus Graph in Dev Mode
 
-Now we can run the development server at `http://localhost:3000`:
+Finally we can run the development server at `http://localhost:3000`:
 
 ```console
 yarn start
 ```
 
-Available Scripts
------------------
-
-After that, inside _nexusgraph_ directory, we can run several commands:
-
-- `yarn start`: Runs the app in the development mode. Open `http://localhost:3000` to view it in
-  the browser. The page will reload if you make edits. You will also see any lint errors in the console.
-- `yarn test`: Runs all tests, including unit and integration tests
-- `yarn build`: Builds the app for production to the `build` folder. It correctly bundles React in production mode and
-  optimizes the build for the best performance. The build is minified and the filenames include the hashes.
-- `yarn cypress:open`: Opens up the [Cypress End-to-End testing](https://docs.cypress.io/guides/overview/why-cypress) dashboard
-- `yarn e2e`: Run end-to-end test
-
-   - `yarn wait-on-dev`: Auxiliary command for e2e test which waits for production server
-   `http://localhost:3000` to become available on CI/CD server
-
-Happy building awesome knowledge graph app!
+which Runs the app in the development mode. The page will reload if you make edits. You will also see any lint errors in
+the console.
 
 Writing TypeDoc
 ---------------
@@ -186,6 +177,32 @@ We can have TypeDoc watch for changes from the command line by using
 ```bash
 yarn typedoc-watch
 ```
+
+Local E2E Testing
+-----------------
+
+We use [Cypress](https://cypress.qubitpi.org/) for E2E testing.
+
+1. Reload environment variables for testing
+
+   ```console
+   cp .env.test .env
+   ```
+
+2. [Restart Nexus Graph](#starting-nexus-graph)
+3. Open up [Cypress End-to-End testing](https://docs.cypress.io/guides/overview/why-cypress) dashboard
+
+   ```console
+   yarn cypress:open
+   ```
+
+   :::tip
+
+   The E2E tests spins up an [in-memory database](design#json-graphql-server) to store the test graphs.
+
+   :::
+
+Happy building awesome knowledge graph app!
 
 Submitting Code
 ---------------
@@ -341,7 +358,7 @@ We use [GitHub Actions] for CI/CD, which contains 3 parts in the following order
 2. Tests
 
    - [Unit tests](https://hashicorp-aws.com/blog/ui-unit-test)
-   - E2E tests via [Cypress](https://cypress.qubitpi.org)
+   - E2E tests via [Cypress]
    - [JSON schema](https://github.com/QubitPi/nexusgraph/blob/master/packages/nexusgraph-db/src/graph/astraios/AstraiosGraphClient.ts#L28-L67)
      tests
    - Lighthouse test, an idea learned from
@@ -350,10 +367,6 @@ We use [GitHub Actions] for CI/CD, which contains 3 parts in the following order
 3. [Release to NPM](https://hashicorp-aws.com/blog/npm-release)
 
 Each part doesn't run until its previous dependency finishes successfully
-
-### E2E Tests
-
-The E2E tests spins up an [in-memory database](design#json-graphql-server) to store the test graphs.
 
 Neo4J Arc Library
 -----------------
@@ -420,6 +433,8 @@ If all syntax are correct, simply cancelled the job and re-run. It might be some
 
 [API]: https://nexusgraph.qubitpi.org/api
 [Astraios]: https://astraios.io/
+
+[Cypress]: https://cypress.qubitpi.org/
 
 [`.env` file]: https://create-react-app.dev/docs/adding-custom-environment-variables/
 

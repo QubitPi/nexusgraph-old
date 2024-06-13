@@ -12,7 +12,28 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+/**
+ * The Inversify type identifiers at runtime
+ */
 const TYPES = {
+  /**
+   * The OAuth 2 access token the currently logged-in user use for access backend API.
+   */
+  accessToken: Symbol("accessToken"),
+
+  /**
+   * The OIDC ID of the currently logged-in user.
+   */
+  userId: Symbol("userId"),
+
+  /**
+   * The Graph client for Graph Data CRUD.
+   */
+  GraphApiClient: Symbol("GraphApiClient"),
+
+  /**
+   * The AI client for entity extractions.
+   */
   NLPClient: Symbol("NLPClient"),
 };
 

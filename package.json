@@ -21,7 +21,6 @@
     "test": "jest",
     "cypress:open": "cypress open",
     "e2e": "cypress run --browser chrome",
-    "wait-on-json-graphql-server": "wait-on -c ./scripts/wait-on-config.js http-get://localhost:5000/",
     "wait-on-ai": "wait-on -c ./scripts/wait-on-config.js http-get://localhost:3001/",
     "wait-on-dev": "wait-on -c ./scripts/wait-on-config.js http-get://localhost:3000/",
     "wait-on-prod": "wait-on -c ./scripts/wait-on-config.js http-get://localhost:3000/"

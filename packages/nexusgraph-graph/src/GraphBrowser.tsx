@@ -79,7 +79,11 @@ export default function GraphBrowser(): JSX.Element {
       } as Node);
 
       dispatch(updateGraphData(newGraphState));
-      graphClient.saveOrUpdate(newGraphState);
+
+      graphClient.saveOrUpdate(newGraphState).catch((error) => {
+        Sentry.captureException(error);
+        throw error;
+      });
     }
 
     if (event == NODE_LABEL_UPDATE) {
@@ -116,7 +120,10 @@ export default function GraphBrowser(): JSX.Element {
       } as Link);
 
       dispatch(updateGraphData(newGraphState));
-      graphClient.saveOrUpdate(newGraphState);
+      graphClient.saveOrUpdate(newGraphState).catch((error) => {
+        Sentry.captureException(error);
+        throw error;
+      });
     }
 
     if (event == REL_TYPE_UPDATE) {
@@ -135,7 +142,10 @@ export default function GraphBrowser(): JSX.Element {
       const newGraphData = mutateLinkFieldById(graphData, relId, "type", newType);
 
       dispatch(updateGraphData(newGraphData));
-      graphClient.saveOrUpdate(newGraphData);
+      graphClient.saveOrUpdate(newGraphData).catch((error) => {
+        Sentry.captureException(error);
+        throw error;
+      });
     }
 
     if (event == PROP_UPDATE) {
@@ -181,7 +191,10 @@ export default function GraphBrowser(): JSX.Element {
         : mutateLinkFieldById(graphData, nodeOrRelId, titlePropertyKey, newTitle);
 
       dispatch(updateGraphData(newGraphData));
-      graphClient.saveOrUpdate(newGraphData);
+      graphClient.saveOrUpdate(newGraphData).catch((error) => {
+        Sentry.captureException(error);
+        throw error;
+      });
     }
   };
 

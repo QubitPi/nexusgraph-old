@@ -116,8 +116,16 @@ jobs:
         run: yarn
       - name: Load test .env file
         run: mv .env.test .env
-      - name: Start test backend
-        run: yarn start:graph-api &
+      - name: Start test NLP service
+        run: |
+          yarn start:ai &
+          yarn wait-on-ai
+      - name: Start test Graph API service
+        run: |
+          yarn start:graph-api &
+          cd scripts
+          timeout 1m bash -c 'until ./remove-graph.sh; do sleep 3; done'
+          cd ../
       - uses: QubitPi/hashicorp-aws/.github/actions/cypress-e2e@master
         with:
           node-version: ${{ env.NODE_VERSION }}
@@ -136,9 +144,8 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 18
-
-      - run: cp .env.test .env && yarn
-
+      - name: Load test .env file
+        run: cp .env.dev .env && yarn
       - name: Audit URLs using Lighthouse
         id: lighthouse_audit
         uses: treosh/lighthouse-ci-action@v10

@@ -19,7 +19,8 @@ import { useDispatch } from "react-redux";
 import { GraphClient } from "../../../../../nexusgraph-db";
 import { NLPClient } from "../../../../../nexusgraph-nlp";
 import { appendToGraphList, updateGraphData } from "../../../../../nexusgraph-redux";
-import { container, TYPES } from "../../../../inversify.config";
+import { container } from "../../../../inversify.config";
+import TYPES from "../../../../types";
 import { GraphClientContext } from "../../../Contexts";
 import { Method } from "./methods";
 
@@ -54,7 +55,7 @@ export function MethodModal(props: MethodsSelectionModalProps): JSX.Element {
 
       graphClient
         .saveOrUpdate({
-          name: t("Untitle Graph"),
+          name: t("Untitled Graph"),
           nodes: graph.nodes,
           links: graph.links,
         })

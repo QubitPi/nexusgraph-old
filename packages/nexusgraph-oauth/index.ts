@@ -11,4 +11,4 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-export { Callback, default as OAuth2Provider } from "./src/OAuth2Provider";
+export { Callback, Signout } from "./src/OAuth2Provider";

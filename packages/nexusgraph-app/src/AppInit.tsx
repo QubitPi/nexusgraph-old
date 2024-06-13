@@ -13,8 +13,9 @@
 // limitations under the License.
 import * as Sentry from "@sentry/react";
 import { I18nextProvider } from "react-i18next";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { GraphClient } from "../../nexusgraph-db";
-import OAuth2Provider from "../../nexusgraph-oauth/src/OAuth2Provider";
+import OAuth2Provider, { Callback, Signout } from "../../nexusgraph-oauth/src/OAuth2Provider";
 import { ReduxStoreProvider, updateGraphData, updateGraphList } from "../../nexusgraph-redux";
 import DevApp from "./DevApp";
 import i18n from "./i18n";
@@ -28,24 +29,36 @@ import ProdApp from "./ProdApp";
  */
 export default function AppInit(): JSX.Element {
   const initReduxStore = (userId: string, graphClient: GraphClient, dispatch: any) => {
-    graphClient.getGraphListMetaDataByUserId(userId).then((metaDataList) => {
-      if (metaDataList.length <= 0) {
-        return;
-      }
+    graphClient
+      .getGraphListMetaDataByUserId(userId)
+      .then((metaDataList) => {
+        if (metaDataList.length <= 0) {
+          return;
+        }
 
-      dispatch(updateGraphList(metaDataList));
+        dispatch(updateGraphList(metaDataList));
 
-      graphClient.getGraphById(metaDataList[0].id).then((graphState) => {
-        dispatch(
-          updateGraphData({
-            id: graphState.id,
-            name: graphState.name,
-            nodes: graphState.nodes,
-            links: graphState.links,
+        graphClient
+          .getGraphById(metaDataList[0].id)
+          .then((graphState) => {
+            dispatch(
+              updateGraphData({
+                id: graphState.id,
+                name: graphState.name,
+                nodes: graphState.nodes,
+                links: graphState.links,
+              })
+            );
           })
-        );
+          .catch((error) => {
+            Sentry.captureException(error);
+            throw error;
+          });
+      })
+      .catch((error) => {
+        Sentry.captureException(error);
+        throw error;
       });
-    });
   };
 
   if (process.env.SKIP_SIGN_IN == "true") {
@@ -61,9 +74,15 @@ export default function AppInit(): JSX.Element {
   return (
     <I18nextProvider i18n={i18n}>
       <ReduxStoreProvider>
-        <OAuth2Provider>
-          <ProdApp initReduxStore={initReduxStore} />
-        </OAuth2Provider>
+        <BrowserRouter>
+          <OAuth2Provider>
+            <Routes>
+              <Route path="/" element={<ProdApp initReduxStore={initReduxStore} />} />
+              <Route path="/callback" element={<Callback />} />
+              <Route path="/signout" element={<Signout />} />
+            </Routes>
+          </OAuth2Provider>
+        </BrowserRouter>
       </ReduxStoreProvider>
     </I18nextProvider>
   );

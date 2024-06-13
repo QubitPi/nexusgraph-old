@@ -12,12 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 describe("Side bar displays new graph button and graph list", () => {
-  before(() => {
-    cy.openApp();
+  beforeEach(() => {
+    cy.openApp().deleteAllGraphs();
   });
 
-  beforeEach(() => {
-    cy.visit("http://localhost:3000/");
+  afterEach(() => {
+    cy.deleteAllGraphs();
   });
 
   it("displays new graph button all the time", () => {

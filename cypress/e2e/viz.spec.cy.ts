@@ -12,12 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 describe("Graph visualization tests", () => {
-  before(() => {
-    cy.openApp();
-  });
-
   beforeEach(() => {
-    cy.visit("http://localhost:3000/");
+    cy.openApp();
     cy.deleteAllGraphs();
   });
 
