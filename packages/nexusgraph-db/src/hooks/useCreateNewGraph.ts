@@ -14,7 +14,11 @@
  * limitations under the License.
  */
 
-export { AstraiosGraphClient } from "./src/graph/astraios/AstraiosGraphClient";
-export type { GraphClient } from "./src/graph/GraphClient";
-export { JsonGraphQLServerClient } from "./src/graph/json-graphql-server/JsonGraphQLServerClient";
-export { useCreateNewGraph, usePersistNewGraph } from "./src/hooks";
+import { Graph, useRenderNewGraph } from "nexusgraph-redux";
+import { usePersistNewGraph } from "./index";
+
+const useCreateNewGraph = (graph: Graph | undefined) => {
+  return useRenderNewGraph(usePersistNewGraph(graph));
+};
+
+export default useCreateNewGraph;
