@@ -15,3 +15,5 @@
  */
 
 export { default as DeleteButton } from "./DeleteButton";
+export { default as GraphTitle } from "./GraphTitle";
+export { SideBar } from "./sidebar";

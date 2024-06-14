@@ -32,9 +32,7 @@ import { useDispatch } from "react-redux";
 import { GraphBrowser } from "../../nexusgraph-graph";
 import logo from "../public/logo.svg";
 import user from "../public/user.svg";
-import { DeleteButton } from "./component";
-import GraphTitle from "./component/GraphTitle";
-import { SideBar } from "./component/sidebar";
+import { DeleteButton, GraphTitle, SideBar } from "./components";
 import { GraphClientContext } from "./Contexts";
 import {
   StyledApp,
