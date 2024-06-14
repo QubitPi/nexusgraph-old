@@ -17,7 +17,7 @@
 import axios from "axios";
 import { inject, injectable } from "inversify";
 import TYPES from "nexusgraph-app/types";
-import { GraphMetaData, GraphState } from "nexusgraph-redux";
+import { Graph, GraphMetaData } from "nexusgraph-redux";
 import "reflect-metadata";
 import { GraphClient } from "../GraphClient";
 
@@ -41,11 +41,11 @@ export class JsonGraphQLServerClient implements GraphClient {
     this._userId = "10000";
   }
 
-  public saveOrUpdate(graph: GraphState): Promise<GraphState> {
+  public saveOrUpdate(graph: Graph): Promise<Graph> {
     return graph.id ? this.update(graph) : this.save(graph);
   }
 
-  private save(graph: GraphState): Promise<GraphState> {
+  private save(graph: Graph): Promise<Graph> {
     return this.postQuery(
       `
       mutation {
@@ -66,7 +66,7 @@ export class JsonGraphQLServerClient implements GraphClient {
     });
   }
 
-  private update(graph: GraphState): Promise<GraphState> {
+  private update(graph: Graph): Promise<Graph> {
     return this.postQuery(
       `
       mutation {
@@ -100,7 +100,7 @@ export class JsonGraphQLServerClient implements GraphClient {
     return jsonObjectString.replace(/"([^"]+)":/g, "$1:");
   }
 
-  public getGraphById(graphId: string): Promise<GraphState> {
+  public getGraphById(graphId: string): Promise<Graph> {
     return this.postQuery(
       `
       {
@@ -120,7 +120,7 @@ export class JsonGraphQLServerClient implements GraphClient {
     });
   }
 
-  public deleteGraphById(graphId: string): Promise<GraphState> {
+  public deleteGraphById(graphId: string): Promise<Graph> {
     return this.postQuery(
       `
       mutation {

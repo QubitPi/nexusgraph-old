@@ -16,9 +16,37 @@
 
 import { produce } from "immer";
 import { useSelector } from "react-redux";
-import { GlobalState, Link, Node } from "../..";
+import { GlobalState } from "../globalState";
 export const GRAPH_DATA = "graphData";
 const UPDATE_GRAPH_DATA = GRAPH_DATA + "/UPDATE_GRAPH_DATA";
+
+/**
+ * A Redux representation of a graph node data structure.
+ *
+ * It has an ID field whose scope is not assumed. It can be unique across a graph or unique across database. All
+ * displayable node properties are stored in `fields`, which is a TS Record whose key is the property name and value the
+ * property value
+ */
+export interface Node {
+  id: string;
+  fields: Record<string, string>;
+}
+
+/**
+ * A Redux representation of a directed graph link data structure.
+ *
+ * It has an ID field whose scope is not assumed. It can be unique across a graph or unique across database. All
+ * displayable node properties are stored in `fields`, which is a TS Record whose key is the property name and value the
+ * property value
+ *
+ * It also has a `source` and `target` field which stores the ID's of the source and target nodes, respectively
+ */
+export interface Link {
+  id: string;
+  source: string;
+  target: string;
+  fields: Record<string, string>;
+}
 
 /**
  * The Redux representation of a directed graph state.
@@ -29,7 +57,7 @@ const UPDATE_GRAPH_DATA = GRAPH_DATA + "/UPDATE_GRAPH_DATA";
  * 2. A display name
  * 3. The graph data structure that stores all node/link information about this graph
  */
-export interface GraphState {
+export interface Graph {
   id?: string;
   name?: string;
 
@@ -42,7 +70,7 @@ export interface GraphState {
  *
  * The ID and display name is undefined and the graph is initially empty
  */
-export const initialState: GraphState = {
+export const initialState: Graph = {
   id: undefined,
   name: undefined,
 
@@ -50,16 +78,16 @@ export const initialState: GraphState = {
   links: [],
 };
 
-export type GraphName = Pick<GraphState, "id" | "name">;
+export type GraphName = Pick<Graph, "id" | "name">;
 
 interface GraphAction {
   type: typeof UPDATE_GRAPH_DATA;
-  payload: GraphState;
+  payload: Graph;
 }
 
 /**
  * A standard [selector function](https://redux.qubitpi.org/usage/deriving-data-selectors/#basic-selector-concepts) that
- * proxies read operation on {@link GraphState}
+ * proxies read operation on {@link Graph}
  */
 export function selectGraphData() {
   return useSelector((state: GlobalState) => {
@@ -69,11 +97,11 @@ export function selectGraphData() {
 
 /**
  * A standard [action creator](https://redux.qubitpi.org/style-guide/#use-action-creators) that prepares the data and
- * performs additional logic before mutating a {@link GraphState} in Redux
+ * performs additional logic before mutating a {@link Graph} in Redux
  *
  * @param graphState  The new graph state to be flushed into Redux
  */
-export function updateGraphData(graphState: GraphState) {
+export function updateGraphData(graphState: Graph) {
   return { type: UPDATE_GRAPH_DATA, payload: graphState };
 }
 
@@ -88,7 +116,7 @@ export function updateGraphData(graphState: GraphState) {
  *
  * @returns New nodes and links state
  */
-export default function graphReducer(state = initialState, action: GraphAction): GraphState {
+export default function graphReducer(state = initialState, action: GraphAction): Graph {
   switch (action.type) {
     case UPDATE_GRAPH_DATA:
       return produce(state, (draft) => {

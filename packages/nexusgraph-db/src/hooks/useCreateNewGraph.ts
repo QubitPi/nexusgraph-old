@@ -17,6 +17,45 @@
 import { Graph, useRenderNewGraph } from "nexusgraph-redux";
 import { usePersistNewGraph } from "./index";
 
+/**
+ * A custom React hook that allows the sharing logic of persisting and rendering a new graph in App.
+ *
+ * This hook is a combination of {}
+ *
+ * ```
+ *                  ┌──────────Graph Object───────────┐
+ *                  │                                 │
+ *                  │                                 │
+ *                  │                                 │
+ *                  │                                 │
+ *                  │                                 │
+ * ┌────────────────▼────┐                            │
+ * │                     │                            │
+ * │ usePersistNewGraph  │                            │
+ * │                     │                            │
+ * └────────────────┬────┘                            │
+ *                  │                                 │
+ *                  │                             ┌───▼───────────────┐
+ *            │     │              ──────         │                   │
+ *          ──┼──   │                             │ useCreateNewGraph │
+ *            │     │              ──────         │                   │
+ *                  │                             └───┬───────────────┘
+ *                  │                                 │
+ *  ┌───────────────▼───┐                             │
+ *  │                   │                             │
+ *  │ useRenderNewGraph │                             │
+ *  │                   │                             │
+ *  └───────────────┬───┘                             │
+ *                  │                                 │
+ *                  │                                 │
+ *                  │                                 │
+ *                  │                                 │
+ *                  │                                 │
+ *                  └───────────►Graph State◄─────────┘
+ * ```
+ *
+ * @param graph
+ */
 const useCreateNewGraph = (graph: Graph | undefined) => {
   return useRenderNewGraph(usePersistNewGraph(graph));
 };

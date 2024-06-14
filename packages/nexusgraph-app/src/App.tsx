@@ -19,8 +19,8 @@ import { produce } from "immer";
 import { GraphClient } from "nexusgraph-db";
 import { GraphClientContext } from "nexusgraph-db/src/Contexts";
 import {
+  Graph,
   GraphMetaData,
-  GraphState,
   initialState,
   selectGraphData,
   selectGraphList,
@@ -85,7 +85,7 @@ export default function App(): JSX.Element {
       throw error;
     }
 
-    const newGraphData: GraphState = produce(graphSate, (draft) => {
+    const newGraphData: Graph = produce(graphSate, (draft) => {
       draft.name = newTitle;
     });
 

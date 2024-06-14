@@ -15,7 +15,7 @@
  */
 
 import { produce } from "immer";
-import { GraphState, Link, Node } from "nexusgraph-redux";
+import { Graph, Link, Node } from "nexusgraph-redux";
 
 /**
  * Add a new node to the specified graph.
@@ -25,7 +25,7 @@ import { GraphState, Link, Node } from "nexusgraph-redux";
  *
  * @returns a new graph state with the new node added
  */
-export const addNode = (oldGraphState: GraphState, node: Node): GraphState => {
+export const addNode = (oldGraphState: Graph, node: Node): Graph => {
   return produce(oldGraphState, (draft) => {
     draft.nodes.push(node);
   });
@@ -39,7 +39,7 @@ export const addNode = (oldGraphState: GraphState, node: Node): GraphState => {
  *
  * @returns a new graph state with the new link added
  */
-export const addLink = (oldGraphState: GraphState, link: Link): GraphState => {
+export const addLink = (oldGraphState: Graph, link: Link): Graph => {
   return produce(oldGraphState, (draft) => {
     draft.links.push(link);
   });
@@ -56,11 +56,11 @@ export const addLink = (oldGraphState: GraphState, link: Link): GraphState => {
  * @returns a new graph state with the updated node
  */
 export const mutateNodeFieldById = (
-  oldGraphState: GraphState,
+  oldGraphState: Graph,
   nodeId: string,
   fieldName: string,
   newFieldValue: string
-): GraphState => {
+): Graph => {
   return produce(oldGraphState, (draft) => {
     draft.nodes.forEach((node) => {
       if (node.id == nodeId) {
@@ -81,11 +81,11 @@ export const mutateNodeFieldById = (
  * @returns a new graph state with the updated link
  */
 export const mutateLinkFieldById = (
-  oldGraphState: GraphState,
+  oldGraphState: Graph,
   linkId: string,
   fieldName: string,
   newFieldValue: string
-): GraphState => {
+): Graph => {
   return produce(oldGraphState, (draft) => {
     draft.links.forEach((link) => {
       if (link.id == linkId) {

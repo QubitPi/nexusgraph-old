@@ -17,45 +17,7 @@
 export type { GlobalState } from "./src/globalState";
 export * from "./src/graph-list/graphListDuck";
 export { default, GRAPH_DATA, initialState, selectGraphData, updateGraphData } from "./src/graph/graphDuck";
-export type { GraphName, GraphState } from "./src/graph/graphDuck";
+export type { Graph, GraphName, Link, Node } from "./src/graph/graphDuck";
 export { useRenderNewGraph } from "./src/hooks";
 export * from "./src/oAuth/oAuthDuck";
 export { default as ReduxStoreProvider } from "./src/ReduxStoreProvider";
-
-/**
- * A Redux representation of a graph node data structure.
- *
- * It has an ID field whose scope is not assumed. It can be unique across a graph or unique across database. All
- * displayable node properties are stored in `fields`, which is a TS Record whose key is the property name and value the
- * property value
- */
-export interface Node {
-  id: string;
-  fields: Record<string, string>;
-}
-
-/**
- * A Redux representation of a directed graph link data structure.
- *
- * It has an ID field whose scope is not assumed. It can be unique across a graph or unique across database. All
- * displayable node properties are stored in `fields`, which is a TS Record whose key is the property name and value the
- * property value
- *
- * It also has a `source` and `target` field which stores the ID's of the source and target nodes, respectively
- */
-export interface Link {
-  id: string;
-  source: string;
-  target: string;
-  fields: Record<string, string>;
-}
-
-/**
- * A Redux representation of a directed graph data structure.
- *
- * It has a list of {@link Node}'s and a list of {@link Link}'s
- */
-export interface Graph {
-  nodes: Node[];
-  links: Link[];
-}

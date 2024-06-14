@@ -15,7 +15,7 @@
  */
 
 import * as Sentry from "@sentry/react";
-import { Graph, GraphState } from "nexusgraph-redux";
+import { Graph } from "nexusgraph-redux";
 import { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { GraphClientContext } from "../Contexts";
@@ -41,7 +41,7 @@ import { GraphClient } from "../graph/GraphClient";
 const usePersistNewGraph = (graph: Graph | undefined) => {
   const { t } = useTranslation();
   const graphClient: GraphClient = useContext(GraphClientContext) as GraphClient;
-  const [graphState, setGraphState] = useState<GraphState>();
+  const [graphState, setGraphState] = useState<Graph>();
 
   useEffect(() => {
     if (graph) {
