@@ -14,4 +14,4 @@
  * limitations under the License.
  */
 
-export { default as useRenderNewGraph } from "./useRenderNewGraph";
+export { default as useRenderGraph } from "./useRenderGraph";

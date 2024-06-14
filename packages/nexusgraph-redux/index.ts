@@ -18,6 +18,6 @@ export type { GlobalState } from "./src/globalState";
 export * from "./src/graph-list/graphListDuck";
 export { default, GRAPH_DATA, initialState, selectGraphData, updateGraphData } from "./src/graph/graphDuck";
 export type { Graph, GraphName, Link, Node } from "./src/graph/graphDuck";
-export { useRenderNewGraph } from "./src/hooks";
+export { useRenderGraph } from "./src/hooks";
 export * from "./src/oAuth/oAuthDuck";
 export { default as ReduxStoreProvider } from "./src/ReduxStoreProvider";
