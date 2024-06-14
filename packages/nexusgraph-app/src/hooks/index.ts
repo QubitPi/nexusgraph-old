@@ -15,3 +15,4 @@
  */
 
 export { default as useCreateNewGraph } from "./useCreateNewGraph";
+export { default as useRenderNewGraph } from "./useRenderNewGraph";

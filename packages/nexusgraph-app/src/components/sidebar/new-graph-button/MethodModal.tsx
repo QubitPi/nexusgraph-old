@@ -15,14 +15,14 @@
  */
 
 import { NLPClient } from "nexusgraph-nlp";
-import { appendToGraphList, Graph, updateGraphData } from "nexusgraph-redux";
+import { Graph } from "nexusgraph-redux";
 import { useEffect, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { useDispatch } from "react-redux";
 import { container } from "../../../../inversify.config";
 import TYPES from "../../../../types";
-import { useCreateNewGraph } from "../../../hooks";
+import { useCreateNewGraph, useRenderNewGraph } from "../../../hooks";
 import { Method } from "./methods";
 
 const nlpClient: NLPClient = container.get<NLPClient>(TYPES.NLPClient);
@@ -38,7 +38,8 @@ export function MethodModal(props: MethodsSelectionModalProps): JSX.Element {
   const { t } = useTranslation();
 
   const [inferencedGraph, setInferencedGraph] = useState<Graph>();
-  const graphState = useCreateNewGraph(inferencedGraph);
+  const graph = useCreateNewGraph(inferencedGraph);
+  const graphState = useRenderNewGraph(graph);
 
   const [textInput, setTextInput] = useState<string>("");
   const [buttonDisabled, setButtonDisabled] = useState<boolean>(true);
@@ -52,12 +53,6 @@ export function MethodModal(props: MethodsSelectionModalProps): JSX.Element {
 
   useEffect(() => {
     if (graphState) {
-      const graphId = graphState.id as string;
-      const graphName = graphState.name as string;
-
-      dispatch(updateGraphData(graphState));
-      dispatch(appendToGraphList({ id: graphId, name: graphName }));
-
       props.setShowModal(false);
     }
   }, [graphState]);
