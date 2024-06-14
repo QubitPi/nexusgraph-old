@@ -19,6 +19,22 @@ import { useDispatch } from "react-redux";
 import { appendToGraphList } from "../graph-list/graphListDuck";
 import { GraphState, updateGraphData } from "../graph/graphDuck";
 
+/**
+ * A custom React hook that allows the sharing logic of rendering a new graph onto canvas on UI.
+ *
+ * Example usage:
+ *
+ * ```typescript
+ * const graphState = useRenderNewGraph(graphState);
+ * ```
+ *
+ * The `graphState` is the state that triggers the re-rendering of the containing component once being updated. Note
+ * that `graphState` is initially set to `undefined`
+ *
+ * @param graphState  An new redux representation of the graph to be rendered onto the UI canvas
+ *
+ * @returns a redux representation of the newly rendered graph
+ */
 const useRenderNewGraph = (graphState: GraphState | undefined) => {
   const dispatch = useDispatch();
   const [newGraphState, setNewGraphState] = useState<GraphState>();

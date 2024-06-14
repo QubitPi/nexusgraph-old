@@ -22,13 +22,13 @@ import { GraphClientContext } from "../Contexts";
 import { GraphClient } from "../graph/GraphClient";
 
 /**
- * A custom React hook that allows the sharing logic of creating a new graph in database.
+ * A custom React hook that allows the sharing logic of persisting a new graph into database.
  *
  * Example usage:
  *
  * ```typescript
  * const [graphObject, setGraphObject] = useState<Graph>();
- * const graphState = useCreateNewGraph(graphObject);
+ * const graphState = usePersistNewGraph(graphObject);
  * ```
  *
  * The `graphState` is the state that triggers the re-rendering of the containing component once being updated. Note
@@ -38,7 +38,7 @@ import { GraphClient } from "../graph/GraphClient";
  *
  * @returns a redux representation of the persisted graph
  */
-const useCreateNewGraph = (graph: Graph | undefined) => {
+const usePersistNewGraph = (graph: Graph | undefined) => {
   const { t } = useTranslation();
   const graphClient: GraphClient = useContext(GraphClientContext) as GraphClient;
   const [graphState, setGraphState] = useState<GraphState>();
@@ -64,4 +64,4 @@ const useCreateNewGraph = (graph: Graph | undefined) => {
   return graphState;
 };
 
-export default useCreateNewGraph;
+export default usePersistNewGraph;

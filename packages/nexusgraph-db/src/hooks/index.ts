@@ -14,4 +14,4 @@
  * limitations under the License.
  */
 
-export { default as useCreateNewGraph } from "./useCreateNewGraph";
+export { default as userPersistNewGraph } from "./usePersistNewGraph";
