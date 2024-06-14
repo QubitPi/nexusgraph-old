@@ -51,6 +51,14 @@ export function selectGraphList() {
 }
 
 /**
+ * A standard [selector function](https://redux.qubitpi.org/usage/deriving-data-selectors/#basic-selector-concepts) that
+ * proxies read operation on {@link GraphMetaData} ID list
+ */
+export function selectGraphIdList() {
+  return useSelector((state: GlobalState) => state.graphList.map((item) => item.id));
+}
+
+/**
  * A standard [action creator](https://redux.qubitpi.org/style-guide/#use-action-creators) that prepares the data and
  * performs additional logic before mutating the displayed graph list
  *

@@ -16,7 +16,7 @@
 
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { appendToGraphList } from "../graph-list/graphListDuck";
+import { appendToGraphList, selectGraphIdList } from "../graph-list/graphListDuck";
 import { Graph, updateGraphData } from "../graph/graphDuck";
 
 /**
@@ -25,7 +25,7 @@ import { Graph, updateGraphData } from "../graph/graphDuck";
  * Example usage:
  *
  * ```typescript
- * const graphState = useRenderNewGraph(graphState);
+ * const graphState = useRenderGraph(graphState);
  * ```
  *
  * The `graphState` is the state that triggers the re-rendering of the containing component once being updated. Note
@@ -35,8 +35,9 @@ import { Graph, updateGraphData } from "../graph/graphDuck";
  *
  * @returns a redux representation of the newly rendered graph
  */
-const useRenderNewGraph = (graphState: Graph | undefined) => {
+const useRenderGraph = (graphState: Graph | undefined) => {
   const dispatch = useDispatch();
+  const graphIdList = selectGraphIdList();
   const [newGraphState, setNewGraphState] = useState<Graph>();
 
   useEffect(() => {
@@ -45,7 +46,10 @@ const useRenderNewGraph = (graphState: Graph | undefined) => {
       const graphName = graphState.name as string;
 
       dispatch(updateGraphData(graphState));
-      dispatch(appendToGraphList({ id: graphId, name: graphName }));
+
+      if (!graphIdList.includes(graphId)) {
+        dispatch(appendToGraphList({ id: graphId, name: graphName }));
+      }
 
       setNewGraphState(graphState);
     }
@@ -54,4 +58,4 @@ const useRenderNewGraph = (graphState: Graph | undefined) => {
   return newGraphState;
 };
 
-export default useRenderNewGraph;
+export default useRenderGraph;

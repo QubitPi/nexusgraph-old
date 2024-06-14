@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Graph, useRenderNewGraph } from "nexusgraph-redux";
+import { Graph, useRenderGraph } from "nexusgraph-redux";
 import { usePersistGraph } from "./index";
 
 /**
@@ -43,7 +43,7 @@ import { usePersistGraph } from "./index";
  *                  │                                 │
  *  ┌───────────────▼───┐                             │
  *  │                   │                             │
- *  │ useRenderNewGraph │                             │
+ *  │   useRenderGraph  │                             │
  *  │                   │                             │
  *  └───────────────┬───┘                             │
  *                  │                                 │
@@ -57,7 +57,7 @@ import { usePersistGraph } from "./index";
  * @param graph
  */
 const useCreateNewGraph = (graph: Graph | undefined) => {
-  return useRenderNewGraph(usePersistGraph(graph));
+  return useRenderGraph(usePersistGraph(graph));
 };
 
 export default useCreateNewGraph;
