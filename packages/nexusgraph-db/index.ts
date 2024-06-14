@@ -17,4 +17,4 @@
 export { AstraiosGraphClient } from "./src/graph/astraios/AstraiosGraphClient";
 export type { GraphClient } from "./src/graph/GraphClient";
 export { JsonGraphQLServerClient } from "./src/graph/json-graphql-server/JsonGraphQLServerClient";
-export { userPersistNewGraph } from "./src/hooks";
+export { usePersistNewGraph } from "./src/hooks";
