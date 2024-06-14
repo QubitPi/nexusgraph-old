@@ -27,8 +27,8 @@ import {
   REL_TYPE_UPDATE,
   resources,
 } from "neo4j-devtools-arc";
-import { GraphClientContext } from "nexusgraph-app/src/Contexts";
 import { GraphClient } from "nexusgraph-db";
+import { GraphClientContext } from "nexusgraph-db/src/Contexts";
 import { Link, Node, selectGraphData, updateGraphData } from "nexusgraph-redux";
 import { useContext, useState } from "react";
 import { useDispatch } from "react-redux";

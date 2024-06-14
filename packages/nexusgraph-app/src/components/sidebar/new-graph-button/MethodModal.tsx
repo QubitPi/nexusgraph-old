@@ -14,15 +14,14 @@
  * limitations under the License.
  */
 
+import { useCreateNewGraph } from "nexusgraph-db";
 import { NLPClient } from "nexusgraph-nlp";
-import { Graph } from "nexusgraph-redux";
+import { Graph, useRenderNewGraph } from "nexusgraph-redux";
 import { useEffect, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
-import { useDispatch } from "react-redux";
 import { container } from "../../../../inversify.config";
 import TYPES from "../../../../types";
-import { useCreateNewGraph, useRenderNewGraph } from "../../../hooks";
 import { Method } from "./methods";
 
 const nlpClient: NLPClient = container.get<NLPClient>(TYPES.NLPClient);
@@ -34,7 +33,6 @@ interface MethodsSelectionModalProps {
 }
 
 export function MethodModal(props: MethodsSelectionModalProps): JSX.Element {
-  const dispatch = useDispatch();
   const { t } = useTranslation();
 
   const [inferencedGraph, setInferencedGraph] = useState<Graph>();

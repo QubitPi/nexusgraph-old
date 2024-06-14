@@ -18,6 +18,7 @@ import axios from "axios";
 import { inject, injectable } from "inversify";
 import TYPES from "nexusgraph-app/types";
 import { GraphMetaData, GraphState } from "nexusgraph-redux";
+import "reflect-metadata";
 import { GraphClient } from "../GraphClient";
 
 axios.interceptors.response.use(

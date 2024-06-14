@@ -14,7 +14,4 @@
  * limitations under the License.
  */
 
-import { GraphClient } from "nexusgraph-db";
-import { createContext } from "react";
-
-export const GraphClientContext = createContext<GraphClient | undefined>(undefined);
+export { default as useCreateNewGraph } from "./useCreateNewGraph";

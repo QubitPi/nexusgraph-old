@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-export { AstraiosGraphClient } from "./src/graph/astraios/AstraiosGraphClient";
-export type { GraphClient } from "./src/graph/GraphClient";
-export { JsonGraphQLServerClient } from "./src/graph/json-graphql-server/JsonGraphQLServerClient";
-export { useCreateNewGraph } from "./src/hooks";
+import { createContext } from "react";
+import { GraphClient } from "./graph/GraphClient";
+
+export const GraphClientContext = createContext<GraphClient | undefined>(undefined);
