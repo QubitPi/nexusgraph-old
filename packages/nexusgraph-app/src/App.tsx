@@ -17,6 +17,7 @@
 import * as Sentry from "@sentry/react";
 import { produce } from "immer";
 import { GraphClient } from "nexusgraph-db";
+import { GraphClientContext } from "nexusgraph-db/src/Contexts";
 import {
   GraphMetaData,
   GraphState,
@@ -33,7 +34,6 @@ import { GraphBrowser } from "../../nexusgraph-graph";
 import logo from "../public/logo.svg";
 import user from "../public/user.svg";
 import { DeleteButton, GraphTitle, SideBar } from "./components";
-import { GraphClientContext } from "./Contexts";
 import {
   StyledApp,
   StyledAppLogo,

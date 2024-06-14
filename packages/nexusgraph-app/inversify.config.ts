@@ -19,7 +19,7 @@ import "reflect-metadata"; // https://stackoverflow.com/a/37535207
 
 import * as Sentry from "@sentry/react";
 import { AstraiosGraphClient, GraphClient, JsonGraphQLServerClient } from "nexusgraph-db";
-import { JsonServerClient, NLPClient, TheresaClient } from "../nexusgraph-nlp";
+import { JsonServerClient, NLPClient, TheresaClient } from "nexusgraph-nlp";
 import TYPES from "./types";
 
 /**

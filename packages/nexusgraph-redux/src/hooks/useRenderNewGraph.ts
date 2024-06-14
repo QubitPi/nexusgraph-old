@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-import { appendToGraphList, GraphState, updateGraphData } from "nexusgraph-redux";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
+import { appendToGraphList } from "../graph-list/graphListDuck";
+import { GraphState, updateGraphData } from "../graph/graphDuck";
 
 const useRenderNewGraph = (graphState: GraphState | undefined) => {
   const dispatch = useDispatch();

@@ -15,10 +15,10 @@
  */
 
 import { GraphClient } from "nexusgraph-db";
+import { GraphClientContext } from "nexusgraph-db/src/Contexts";
 import { updateOAuthState } from "nexusgraph-redux";
 import { useDispatch } from "react-redux";
 import App from "./App";
-import { GraphClientContext } from "./Contexts";
 
 import initialData from "../../nexusgraph-db/src/graph/json-graphql-server/server/initial-data.json";
 import { bindGraphClient, container } from "../inversify.config";

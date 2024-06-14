@@ -1,93 +1,83 @@
-<mxfile host="app.diagrams.net" modified="2024-06-11T07:34:52.322Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36" etag="uJKUBjjynlTRhUqFa6Ay" version="24.5.2" type="device">
+<mxfile host="app.diagrams.net" modified="2024-06-14T09:29:41.093Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36" etag="l48qvHiy97jKB_szxKie" version="24.5.4" type="device">
   <diagram name="Page-1" id="h44ttkBjcu-L7KLSXF3c">
-    <mxGraphModel dx="2331" dy="819" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="2716" dy="1180" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="ROhvSXwiDPXo4LtuRvh4-1" value="&lt;font style=&quot;font-size: 20px;&quot; face=&quot;Ubuntu&quot;&gt;&lt;b&gt;nexusgraph-app&lt;/b&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;strokeWidth=7;" vertex="1" parent="1">
-          <mxGeometry x="280" y="300" width="200" height="100" as="geometry" />
+        <mxCell id="bUZzEBSvuRqHc9tuNdCj-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;shape=flexArrow;fillColor=#999999;strokeColor=none;" edge="1" parent="1" source="ROhvSXwiDPXo4LtuRvh4-1" target="ROhvSXwiDPXo4LtuRvh4-2">
+          <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="ROhvSXwiDPXo4LtuRvh4-2" value="&lt;font style=&quot;font-size: 20px;&quot; face=&quot;Ubuntu&quot;&gt;&lt;b&gt;nexusgraph-redux&lt;/b&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;strokeWidth=7;" vertex="1" parent="1">
-          <mxGeometry x="80" y="440" width="200" height="100" as="geometry" />
+        <mxCell id="bUZzEBSvuRqHc9tuNdCj-15" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;shape=flexArrow;fillColor=#999999;strokeColor=none;" edge="1" parent="1" source="ROhvSXwiDPXo4LtuRvh4-1" target="ROhvSXwiDPXo4LtuRvh4-3">
+          <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="ROhvSXwiDPXo4LtuRvh4-3" value="&lt;font style=&quot;font-size: 20px;&quot; face=&quot;Ubuntu&quot;&gt;&lt;b&gt;nexusgraph-graph&lt;/b&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;strokeWidth=7;" vertex="1" parent="1">
-          <mxGeometry x="480" y="440" width="200" height="100" as="geometry" />
+        <mxCell id="bUZzEBSvuRqHc9tuNdCj-16" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;shape=flexArrow;fillColor=#999999;strokeColor=none;" edge="1" parent="1" source="ROhvSXwiDPXo4LtuRvh4-1" target="ROhvSXwiDPXo4LtuRvh4-6">
+          <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="ROhvSXwiDPXo4LtuRvh4-4" value="&lt;font style=&quot;font-size: 20px;&quot; face=&quot;Ubuntu&quot;&gt;&lt;b&gt;nexusgraph-db&lt;/b&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;strokeWidth=7;" vertex="1" parent="1">
-          <mxGeometry x="160" y="600" width="200" height="100" as="geometry" />
+        <mxCell id="bUZzEBSvuRqHc9tuNdCj-18" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0;entryDx=0;entryDy=0;shape=flexArrow;fillColor=#999999;strokeColor=none;" edge="1" parent="1" source="ROhvSXwiDPXo4LtuRvh4-1" target="ROhvSXwiDPXo4LtuRvh4-5">
+          <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="ROhvSXwiDPXo4LtuRvh4-5" value="&lt;font style=&quot;font-size: 20px;&quot; face=&quot;Ubuntu&quot;&gt;&lt;b&gt;nexusgraph-nlp&lt;/b&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;strokeWidth=7;" vertex="1" parent="1">
-          <mxGeometry x="410" y="600" width="200" height="100" as="geometry" />
+        <mxCell id="ROhvSXwiDPXo4LtuRvh4-1" value="&lt;font style=&quot;font-size: 20px;&quot; face=&quot;Ubuntu&quot;&gt;&lt;b&gt;nexusgraph-app&lt;/b&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;strokeWidth=7;" parent="1" vertex="1">
+          <mxGeometry x="105" y="160" width="200" height="100" as="geometry" />
         </mxCell>
-        <mxCell id="ROhvSXwiDPXo4LtuRvh4-6" value="&lt;font style=&quot;font-size: 20px;&quot; face=&quot;Ubuntu&quot;&gt;&lt;b&gt;nexusgraph-oauth&lt;/b&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;strokeWidth=7;" vertex="1" parent="1">
-          <mxGeometry x="-340" y="300" width="200" height="100" as="geometry" />
+        <mxCell id="ROhvSXwiDPXo4LtuRvh4-2" value="&lt;font style=&quot;font-size: 20px;&quot; face=&quot;Ubuntu&quot;&gt;&lt;b&gt;nexusgraph-redux&lt;/b&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;strokeWidth=7;" parent="1" vertex="1">
+          <mxGeometry x="105" y="537.5" width="200" height="100" as="geometry" />
         </mxCell>
-        <mxCell id="ROhvSXwiDPXo4LtuRvh4-7" value="" style="shape=flexArrow;endArrow=classic;startArrow=classic;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;strokeColor=none;fillColor=#999999;" edge="1" parent="1" source="ROhvSXwiDPXo4LtuRvh4-2" target="ROhvSXwiDPXo4LtuRvh4-1">
-          <mxGeometry width="100" height="100" relative="1" as="geometry">
-            <mxPoint x="110" y="410" as="sourcePoint" />
-            <mxPoint x="210" y="310" as="targetPoint" />
-            <Array as="points">
-              <mxPoint x="180" y="350" />
-            </Array>
-          </mxGeometry>
+        <mxCell id="bUZzEBSvuRqHc9tuNdCj-13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;shape=flexArrow;fillColor=#999999;strokeColor=none;" edge="1" parent="1" source="ROhvSXwiDPXo4LtuRvh4-3" target="ROhvSXwiDPXo4LtuRvh4-4">
+          <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="ROhvSXwiDPXo4LtuRvh4-8" value="" style="shape=flexArrow;endArrow=classic;startArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fillColor=#999999;strokeColor=none;" edge="1" parent="1" source="ROhvSXwiDPXo4LtuRvh4-1" target="ROhvSXwiDPXo4LtuRvh4-3">
-          <mxGeometry width="100" height="100" relative="1" as="geometry">
-            <mxPoint x="440" y="580" as="sourcePoint" />
-            <mxPoint x="540" y="480" as="targetPoint" />
-            <Array as="points">
-              <mxPoint x="580" y="350" />
-            </Array>
-          </mxGeometry>
+        <mxCell id="bUZzEBSvuRqHc9tuNdCj-14" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=1;exitDx=0;exitDy=0;entryX=0.75;entryY=0;entryDx=0;entryDy=0;elbow=vertical;shape=flexArrow;fillColor=#999999;strokeColor=none;" edge="1" parent="1" source="ROhvSXwiDPXo4LtuRvh4-3" target="ROhvSXwiDPXo4LtuRvh4-2">
+          <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="ROhvSXwiDPXo4LtuRvh4-10" value="" style="shape=flexArrow;endArrow=classic;startArrow=classic;html=1;rounded=0;entryX=0.25;entryY=1;entryDx=0;entryDy=0;exitX=0.75;exitY=0;exitDx=0;exitDy=0;strokeColor=none;fillColor=#999999;" edge="1" parent="1" source="ROhvSXwiDPXo4LtuRvh4-4" target="ROhvSXwiDPXo4LtuRvh4-1">
-          <mxGeometry width="100" height="100" relative="1" as="geometry">
-            <mxPoint x="440" y="580" as="sourcePoint" />
-            <mxPoint x="540" y="480" as="targetPoint" />
-            <Array as="points" />
-          </mxGeometry>
+        <mxCell id="ROhvSXwiDPXo4LtuRvh4-3" value="&lt;font style=&quot;font-size: 20px;&quot; face=&quot;Ubuntu&quot;&gt;&lt;b&gt;nexusgraph-graph&lt;/b&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;strokeWidth=7;" parent="1" vertex="1">
+          <mxGeometry x="500" y="160" width="200" height="100" as="geometry" />
         </mxCell>
-        <mxCell id="ROhvSXwiDPXo4LtuRvh4-11" value="" style="shape=flexArrow;endArrow=classic;startArrow=classic;html=1;rounded=0;entryX=0.75;entryY=1;entryDx=0;entryDy=0;exitX=0.25;exitY=0;exitDx=0;exitDy=0;fillColor=#999999;strokeColor=none;" edge="1" parent="1" source="ROhvSXwiDPXo4LtuRvh4-5" target="ROhvSXwiDPXo4LtuRvh4-1">
-          <mxGeometry width="100" height="100" relative="1" as="geometry">
-            <mxPoint x="440" y="570" as="sourcePoint" />
-            <mxPoint x="540" y="480" as="targetPoint" />
-          </mxGeometry>
+        <mxCell id="bUZzEBSvuRqHc9tuNdCj-12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;shape=flexArrow;fillColor=#999999;strokeColor=none;" edge="1" parent="1" source="ROhvSXwiDPXo4LtuRvh4-4" target="ROhvSXwiDPXo4LtuRvh4-2">
+          <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="ROhvSXwiDPXo4LtuRvh4-12" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;dashed=1;" vertex="1" parent="1">
-          <mxGeometry x="700" y="400" width="160" height="180" as="geometry" />
+        <mxCell id="ROhvSXwiDPXo4LtuRvh4-4" value="&lt;font style=&quot;font-size: 20px;&quot; face=&quot;Ubuntu&quot;&gt;&lt;b&gt;nexusgraph-db&lt;/b&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;strokeWidth=7;" parent="1" vertex="1">
+          <mxGeometry x="500" y="537.5" width="200" height="100" as="geometry" />
         </mxCell>
-        <mxCell id="ROhvSXwiDPXo4LtuRvh4-13" value="&lt;b&gt;&lt;font face=&quot;Ubuntu&quot;&gt;GraphBrowser&lt;/font&gt;&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#CFE1F3;strokeWidth=3;" vertex="1" parent="1">
-          <mxGeometry x="715" y="420" width="130" height="40" as="geometry" />
+        <mxCell id="bUZzEBSvuRqHc9tuNdCj-11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;shape=flexArrow;fillColor=#999999;strokeColor=none;" edge="1" parent="1" source="ROhvSXwiDPXo4LtuRvh4-5" target="ROhvSXwiDPXo4LtuRvh4-2">
+          <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="ROhvSXwiDPXo4LtuRvh4-14" value="&lt;b&gt;&lt;font face=&quot;Ubuntu&quot;&gt;immutable&lt;/font&gt;&lt;/b&gt;&lt;span style=&quot;color: rgba(0, 0, 0, 0); font-family: monospace; font-size: 0px; text-align: start; text-wrap: nowrap;&quot;&gt;%3CmxGraphModel%3E%3Croot%3E%3CmxCell%20id%3D%220%22%2F%3E%3CmxCell%20id%3D%221%22%20parent%3D%220%22%2F%3E%3CmxCell%20id%3D%222%22%20value%3D%22%26lt%3Bb%26gt%3B%26lt%3Bfont%20face%3D%26quot%3BUbuntu%26quot%3B%26gt%3BGraphBrowser%26lt%3B%2Ffont%26gt%3B%26lt%3B%2Fb%26gt%3B%22%20style%3D%22rounded%3D1%3BwhiteSpace%3Dwrap%3Bhtml%3D1%3BfillColor%3Dnone%3BstrokeWidth%3D5%3B%22%20vertex%3D%221%22%20parent%3D%221%22%3E%3CmxGeometry%20x%3D%22775%22%20y%3D%22420%22%20width%3D%22130%22%20height%3D%2240%22%20as%3D%22geometry%22%2F%3E%3C%2FmxCell%3E%3C%2Froot%3E%3C%2FmxGraphModel%3E&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#CFE1F3;strokeWidth=3;" vertex="1" parent="1">
-          <mxGeometry x="715" y="470" width="130" height="40" as="geometry" />
+        <mxCell id="ROhvSXwiDPXo4LtuRvh4-5" value="&lt;font style=&quot;font-size: 20px;&quot; face=&quot;Ubuntu&quot;&gt;&lt;b&gt;nexusgraph-nlp&lt;/b&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;strokeWidth=7;" parent="1" vertex="1">
+          <mxGeometry x="-340" y="537.5" width="200" height="100" as="geometry" />
         </mxCell>
-        <mxCell id="ROhvSXwiDPXo4LtuRvh4-15" value="&lt;font face=&quot;Ubuntu&quot;&gt;&lt;b&gt;mappers&lt;/b&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#CFE1F3;strokeWidth=3;" vertex="1" parent="1">
-          <mxGeometry x="715" y="520" width="130" height="40" as="geometry" />
+        <mxCell id="ROhvSXwiDPXo4LtuRvh4-6" value="&lt;font style=&quot;font-size: 20px;&quot; face=&quot;Ubuntu&quot;&gt;&lt;b&gt;nexusgraph-oauth&lt;/b&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;strokeWidth=7;" parent="1" vertex="1">
+          <mxGeometry x="-340" y="160" width="200" height="100" as="geometry" />
         </mxCell>
-        <mxCell id="ROhvSXwiDPXo4LtuRvh4-17" value="&lt;font face=&quot;Ubuntu&quot;&gt;&lt;span style=&quot;font-size: 15px;&quot;&gt;&lt;b&gt;Graphing Capability&lt;/b&gt;&lt;/span&gt;&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
-          <mxGeometry x="660" y="370" width="240" height="30" as="geometry" />
+        <mxCell id="ROhvSXwiDPXo4LtuRvh4-12" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;dashed=1;" parent="1" vertex="1">
+          <mxGeometry x="710" y="120" width="160" height="180" as="geometry" />
         </mxCell>
-        <mxCell id="ROhvSXwiDPXo4LtuRvh4-19" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;dashed=1;" vertex="1" parent="1">
-          <mxGeometry x="-100" y="400" width="160" height="180" as="geometry" />
+        <mxCell id="ROhvSXwiDPXo4LtuRvh4-13" value="&lt;b&gt;&lt;font face=&quot;Ubuntu&quot;&gt;GraphBrowser&lt;/font&gt;&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#CFE1F3;strokeWidth=3;" parent="1" vertex="1">
+          <mxGeometry x="725" y="140" width="130" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="ROhvSXwiDPXo4LtuRvh4-20" value="&lt;font face=&quot;Ubuntu&quot; color=&quot;#ffffff&quot;&gt;&lt;b&gt;ReduxStoreProvider&lt;/b&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#764ABC;strokeWidth=3;" vertex="1" parent="1">
-          <mxGeometry x="-85" y="420" width="130" height="40" as="geometry" />
+        <mxCell id="ROhvSXwiDPXo4LtuRvh4-14" value="&lt;b&gt;&lt;font face=&quot;Ubuntu&quot;&gt;immutable&lt;/font&gt;&lt;/b&gt;&lt;span style=&quot;color: rgba(0, 0, 0, 0); font-family: monospace; font-size: 0px; text-align: start; text-wrap: nowrap;&quot;&gt;%3CmxGraphModel%3E%3Croot%3E%3CmxCell%20id%3D%220%22%2F%3E%3CmxCell%20id%3D%221%22%20parent%3D%220%22%2F%3E%3CmxCell%20id%3D%222%22%20value%3D%22%26lt%3Bb%26gt%3B%26lt%3Bfont%20face%3D%26quot%3BUbuntu%26quot%3B%26gt%3BGraphBrowser%26lt%3B%2Ffont%26gt%3B%26lt%3B%2Fb%26gt%3B%22%20style%3D%22rounded%3D1%3BwhiteSpace%3Dwrap%3Bhtml%3D1%3BfillColor%3Dnone%3BstrokeWidth%3D5%3B%22%20vertex%3D%221%22%20parent%3D%221%22%3E%3CmxGeometry%20x%3D%22775%22%20y%3D%22420%22%20width%3D%22130%22%20height%3D%2240%22%20as%3D%22geometry%22%2F%3E%3C%2FmxCell%3E%3C%2Froot%3E%3C%2FmxGraphModel%3E&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#CFE1F3;strokeWidth=3;" parent="1" vertex="1">
+          <mxGeometry x="725" y="190" width="130" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="ROhvSXwiDPXo4LtuRvh4-21" value="&lt;font color=&quot;#ffffff&quot; face=&quot;Ubuntu&quot;&gt;&lt;b&gt;GlobalState&lt;/b&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#764ABC;strokeWidth=3;" vertex="1" parent="1">
-          <mxGeometry x="-85" y="470" width="130" height="40" as="geometry" />
+        <mxCell id="ROhvSXwiDPXo4LtuRvh4-15" value="&lt;font face=&quot;Ubuntu&quot;&gt;&lt;b&gt;mappers&lt;/b&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#CFE1F3;strokeWidth=3;" parent="1" vertex="1">
+          <mxGeometry x="725" y="240" width="130" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="ROhvSXwiDPXo4LtuRvh4-22" value="&lt;font color=&quot;#ffffff&quot; face=&quot;Ubuntu&quot;&gt;&lt;b&gt;slices &amp;amp; reducers&lt;/b&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#764ABC;strokeWidth=3;" vertex="1" parent="1">
-          <mxGeometry x="-85" y="520" width="130" height="40" as="geometry" />
+        <mxCell id="ROhvSXwiDPXo4LtuRvh4-17" value="&lt;font face=&quot;Ubuntu&quot;&gt;&lt;span style=&quot;font-size: 15px;&quot;&gt;&lt;b&gt;Graphing Capability&lt;/b&gt;&lt;/span&gt;&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="670" y="90" width="240" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="ROhvSXwiDPXo4LtuRvh4-23" value="&lt;font face=&quot;Ubuntu&quot;&gt;&lt;span style=&quot;font-size: 15px;&quot;&gt;&lt;b&gt;State Management&lt;/b&gt;&lt;/span&gt;&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
-          <mxGeometry x="-140" y="370" width="240" height="30" as="geometry" />
+        <mxCell id="ROhvSXwiDPXo4LtuRvh4-19" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;dashed=1;" parent="1" vertex="1">
+          <mxGeometry x="125" y="680" width="160" height="230" as="geometry" />
         </mxCell>
-        <mxCell id="ROhvSXwiDPXo4LtuRvh4-24" value="" style="shape=flexArrow;endArrow=classic;startArrow=classic;html=1;rounded=0;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=0;entryY=0.25;entryDx=0;entryDy=0;fillColor=#999999;strokeColor=none;" edge="1" parent="1" source="ROhvSXwiDPXo4LtuRvh4-6" target="ROhvSXwiDPXo4LtuRvh4-1">
-          <mxGeometry width="100" height="100" relative="1" as="geometry">
-            <mxPoint x="330" y="520" as="sourcePoint" />
-            <mxPoint x="430" y="420" as="targetPoint" />
-          </mxGeometry>
+        <mxCell id="ROhvSXwiDPXo4LtuRvh4-20" value="&lt;font face=&quot;Ubuntu&quot; color=&quot;#ffffff&quot;&gt;&lt;b&gt;ReduxStoreProvider&lt;/b&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#764ABC;strokeWidth=3;" parent="1" vertex="1">
+          <mxGeometry x="140" y="700" width="130" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="ROhvSXwiDPXo4LtuRvh4-21" value="&lt;font color=&quot;#ffffff&quot; face=&quot;Ubuntu&quot;&gt;&lt;b&gt;GlobalState&lt;/b&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#764ABC;strokeWidth=3;" parent="1" vertex="1">
+          <mxGeometry x="140" y="750" width="130" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="ROhvSXwiDPXo4LtuRvh4-22" value="&lt;font color=&quot;#ffffff&quot; face=&quot;Ubuntu&quot;&gt;&lt;b&gt;slices &amp;amp; reducers&lt;/b&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#764ABC;strokeWidth=3;" parent="1" vertex="1">
+          <mxGeometry x="140" y="800" width="130" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="ROhvSXwiDPXo4LtuRvh4-23" value="&lt;font face=&quot;Ubuntu&quot;&gt;&lt;span style=&quot;font-size: 15px;&quot;&gt;&lt;b&gt;State Management&lt;/b&gt;&lt;/span&gt;&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="85" y="650" width="240" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="bUZzEBSvuRqHc9tuNdCj-1" value="&lt;font color=&quot;#ffffff&quot; face=&quot;Ubuntu&quot;&gt;&lt;b&gt;hooks&lt;/b&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#764ABC;strokeWidth=3;" vertex="1" parent="1">
+          <mxGeometry x="140" y="850" width="130" height="40" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>

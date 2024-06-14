@@ -414,6 +414,14 @@ When we are done, do not forget to put `"neo4j-devtools-arc": "^x.y.z"` back int
 Troubleshooting
 ---------------
 
+### TypeError: Reflect.hasOwnMetadata is not a function
+
+![Error loading inversify-error.png](./img/inversify-error.png)
+
+This is because we are missing a simple import somewhere. Looking at the error trace, it mentions
+`AstraiosGraphClient.ts`. [__Simply put a `import "reflect-metadata";` import__](https://stackoverflow.com/a/43115660)
+solves the problem
+
 ### React: Cannot assign to read only property `xxx` of object `#<Object>`
 
 This was caused by immer's `produce` function which builds read-only deep copy of object. In Nexus Graph, all redux

@@ -20,11 +20,11 @@ import { useDispatch } from "react-redux";
 
 import * as Sentry from "@sentry/react";
 import { GraphClient } from "nexusgraph-db";
+import { GraphClientContext } from "nexusgraph-db/src/Contexts";
 import { updateOAuthState } from "nexusgraph-redux";
 import { bindGraphClient, container } from "../inversify.config";
 import TYPES from "../types";
 import App from "./App";
-import { GraphClientContext } from "./Contexts";
 import { StyledSpinner } from "./styled";
 
 interface ProdAppProps {

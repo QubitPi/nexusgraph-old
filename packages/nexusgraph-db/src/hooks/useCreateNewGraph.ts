@@ -15,11 +15,11 @@
  */
 
 import * as Sentry from "@sentry/react";
-import { GraphClient } from "nexusgraph-db";
 import { Graph, GraphState } from "nexusgraph-redux";
 import { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { GraphClientContext } from "../Contexts";
+import { GraphClient } from "../graph/GraphClient";
 
 /**
  * A custom React hook that allows the sharing logic of creating a new graph in database.
