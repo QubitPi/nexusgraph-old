@@ -14,17 +14,15 @@
  * limitations under the License.
  */
 
-import * as Sentry from "@sentry/react";
-import { GraphClient } from "nexusgraph-db";
 import { NLPClient } from "nexusgraph-nlp";
-import { appendToGraphList, updateGraphData } from "nexusgraph-redux";
-import { useContext, useEffect, useState } from "react";
+import { appendToGraphList, Graph, updateGraphData } from "nexusgraph-redux";
+import { useEffect, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { useDispatch } from "react-redux";
 import { container } from "../../../../inversify.config";
 import TYPES from "../../../../types";
-import { GraphClientContext } from "../../../Contexts";
+import { useCreateNewGraph } from "../../../hooks";
 import { Method } from "./methods";
 
 const nlpClient: NLPClient = container.get<NLPClient>(TYPES.NLPClient);
@@ -38,7 +36,9 @@ interface MethodsSelectionModalProps {
 export function MethodModal(props: MethodsSelectionModalProps): JSX.Element {
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  const graphClient: GraphClient = useContext(GraphClientContext) as GraphClient;
+
+  const [inferencedGraph, setInferencedGraph] = useState<Graph>();
+  const graphState = useCreateNewGraph(inferencedGraph);
 
   const [textInput, setTextInput] = useState<string>("");
   const [buttonDisabled, setButtonDisabled] = useState<boolean>(true);
@@ -50,28 +50,28 @@ export function MethodModal(props: MethodsSelectionModalProps): JSX.Element {
     setButtonDisabled(!textInput);
   }, [textInput]);
 
+  useEffect(() => {
+    if (graphState) {
+      const graphId = graphState.id as string;
+      const graphName = graphState.name as string;
+
+      dispatch(updateGraphData(graphState));
+      dispatch(appendToGraphList({ id: graphId, name: graphName }));
+
+      props.setShowModal(false);
+    }
+  }, [graphState]);
+
+  /**
+   * A state mutation that triggers the `useCreateNewGraph()`
+   */
   const onClick = () => {
     nlpClient.entityExtraction(textInput).then((graph) => {
       if (graph.nodes.length == 0) {
         return;
       }
 
-      graphClient
-        .saveOrUpdate({
-          name: t("Untitled Graph"),
-          nodes: graph.nodes,
-          links: graph.links,
-        })
-        .then((graphState) => {
-          const graphId = graphState.id as string;
-          const graphName = graphState.name as string;
-
-          dispatch(updateGraphData(graphState));
-          dispatch(appendToGraphList({ id: graphId, name: graphName }));
-
-          props.setShowModal(false);
-        })
-        .catch((error) => Sentry.captureException(error));
+      setInferencedGraph(graph);
     });
   };
 
