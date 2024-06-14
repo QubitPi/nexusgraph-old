@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { GraphMetaData, selectGraphData } from "nexusgraph-redux";
+import { GraphMetaData, selectGraph } from "nexusgraph-redux";
 import { NewGraphButton } from "./new-graph-button";
 import { StyledGraphListItem } from "./styled";
 
@@ -24,7 +24,7 @@ interface SideBarProps {
 }
 
 export default function SideBar(props: SideBarProps): JSX.Element {
-  const graphId = selectGraphData().id;
+  const graphId = selectGraph().id;
 
   return (
     <>

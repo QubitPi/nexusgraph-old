@@ -22,9 +22,9 @@ import {
   Graph,
   GraphMetaData,
   initialState,
-  selectGraphData,
+  selectGraph,
   selectGraphList,
-  updateGraphData,
+  updateGraph,
   updateGraphList,
   updateSingleItem,
 } from "nexusgraph-redux";
@@ -57,7 +57,7 @@ export default function App(): JSX.Element {
   const dispatch = useDispatch();
   const graphClient: GraphClient = useContext(GraphClientContext) as GraphClient;
 
-  const graphSate = selectGraphData();
+  const graphSate = selectGraph();
   const graphId = graphSate.id;
   const graphList = selectGraphList();
 
@@ -68,7 +68,7 @@ export default function App(): JSX.Element {
 
     graphClient.getGraphById(graphId).then((graph) => {
       dispatch(
-        updateGraphData({
+        updateGraph({
           id: graph.id,
           name: graph.name,
           nodes: graph.nodes,
@@ -85,12 +85,12 @@ export default function App(): JSX.Element {
       throw error;
     }
 
-    const newGraphData: Graph = produce(graphSate, (draft) => {
+    const newGraph: Graph = produce(graphSate, (draft) => {
       draft.name = newTitle;
     });
 
     graphClient
-      .saveOrUpdate(newGraphData)
+      .saveOrUpdate(newGraph)
       .then((response) => {
         dispatch(updateSingleItem({ id: graphId, name: newTitle }));
       })
@@ -114,13 +114,13 @@ export default function App(): JSX.Element {
 
         if (nextDisplayedGraphId == null) {
           dispatch(updateGraphList([]));
-          dispatch(updateGraphData(initialState));
+          dispatch(updateGraph(initialState));
           return;
         }
 
         graphClient.getGraphById(nextDisplayedGraphId).then((graph) => {
           dispatch(
-            updateGraphData({
+            updateGraph({
               id: graph.id,
               name: graph.name,
               nodes: graph.nodes,

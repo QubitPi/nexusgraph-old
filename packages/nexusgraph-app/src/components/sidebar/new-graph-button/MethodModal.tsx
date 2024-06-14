@@ -36,7 +36,7 @@ export function MethodModal(props: MethodsSelectionModalProps): JSX.Element {
   const { t } = useTranslation();
 
   const [inferencedGraph, setInferencedGraph] = useState<Graph>();
-  const graphState = useCreateNewGraph(inferencedGraph);
+  const graph = useCreateNewGraph(inferencedGraph);
 
   const [textInput, setTextInput] = useState<string>("");
   const [buttonDisabled, setButtonDisabled] = useState<boolean>(true);
@@ -49,10 +49,10 @@ export function MethodModal(props: MethodsSelectionModalProps): JSX.Element {
   }, [textInput]);
 
   useEffect(() => {
-    if (graphState) {
+    if (graph) {
       props.setShowModal(false);
     }
-  }, [graphState]);
+  }, [graph]);
 
   /**
    * A state mutation that triggers the `usePersistGraph()`

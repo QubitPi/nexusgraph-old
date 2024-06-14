@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { selectGraphData } from "nexusgraph-redux";
+import { selectGraph } from "nexusgraph-redux";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { StyledInput } from "./styled";
@@ -29,13 +29,13 @@ export default function GraphTitle(props: GraphTitleProps): JSX.Element {
 
   const initialGraphName = t("Unamed Graph");
 
-  const graphData = selectGraphData();
+  const graph = selectGraph();
 
-  const [inputValue, setInputValue] = useState(graphData.name ? graphData.name : initialGraphName);
+  const [inputValue, setInputValue] = useState(graph.name ? graph.name : initialGraphName);
 
   useEffect(() => {
-    setInputValue(graphData.name ? graphData.name : initialGraphName);
-  }, [graphData.id]);
+    setInputValue(graph.name ? graph.name : initialGraphName);
+  }, [graph.id]);
 
   return (
     <StyledInput

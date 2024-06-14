@@ -19,7 +19,7 @@ import { GraphClient } from "nexusgraph-db";
 import { I18nextProvider } from "react-i18next";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import OAuth2Provider, { Callback, Signout } from "../../nexusgraph-oauth/src/OAuth2Provider";
-import { ReduxStoreProvider, updateGraphData, updateGraphList } from "../../nexusgraph-redux";
+import { ReduxStoreProvider, updateGraph, updateGraphList } from "../../nexusgraph-redux";
 import DevApp from "./DevApp";
 import i18n from "./i18n";
 import ProdApp from "./ProdApp";
@@ -43,13 +43,13 @@ export default function AppInit(): JSX.Element {
 
         graphClient
           .getGraphById(metaDataList[0].id)
-          .then((graphState) => {
+          .then((graph) => {
             dispatch(
-              updateGraphData({
-                id: graphState.id,
-                name: graphState.name,
-                nodes: graphState.nodes,
-                links: graphState.links,
+              updateGraph({
+                id: graph.id,
+                name: graph.name,
+                nodes: graph.nodes,
+                links: graph.links,
               })
             );
           })

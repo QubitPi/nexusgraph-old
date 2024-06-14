@@ -29,7 +29,7 @@ import {
 } from "neo4j-devtools-arc";
 import { GraphClient } from "nexusgraph-db";
 import { GraphClientContext } from "nexusgraph-db/src/Contexts";
-import { Link, Node, selectGraphData, updateGraphData } from "nexusgraph-redux";
+import { Link, Node, selectGraph, updateGraph } from "nexusgraph-redux";
 import { useContext, useState } from "react";
 import { useDispatch } from "react-redux";
 import { ThemeProvider } from "styled-components";
@@ -50,7 +50,7 @@ export default function GraphBrowser(): JSX.Element {
   const dispatch = useDispatch();
 
   const isFullscreen = true;
-  const graphData = selectGraphData();
+  const graph = selectGraph();
 
   const graphClient: GraphClient = useContext(GraphClientContext) as GraphClient;
 
@@ -72,7 +72,7 @@ export default function GraphBrowser(): JSX.Element {
         throw error;
       }
 
-      const newGraphState = addNode(graphData, {
+      const newGraph = addNode(graph, {
         id: Math.random().toString(36).slice(2),
         fields: {
           name: properties["name"],
@@ -81,9 +81,9 @@ export default function GraphBrowser(): JSX.Element {
         },
       } as Node);
 
-      dispatch(updateGraphData(newGraphState));
+      dispatch(updateGraph(newGraph));
 
-      graphClient.saveOrUpdate(newGraphState).catch((error) => {
+      graphClient.saveOrUpdate(newGraph).catch((error) => {
         Sentry.captureException(error);
         throw error;
       });
@@ -113,7 +113,7 @@ export default function GraphBrowser(): JSX.Element {
         throw error;
       }
 
-      const newGraphState = addLink(graphData, {
+      const newGraph = addLink(graph, {
         id: properties["type"],
         source: properties["sourceNodeId"],
         target: properties["targetNodeId"],
@@ -122,8 +122,8 @@ export default function GraphBrowser(): JSX.Element {
         },
       } as Link);
 
-      dispatch(updateGraphData(newGraphState));
-      graphClient.saveOrUpdate(newGraphState).catch((error) => {
+      dispatch(updateGraph(newGraph));
+      graphClient.saveOrUpdate(newGraph).catch((error) => {
         Sentry.captureException(error);
         throw error;
       });
@@ -142,10 +142,10 @@ export default function GraphBrowser(): JSX.Element {
       const relId = properties["relId"] as string;
       const newType = properties["newType"] as string;
 
-      const newGraphData = mutateLinkFieldById(graphData, relId, "type", newType);
+      const newGraph = mutateLinkFieldById(graph, relId, "type", newType);
 
-      dispatch(updateGraphData(newGraphData));
-      graphClient.saveOrUpdate(newGraphData).catch((error) => {
+      dispatch(updateGraph(newGraph));
+      graphClient.saveOrUpdate(newGraph).catch((error) => {
         Sentry.captureException(error);
         throw error;
       });
@@ -166,12 +166,12 @@ export default function GraphBrowser(): JSX.Element {
       const propKey = properties["propKey"] as string;
       const propVal = properties["propVal"] as string;
 
-      const newGraphData = isNode
-        ? mutateNodeFieldById(graphData, nodeOrRelId, propKey, propVal)
-        : mutateLinkFieldById(graphData, nodeOrRelId, propKey, propVal);
+      const newGraph = isNode
+        ? mutateNodeFieldById(graph, nodeOrRelId, propKey, propVal)
+        : mutateLinkFieldById(graph, nodeOrRelId, propKey, propVal);
 
-      dispatch(updateGraphData(newGraphData));
-      graphClient.saveOrUpdate(newGraphData);
+      dispatch(updateGraph(newGraph));
+      graphClient.saveOrUpdate(newGraph);
     }
 
     if (event == DETAILS_PANE_TITLE_UPDATE) {
@@ -189,12 +189,12 @@ export default function GraphBrowser(): JSX.Element {
       const titlePropertyKey = properties["titlePropertyKey"] as string;
       const newTitle = properties["newTitle"] as string;
 
-      const newGraphData = isNode
-        ? mutateNodeFieldById(graphData, nodeOrRelId, titlePropertyKey, newTitle)
-        : mutateLinkFieldById(graphData, nodeOrRelId, titlePropertyKey, newTitle);
+      const newGraph = isNode
+        ? mutateNodeFieldById(graph, nodeOrRelId, titlePropertyKey, newTitle)
+        : mutateLinkFieldById(graph, nodeOrRelId, titlePropertyKey, newTitle);
 
-      dispatch(updateGraphData(newGraphData));
-      graphClient.saveOrUpdate(newGraphData).catch((error) => {
+      dispatch(updateGraph(newGraph));
+      graphClient.saveOrUpdate(newGraph).catch((error) => {
         Sentry.captureException(error);
         throw error;
       });
@@ -214,9 +214,9 @@ export default function GraphBrowser(): JSX.Element {
         // graphStyleData={undefined}
         // updateStyle={undefined}
         // getNeighbours={undefined}
-        nodes={mapToBasicNodes(graphData.nodes)}
+        nodes={mapToBasicNodes(graph.nodes)}
         autocompleteRelationships={false}
-        relationships={mapToBasicRelationships(graphData.links)}
+        relationships={mapToBasicRelationships(graph.links)}
         isFullscreen={isFullscreen}
         assignVisElement={(svgElement: any, graphElement: any) => {
           setVisElement({ svgElement, graphElement, type: "graph" });

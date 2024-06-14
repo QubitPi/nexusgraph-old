@@ -20,13 +20,13 @@ import { Graph, Link, Node } from "nexusgraph-redux";
 /**
  * Add a new node to the specified graph.
  *
- * @param oldGraphState  A Redux state of the provided graph
+ * @param oldGraph  A Redux state of the provided graph
  * @param node  The new node to add to the provided graph
  *
  * @returns a new graph state with the new node added
  */
-export const addNode = (oldGraphState: Graph, node: Node): Graph => {
-  return produce(oldGraphState, (draft) => {
+export const addNode = (oldGraph: Graph, node: Node): Graph => {
+  return produce(oldGraph, (draft) => {
     draft.nodes.push(node);
   });
 };
@@ -34,13 +34,13 @@ export const addNode = (oldGraphState: Graph, node: Node): Graph => {
 /**
  * Add a new link to the specified graph.
  *
- * @param oldGraphState  A Redux state of the provided graph
+ * @param oldGraph  A Redux state of the provided graph
  * @param link  The new link to add to the provided graph
  *
  * @returns a new graph state with the new link added
  */
-export const addLink = (oldGraphState: Graph, link: Link): Graph => {
-  return produce(oldGraphState, (draft) => {
+export const addLink = (oldGraph: Graph, link: Link): Graph => {
+  return produce(oldGraph, (draft) => {
     draft.links.push(link);
   });
 };
@@ -48,7 +48,7 @@ export const addLink = (oldGraphState: Graph, link: Link): Graph => {
 /**
  * Updates a property of a node in a specified graph and returns the graph with the updated node.
  *
- * @param oldGraphState  A Redux state of the provided graph
+ * @param oldGraph  A Redux state of the provided graph
  * @param nodeId  The ID of the node to be modified
  * @param fieldName  The name of the field to modify
  * @param newFieldValue  The new value for the field
@@ -56,12 +56,12 @@ export const addLink = (oldGraphState: Graph, link: Link): Graph => {
  * @returns a new graph state with the updated node
  */
 export const mutateNodeFieldById = (
-  oldGraphState: Graph,
+  oldGraph: Graph,
   nodeId: string,
   fieldName: string,
   newFieldValue: string
 ): Graph => {
-  return produce(oldGraphState, (draft) => {
+  return produce(oldGraph, (draft) => {
     draft.nodes.forEach((node) => {
       if (node.id == nodeId) {
         node.fields[`${fieldName}`] = newFieldValue;
@@ -73,7 +73,7 @@ export const mutateNodeFieldById = (
 /**
  * Updates a property of a link in a specified graph and returns the graph with the updated link.
  *
- * @param oldGraphState  A Redux state of the provided graph
+ * @param oldGraph  A Redux state of the provided graph
  * @param linkId  The ID of the link to be modified
  * @param fieldName  The name of the field to modify
  * @param newFieldValue  The new value for the field
@@ -81,12 +81,12 @@ export const mutateNodeFieldById = (
  * @returns a new graph state with the updated link
  */
 export const mutateLinkFieldById = (
-  oldGraphState: Graph,
+  oldGraph: Graph,
   linkId: string,
   fieldName: string,
   newFieldValue: string
 ): Graph => {
-  return produce(oldGraphState, (draft) => {
+  return produce(oldGraph, (draft) => {
     draft.links.forEach((link) => {
       if (link.id == linkId) {
         link.fields[`${fieldName}`] = newFieldValue;
