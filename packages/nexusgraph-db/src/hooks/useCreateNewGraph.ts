@@ -15,7 +15,7 @@
  */
 
 import { Graph, useRenderNewGraph } from "nexusgraph-redux";
-import { usePersistNewGraph } from "./index";
+import { usePersistGraph } from "./index";
 
 /**
  * A custom React hook that allows the sharing logic of persisting and rendering a new graph in App.
@@ -31,7 +31,7 @@ import { usePersistNewGraph } from "./index";
  *                  │                                 │
  * ┌────────────────▼────┐                            │
  * │                     │                            │
- * │ usePersistNewGraph  │                            │
+ * │   usePersistGraph   │                            │
  * │                     │                            │
  * └────────────────┬────┘                            │
  *                  │                                 │
@@ -57,7 +57,7 @@ import { usePersistNewGraph } from "./index";
  * @param graph
  */
 const useCreateNewGraph = (graph: Graph | undefined) => {
-  return useRenderNewGraph(usePersistNewGraph(graph));
+  return useRenderNewGraph(usePersistGraph(graph));
 };
 
 export default useCreateNewGraph;

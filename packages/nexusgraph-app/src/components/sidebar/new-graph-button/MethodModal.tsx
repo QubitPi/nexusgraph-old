@@ -55,7 +55,7 @@ export function MethodModal(props: MethodsSelectionModalProps): JSX.Element {
   }, [graphState]);
 
   /**
-   * A state mutation that triggers the `usePersistNewGraph()`
+   * A state mutation that triggers the `usePersistGraph()`
    */
   const onClick = () => {
     nlpClient.entityExtraction(textInput).then((graph) => {
