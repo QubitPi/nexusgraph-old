@@ -17,7 +17,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { appendToGraphList, selectGraphIdList } from "../graph-list/graphListDuck";
-import { Graph, updateGraphData } from "../graph/graphDuck";
+import { Graph, updateGraph } from "../graph/graphDuck";
 
 /**
  * A custom React hook that allows the sharing logic of rendering a new graph onto canvas on UI.
@@ -25,37 +25,37 @@ import { Graph, updateGraphData } from "../graph/graphDuck";
  * Example usage:
  *
  * ```typescript
- * const graphState = useRenderGraph(graphState);
+ * const graph = useRenderGraph(graph);
  * ```
  *
- * The `graphState` is the state that triggers the re-rendering of the containing component once being updated. Note
- * that `graphState` is initially set to `undefined`
+ * The `graph` is the state that triggers the re-rendering of the containing component once being updated. Note
+ * that `graph` is initially set to `undefined`
  *
- * @param graphState  An new redux representation of the graph to be rendered onto the UI canvas
+ * @param graph  An new redux representation of the graph to be rendered onto the UI canvas
  *
  * @returns a redux representation of the newly rendered graph
  */
-const useRenderGraph = (graphState: Graph | undefined) => {
+const useRenderGraph = (graph: Graph | undefined) => {
   const dispatch = useDispatch();
   const graphIdList = selectGraphIdList();
-  const [newGraphState, setNewGraphState] = useState<Graph>();
+  const [newGraph, setNewGraph] = useState<Graph>();
 
   useEffect(() => {
-    if (graphState) {
-      const graphId = graphState.id as string;
-      const graphName = graphState.name as string;
+    if (graph) {
+      const graphId = graph.id as string;
+      const graphName = graph.name as string;
 
-      dispatch(updateGraphData(graphState));
+      dispatch(updateGraph(graph));
 
       if (!graphIdList.includes(graphId)) {
         dispatch(appendToGraphList({ id: graphId, name: graphName }));
       }
 
-      setNewGraphState(graphState);
+      setNewGraph(graph);
     }
-  }, [graphState]);
+  }, [graph]);
 
-  return newGraphState;
+  return newGraph;
 };
 
 export default useRenderGraph;

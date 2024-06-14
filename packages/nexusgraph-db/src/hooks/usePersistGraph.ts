@@ -28,11 +28,11 @@ import { GraphClient } from "../graph/GraphClient";
  *
  * ```typescript
  * const [graphObject, setGraphObject] = useState<Graph>();
- * const graphState = usePersistGraph(graphObject);
+ * const graph = usePersistGraph(graphObject);
  * ```
  *
- * The `graphState` is the state that triggers the re-rendering of the containing component once being updated. Note
- * that `graphState` is initially set to `undefined`
+ * The `graph` is the state that triggers the re-rendering of the containing component once being updated. Note
+ * that `graph` is initially set to `undefined`
  *
  * @param graph  An in-memory representation of the graph to be persisted into the database
  *

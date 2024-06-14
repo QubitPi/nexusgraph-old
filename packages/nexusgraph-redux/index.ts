@@ -16,7 +16,7 @@
 
 export type { GlobalState } from "./src/globalState";
 export * from "./src/graph-list/graphListDuck";
-export { default, GRAPH_DATA, initialState, selectGraphData, updateGraphData } from "./src/graph/graphDuck";
+export { default, GRAPH, initialState, selectGraph, updateGraph } from "./src/graph/graphDuck";
 export type { Graph, GraphName, Link, Node } from "./src/graph/graphDuck";
 export { useRenderGraph } from "./src/hooks";
 export * from "./src/oAuth/oAuthDuck";

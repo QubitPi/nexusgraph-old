@@ -17,8 +17,8 @@
 import { produce } from "immer";
 import { useSelector } from "react-redux";
 import { GlobalState } from "../globalState";
-export const GRAPH_DATA = "graphData";
-const UPDATE_GRAPH_DATA = GRAPH_DATA + "/UPDATE_GRAPH_DATA";
+export const GRAPH = "graph";
+const UPDATE_GRAPH = GRAPH + "/UPDATE_GRAPH";
 
 /**
  * A Redux representation of a graph node data structure.
@@ -81,7 +81,7 @@ export const initialState: Graph = {
 export type GraphName = Pick<Graph, "id" | "name">;
 
 interface GraphAction {
-  type: typeof UPDATE_GRAPH_DATA;
+  type: typeof UPDATE_GRAPH;
   payload: Graph;
 }
 
@@ -89,9 +89,9 @@ interface GraphAction {
  * A standard [selector function](https://redux.qubitpi.org/usage/deriving-data-selectors/#basic-selector-concepts) that
  * proxies read operation on {@link Graph}
  */
-export function selectGraphData() {
+export function selectGraph() {
   return useSelector((state: GlobalState) => {
-    return state.graphData;
+    return state.graph;
   });
 }
 
@@ -99,10 +99,10 @@ export function selectGraphData() {
  * A standard [action creator](https://redux.qubitpi.org/style-guide/#use-action-creators) that prepares the data and
  * performs additional logic before mutating a {@link Graph} in Redux
  *
- * @param graphState  The new graph state to be flushed into Redux
+ * @param graph  The new graph state to be flushed into Redux
  */
-export function updateGraphData(graphState: Graph) {
-  return { type: UPDATE_GRAPH_DATA, payload: graphState };
+export function updateGraph(graph: Graph) {
+  return { type: UPDATE_GRAPH, payload: graph };
 }
 
 /**
@@ -118,7 +118,7 @@ export function updateGraphData(graphState: Graph) {
  */
 export default function graphReducer(state = initialState, action: GraphAction): Graph {
   switch (action.type) {
-    case UPDATE_GRAPH_DATA:
+    case UPDATE_GRAPH:
       return produce(state, (draft) => {
         draft.id = action.payload.id;
         draft.name = action.payload.name;

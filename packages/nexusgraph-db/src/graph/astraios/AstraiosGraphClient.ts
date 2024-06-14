@@ -86,7 +86,7 @@ export class AstraiosGraphClient implements GraphClient {
     return this.saveOrUpdateNodes(graph.nodes).then((nodeIdMap) => {
       return this.saveOrUpdateLinks(graph.links, nodeIdMap).then((linkIdMap) => {
         return this.saveOrUpdateGraph(graph, nodeIdMap, linkIdMap).then((response) => {
-          return this.toGraphState(response);
+          return this.toGraph(response);
         });
       });
     });
@@ -104,7 +104,7 @@ export class AstraiosGraphClient implements GraphClient {
       ${RESPONSE_FRAGMENT}
       `
     ).then((response) => {
-      return this.toGraphState(response);
+      return this.toGraph(response);
     });
   }
 
@@ -266,7 +266,7 @@ export class AstraiosGraphClient implements GraphClient {
     );
   }
 
-  private toGraphState(response: any): Graph {
+  private toGraph(response: any): Graph {
     return response.data.data.graph.edges.map((node: { node: any }) => {
       const graph = node.node;
       const nodes: any[] = graph.nodes.edges.map((node: { node: any }) => {
