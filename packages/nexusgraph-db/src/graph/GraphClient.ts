@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-import { GraphMetaData, GraphState } from "nexusgraph-redux";
+import { Graph, GraphMetaData } from "nexusgraph-redux";
 
 /**
  * Webservice interface library.
  */
 export interface GraphClient {
-  saveOrUpdate(graph: GraphState): Promise<GraphState>;
+  saveOrUpdate(graph: Graph): Promise<Graph>;
 
-  getGraphById(graphId: string): Promise<GraphState>;
+  getGraphById(graphId: string): Promise<Graph>;
 
-  deleteGraphById(graphId: string): Promise<GraphState>;
+  deleteGraphById(graphId: string): Promise<Graph>;
 
   getGraphListMetaDataByUserId(userId: string): Promise<GraphMetaData[]>;
 }

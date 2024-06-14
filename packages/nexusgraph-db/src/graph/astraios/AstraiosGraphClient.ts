@@ -17,7 +17,7 @@
 import axios from "axios";
 import { inject, injectable } from "inversify";
 import TYPES from "nexusgraph-app/types";
-import { GraphMetaData, GraphState, Link, Node } from "nexusgraph-redux";
+import { Graph, GraphMetaData, Link, Node } from "nexusgraph-redux";
 import "reflect-metadata";
 import { GraphClient } from "../GraphClient";
 
@@ -82,7 +82,7 @@ export class AstraiosGraphClient implements GraphClient {
     this._accessToken = accessToken;
   }
 
-  public saveOrUpdate(graph: GraphState): Promise<GraphState> {
+  public saveOrUpdate(graph: Graph): Promise<Graph> {
     return this.saveOrUpdateNodes(graph.nodes).then((nodeIdMap) => {
       return this.saveOrUpdateLinks(graph.links, nodeIdMap).then((linkIdMap) => {
         return this.saveOrUpdateGraph(graph, nodeIdMap, linkIdMap).then((response) => {
@@ -92,7 +92,7 @@ export class AstraiosGraphClient implements GraphClient {
     });
   }
 
-  public getGraphById(graphId: string): Promise<GraphState> {
+  public getGraphById(graphId: string): Promise<Graph> {
     return this.postGraphQuery(
       `
       {
@@ -108,7 +108,7 @@ export class AstraiosGraphClient implements GraphClient {
     });
   }
 
-  public deleteGraphById(graphId: string): Promise<GraphState> {
+  public deleteGraphById(graphId: string): Promise<Graph> {
     return this.postGraphQuery(
       `
       mutation {
@@ -232,7 +232,7 @@ export class AstraiosGraphClient implements GraphClient {
     });
   }
 
-  private saveOrUpdateGraph(graph: GraphState, nodeIdMap: Map<string, string>, linkIdMap: Map<string, string>) {
+  private saveOrUpdateGraph(graph: Graph, nodeIdMap: Map<string, string>, linkIdMap: Map<string, string>) {
     const nodes = Array.from(nodeIdMap, ([key, dbId]) => {
       return {
         id: dbId,
@@ -266,7 +266,7 @@ export class AstraiosGraphClient implements GraphClient {
     );
   }
 
-  private toGraphState(response: any): GraphState {
+  private toGraphState(response: any): Graph {
     return response.data.data.graph.edges.map((node: { node: any }) => {
       const graph = node.node;
       const nodes: any[] = graph.nodes.edges.map((node: { node: any }) => {

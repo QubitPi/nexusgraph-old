@@ -81,7 +81,13 @@ export default function AppInit(): JSX.Element {
           <OAuth2Provider>
             <Routes>
               <Route path="/" element={<ProdApp initReduxStore={initReduxStore} />} />
+
+              {/*the /Callback route CAN NOT involve authentication, so it must be put as a separate route outside of*/}
+              {/*ProdApp where all auth checking and logging in happens*/}
+              {/*See https://logto.qubitpi.org/tutorial/how-to-build-github-sign-in-with-react-and-logto/#handle-redirect*/}
+              {/*for more details*/}
               <Route path="/callback" element={<Callback />} />
+
               <Route path="/signout" element={<Signout />} />
             </Routes>
           </OAuth2Provider>

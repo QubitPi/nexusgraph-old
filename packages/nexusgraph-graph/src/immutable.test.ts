@@ -15,10 +15,10 @@
  */
 
 import { produce } from "immer";
-import { GraphState } from "../../nexusgraph-redux";
+import { Graph } from "../../nexusgraph-redux";
 import { addLink, addNode, mutateLinkFieldById, mutateNodeFieldById } from "./immutable";
 
-const OLD_GRAPH_STATE = produce({} as GraphState, (draft) => {
+const OLD_GRAPH_STATE = produce({} as Graph, (draft) => {
   draft.id = "graph1";
   draft.name = "My Graph";
   draft.nodes = [
