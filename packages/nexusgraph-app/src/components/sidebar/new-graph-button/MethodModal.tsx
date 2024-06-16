@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { useCreateNewGraph } from "nexusgraph-db";
+import { usePersistAndRenderGraph } from "nexusgraph-db";
 import { NLPClient } from "nexusgraph-nlp";
 import { Graph } from "nexusgraph-redux";
 import { useEffect, useState } from "react";
@@ -36,7 +36,7 @@ export function MethodModal(props: MethodsSelectionModalProps): JSX.Element {
   const { t } = useTranslation();
 
   const [inferencedGraph, setInferencedGraph] = useState<Graph>();
-  const graph = useCreateNewGraph(inferencedGraph);
+  const graph = usePersistAndRenderGraph(inferencedGraph);
 
   const [textInput, setTextInput] = useState<string>("");
   const [buttonDisabled, setButtonDisabled] = useState<boolean>(true);
