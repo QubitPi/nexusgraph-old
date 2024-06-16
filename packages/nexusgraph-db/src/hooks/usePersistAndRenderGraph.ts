@@ -35,11 +35,11 @@ import { usePersistGraph } from "./index";
  * │                     │                            │
  * └────────────────┬────┘                            │
  *                  │                                 │
- *                  │                             ┌───▼───────────────┐
- *            │     │              ──────         │                   │
- *          ──┼──   │                             │ useCreateNewGraph │
- *            │     │              ──────         │                   │
- *                  │                             └───┬───────────────┘
+ *                  │                             ┌───▼──────────────────────┐
+ *            │     │              ──────         │                          │
+ *          ──┼──   │                             │ usePersistAndRenderGraph │
+ *            │     │              ──────         │                          │
+ *                  │                             └───┬──────────────────────┘
  *                  │                                 │
  *  ┌───────────────▼───┐                             │
  *  │                   │                             │
@@ -56,8 +56,8 @@ import { usePersistGraph } from "./index";
  *
  * @param graph
  */
-const useCreateNewGraph = (graph: Graph | undefined) => {
+const usePersistAndRenderGraph = (graph: Graph | undefined) => {
   return useRenderGraph(usePersistGraph(graph));
 };
 
-export default useCreateNewGraph;
+export default usePersistAndRenderGraph;
