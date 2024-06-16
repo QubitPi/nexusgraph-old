@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { appendToGraphList, selectGraphIdList } from "../graph-list/graphListDuck";
 import { Graph, updateGraph } from "../graph/graphDuck";
@@ -22,25 +22,38 @@ import { Graph, updateGraph } from "../graph/graphDuck";
 /**
  * A custom React hook that allows the sharing logic of rendering a new graph onto canvas on UI.
  *
+ * It exports
+ *
+ * 1. a [React state](https://react.qubitpi.org/reference/react/useState) called `renderedGraph` that represents the
+ *    displayed graph on canvas
+ * 2. a proxy method that flushes an updated {@link Graph} object into Redux store
+ *
  * Example usage:
  *
  * ```typescript
- * const graph = useRenderGraph(graph);
+ * const { renderedGraph, renderGraph } = useRenderGraph()
+ *
+ * useEffect(() => {
+ *   ...
+ * }, [renderedGraph]);
+ *
+ * ...
+ *
+ * renderGraph(myGraph);
  * ```
  *
- * The `graph` is the state that triggers the re-rendering of the containing component once being updated. Note
- * that `graph` is initially set to `undefined`
+ * The `renderedGraph` will be the state that triggers the re-rendering of the containing component once being updated.
+ * Note that `renderedGraph` is initially set to `undefined` and will be mutated if calling `renderGraph` results in
+ * a [different representation](https://immer.qubitpi.org/) flushed into Redux
  *
- * @param graph  An new redux representation of the graph to be rendered onto the UI canvas
- *
- * @returns a redux representation of the newly rendered graph
+ * @returns a redux representation of the most up-to-date graph
  */
-const useRenderGraph = (graph: Graph | undefined) => {
+const useRenderGraph = () => {
   const dispatch = useDispatch();
   const graphIdList = selectGraphIdList();
-  const [newGraph, setNewGraph] = useState<Graph>();
+  const [renderedGraph, setRenderedGraph] = useState<Graph>();
 
-  useEffect(() => {
+  const renderGraph = (graph: Graph | undefined) => {
     if (graph) {
       const graphId = graph.id as string;
       const graphName = graph.name as string;
@@ -51,11 +64,11 @@ const useRenderGraph = (graph: Graph | undefined) => {
         dispatch(appendToGraphList({ id: graphId, name: graphName }));
       }
 
-      setNewGraph(graph);
+      setRenderedGraph(graph);
     }
-  }, [graph]);
+  };
 
-  return newGraph;
+  return { renderedGraph, renderGraph };
 };
 
 export default useRenderGraph;

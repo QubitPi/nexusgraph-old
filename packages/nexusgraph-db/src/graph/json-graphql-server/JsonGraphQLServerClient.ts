@@ -83,7 +83,7 @@ export class JsonGraphQLServerClient implements GraphClient {
       }
       `
     ).then((response) => {
-      return response.data.data.createGraph;
+      return response.data.data.updateGraph;
     });
   }
 
