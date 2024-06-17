@@ -24,6 +24,19 @@ describe("Graph visualization tests", () => {
     cy.deleteAllGraphs();
   });
 
+  it("double clicking the empty canvas should generate a fully-hydrated graph", () => {
+    cy.get('[data-testid="graphCanvas"]')
+      .trigger("click", 200, 200, { force: true })
+      .trigger("dblclick", 200, 200, { force: true })
+      .get('[data-testid="nodeGroups"]', { timeout: 10000 })
+      .contains("New Node")
+      .get('[data-testid="graphTitle"]')
+      .should("exist")
+      .should("have.value", "Untitled Graph")
+      .get('[data-testid^="graphListItem-"]')
+      .should("exist");
+  });
+
   it("can create new node by double clicking the canvas", () => {
     cy.newGraph()
       .get('[data-testid="graphCanvas"]')

@@ -27,11 +27,9 @@ import {
   REL_TYPE_UPDATE,
   resources,
 } from "neo4j-devtools-arc";
-import { GraphClient } from "nexusgraph-db";
-import { GraphClientContext } from "nexusgraph-db/src/Contexts";
-import { Link, Node, selectGraph, updateGraph } from "nexusgraph-redux";
-import { useContext, useState } from "react";
-import { useDispatch } from "react-redux";
+import { usePersistAndRenderGraph } from "nexusgraph-db";
+import { Link, Node, selectGraph } from "nexusgraph-redux";
+import { useState } from "react";
 import { ThemeProvider } from "styled-components";
 import { addLink, addNode, mutateLinkFieldById, mutateNodeFieldById } from "./immutable";
 import { mapToBasicNodes, mapToBasicRelationships } from "./mappers";
@@ -47,12 +45,10 @@ import { theme } from "./themes";
  * @returns a React DOM object
  */
 export default function GraphBrowser(): JSX.Element {
-  const dispatch = useDispatch();
-
   const isFullscreen = true;
-  const graph = selectGraph();
 
-  const graphClient: GraphClient = useContext(GraphClientContext) as GraphClient;
+  const displayedGraph = selectGraph();
+  const { persistAndRenderGraph } = usePersistAndRenderGraph();
 
   const [hasVis, setHasVis] = useState<boolean>(true);
   const [visElement, setVisElement] = useState<null | {
@@ -72,7 +68,7 @@ export default function GraphBrowser(): JSX.Element {
         throw error;
       }
 
-      const newGraph = addNode(graph, {
+      const newGraph = addNode(displayedGraph, {
         id: Math.random().toString(36).slice(2),
         fields: {
           name: properties["name"],
@@ -81,12 +77,7 @@ export default function GraphBrowser(): JSX.Element {
         },
       } as Node);
 
-      dispatch(updateGraph(newGraph));
-
-      graphClient.saveOrUpdate(newGraph).catch((error) => {
-        Sentry.captureException(error);
-        throw error;
-      });
+      persistAndRenderGraph(newGraph);
     }
 
     if (event == NODE_LABEL_UPDATE) {
@@ -113,7 +104,7 @@ export default function GraphBrowser(): JSX.Element {
         throw error;
       }
 
-      const newGraph = addLink(graph, {
+      const newGraph = addLink(displayedGraph, {
         id: properties["type"],
         source: properties["sourceNodeId"],
         target: properties["targetNodeId"],
@@ -122,11 +113,7 @@ export default function GraphBrowser(): JSX.Element {
         },
       } as Link);
 
-      dispatch(updateGraph(newGraph));
-      graphClient.saveOrUpdate(newGraph).catch((error) => {
-        Sentry.captureException(error);
-        throw error;
-      });
+      persistAndRenderGraph(newGraph);
     }
 
     if (event == REL_TYPE_UPDATE) {
@@ -142,13 +129,9 @@ export default function GraphBrowser(): JSX.Element {
       const relId = properties["relId"] as string;
       const newType = properties["newType"] as string;
 
-      const newGraph = mutateLinkFieldById(graph, relId, "type", newType);
+      const newGraph = mutateLinkFieldById(displayedGraph, relId, "type", newType);
 
-      dispatch(updateGraph(newGraph));
-      graphClient.saveOrUpdate(newGraph).catch((error) => {
-        Sentry.captureException(error);
-        throw error;
-      });
+      persistAndRenderGraph(newGraph);
     }
 
     if (event == PROP_UPDATE) {
@@ -167,11 +150,10 @@ export default function GraphBrowser(): JSX.Element {
       const propVal = properties["propVal"] as string;
 
       const newGraph = isNode
-        ? mutateNodeFieldById(graph, nodeOrRelId, propKey, propVal)
-        : mutateLinkFieldById(graph, nodeOrRelId, propKey, propVal);
+        ? mutateNodeFieldById(displayedGraph, nodeOrRelId, propKey, propVal)
+        : mutateLinkFieldById(displayedGraph, nodeOrRelId, propKey, propVal);
 
-      dispatch(updateGraph(newGraph));
-      graphClient.saveOrUpdate(newGraph);
+      persistAndRenderGraph(newGraph);
     }
 
     if (event == DETAILS_PANE_TITLE_UPDATE) {
@@ -190,14 +172,10 @@ export default function GraphBrowser(): JSX.Element {
       const newTitle = properties["newTitle"] as string;
 
       const newGraph = isNode
-        ? mutateNodeFieldById(graph, nodeOrRelId, titlePropertyKey, newTitle)
-        : mutateLinkFieldById(graph, nodeOrRelId, titlePropertyKey, newTitle);
+        ? mutateNodeFieldById(displayedGraph, nodeOrRelId, titlePropertyKey, newTitle)
+        : mutateLinkFieldById(displayedGraph, nodeOrRelId, titlePropertyKey, newTitle);
 
-      dispatch(updateGraph(newGraph));
-      graphClient.saveOrUpdate(newGraph).catch((error) => {
-        Sentry.captureException(error);
-        throw error;
-      });
+      persistAndRenderGraph(newGraph);
     }
   };
 
@@ -207,36 +185,40 @@ export default function GraphBrowser(): JSX.Element {
   const themeData = theme;
 
   return (
-    <ThemeProvider theme={themeData}>
-      <GraphVisualizer
-        maxNeighbours={100}
-        hasTruncatedFields={false}
-        // graphStyleData={undefined}
-        // updateStyle={undefined}
-        // getNeighbours={undefined}
-        nodes={mapToBasicNodes(graph.nodes)}
-        autocompleteRelationships={false}
-        relationships={mapToBasicRelationships(graph.links)}
-        isFullscreen={isFullscreen}
-        assignVisElement={(svgElement: any, graphElement: any) => {
-          setVisElement({ svgElement, graphElement, type: "graph" });
-          setHasVis(true);
-        }}
-        nodeLimitHit={false}
-        getAutoCompleteCallback={undefined}
-        // setGraph={undefined}
-        // setNodePropertiesExpandedByDefault={undefined}
-        // nodePropertiesExpandedByDefault={true}
-        wheelZoomRequiresModKey={!isFullscreen}
-        wheelZoomInfoMessageEnabled={false}
-        // disableWheelZoomInfoMessage={() => {}}
-        // DetailsPaneOverride={undefined}
-        // OverviewPaneOverride={undefined}
-        useGeneratedDefaultColors={false}
-        initialZoomToFit={true}
-        onGraphInteraction={onGraphInteraction}
-        showPropertiesTable={false}
-      />
-    </ThemeProvider>
+    <>
+      {displayedGraph && (
+        <ThemeProvider theme={themeData}>
+          <GraphVisualizer
+            maxNeighbours={100}
+            hasTruncatedFields={false}
+            // graphStyleData={undefined}
+            // updateStyle={undefined}
+            // getNeighbours={undefined}
+            nodes={mapToBasicNodes(displayedGraph.nodes)}
+            autocompleteRelationships={false}
+            relationships={mapToBasicRelationships(displayedGraph.links)}
+            isFullscreen={isFullscreen}
+            assignVisElement={(svgElement: any, graphElement: any) => {
+              setVisElement({ svgElement, graphElement, type: "graph" });
+              setHasVis(true);
+            }}
+            nodeLimitHit={false}
+            getAutoCompleteCallback={undefined}
+            // setGraph={undefined}
+            // setNodePropertiesExpandedByDefault={undefined}
+            // nodePropertiesExpandedByDefault={true}
+            wheelZoomRequiresModKey={!isFullscreen}
+            wheelZoomInfoMessageEnabled={false}
+            // disableWheelZoomInfoMessage={() => {}}
+            // DetailsPaneOverride={undefined}
+            // OverviewPaneOverride={undefined}
+            useGeneratedDefaultColors={false}
+            initialZoomToFit={true}
+            onGraphInteraction={onGraphInteraction}
+            showPropertiesTable={false}
+          />
+        </ThemeProvider>
+      )}
+    </>
   );
 }

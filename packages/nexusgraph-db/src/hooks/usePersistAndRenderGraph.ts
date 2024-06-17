@@ -15,12 +15,19 @@
  */
 
 import { Graph, useRenderGraph } from "nexusgraph-redux";
+import { useEffect, useState } from "react";
 import { usePersistGraph } from "./index";
 
 /**
  * A custom React hook that allows the sharing logic of persisting and rendering a new graph in App.
  *
- * This hook is a combination of {}
+ * Example usage:
+ *
+ * ```typescript
+ * const { graph, persistAndRenderGraph } = usePersistAndRenderGraph();
+ * ```
+ *
+ * This hook is a combination of {@link usePersistGraph} and {@link useRenderGraph}:
  *
  * ```
  *                  ┌──────────Graph Object───────────┐
@@ -53,11 +60,26 @@ import { usePersistGraph } from "./index";
  *                  │                                 │
  *                  └───────────►Graph State◄─────────┘
  * ```
- *
- * @param graph
  */
-const usePersistAndRenderGraph = (graph: Graph | undefined) => {
-  return useRenderGraph(usePersistGraph(graph));
+const usePersistAndRenderGraph = () => {
+  const { persistedGraph, persistGraph } = usePersistGraph();
+  const { renderedGraph, renderGraph } = useRenderGraph();
+
+  const [graph, setGraph] = useState<Graph>();
+
+  useEffect(() => {
+    setGraph(renderedGraph);
+  }, [renderedGraph]);
+
+  useEffect(() => {
+    renderGraph(persistedGraph);
+  }, [persistedGraph]);
+
+  const persistAndRenderGraph = (graph: Graph) => {
+    persistGraph(graph);
+  };
+
+  return { graph, persistAndRenderGraph };
 };
 
 export default usePersistAndRenderGraph;

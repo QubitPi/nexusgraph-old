@@ -16,7 +16,6 @@
 
 import { usePersistAndRenderGraph } from "nexusgraph-db";
 import { NLPClient } from "nexusgraph-nlp";
-import { Graph } from "nexusgraph-redux";
 import { useEffect, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
@@ -35,8 +34,7 @@ interface MethodsSelectionModalProps {
 export function MethodModal(props: MethodsSelectionModalProps): JSX.Element {
   const { t } = useTranslation();
 
-  const [inferencedGraph, setInferencedGraph] = useState<Graph>();
-  const graph = usePersistAndRenderGraph(inferencedGraph);
+  const { graph, persistAndRenderGraph } = usePersistAndRenderGraph();
 
   const [textInput, setTextInput] = useState<string>("");
   const [buttonDisabled, setButtonDisabled] = useState<boolean>(true);
@@ -63,7 +61,7 @@ export function MethodModal(props: MethodsSelectionModalProps): JSX.Element {
         return;
       }
 
-      setInferencedGraph(graph);
+      persistAndRenderGraph(graph);
     });
   };
 
