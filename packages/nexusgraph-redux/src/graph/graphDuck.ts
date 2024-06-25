@@ -23,9 +23,9 @@ const UPDATE_GRAPH = GRAPH + "/UPDATE_GRAPH";
 /**
  * A Redux representation of a graph node data structure.
  *
- * It has an ID field whose scope is not assumed. It can be unique across a graph or unique across database. All
- * displayable node properties are stored in `fields`, which is a TS Record whose key is the property name and value the
- * property value
+ * It has an ID field which is unique across a graph, not necessarily in database. This ID field is generated at client
+ * side in {@link GraphBrowser}. All displayable node properties are stored in `fields`, which is a TS Record whose key
+ * is the property name and value the property value
  */
 export interface Node {
   id: string;
@@ -35,9 +35,9 @@ export interface Node {
 /**
  * A Redux representation of a directed graph link data structure.
  *
- * It has an ID field whose scope is not assumed. It can be unique across a graph or unique across database. All
- * displayable node properties are stored in `fields`, which is a TS Record whose key is the property name and value the
- * property value
+ * It has an ID field which is unique across a graph, not necessarily in database. This ID field is generated at client
+ * side in {@link GraphBrowser}. All displayable node properties are stored in `fields`, which is a TS Record whose key
+ * is the property name and value the property value
  *
  * It also has a `source` and `target` field which stores the ID's of the source and target nodes, respectively
  */

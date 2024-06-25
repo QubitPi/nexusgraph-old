@@ -1,0 +1,4 @@
+@startuml
+Relationship "many" <-l-* "1" InputObject : "            "
+Attribute "many" <-r-* "1" InputObject : "            "
+@enduml
