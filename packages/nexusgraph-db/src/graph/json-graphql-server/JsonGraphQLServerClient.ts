@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
+import * as Sentry from "@sentry/react";
 import axios from "axios";
 import { inject, injectable } from "inversify";
 import TYPES from "nexusgraph-app/types";
-import { Graph, GraphMetaData } from "nexusgraph-redux";
+import { Graph, GraphMetaData, Link, Node } from "nexusgraph-redux";
 import "reflect-metadata";
 import { GraphClient } from "../GraphClient";
 
@@ -42,76 +43,28 @@ export class JsonGraphQLServerClient implements GraphClient {
   }
 
   public saveOrUpdate(graph: Graph): Promise<Graph> {
-    return graph.id ? this.update(graph) : this.save(graph);
-  }
-
-  private save(graph: Graph): Promise<Graph> {
-    return this.postQuery(
-      `
-      mutation {
-        createGraph(user: ${Number(this._userId)}, name: "${graph.name}", nodes: ${this.removeQuotesFromKey(
-        JSON.stringify(graph.nodes)
-      )}, links: ${this.removeQuotesFromKey(
-        JSON.stringify(graph.links)
-      )}, created_on: "${new Date()}", last_updated_on: "${new Date()}") {
-          id
-          name
-          nodes
-          links
-        }
-      }
-      `
-    ).then((response) => {
-      return response.data.data.createGraph;
-    });
-  }
-
-  private update(graph: Graph): Promise<Graph> {
-    return this.postQuery(
-      `
-      mutation {
-        updateGraph(id: ${Number(graph.id)}, user: ${Number(this._userId)}, name: "${
-        graph.name
-      }", nodes: ${this.removeQuotesFromKey(JSON.stringify(graph.nodes))}, links: ${this.removeQuotesFromKey(
-        JSON.stringify(graph.links)
-      )}, created_on: "${new Date()}", last_updated_on: "${new Date()}") {
-        id
-        name
-        nodes
-        links
-        }
-      }
-      `
-    ).then((response) => {
-      return response.data.data.updateGraph;
-    });
-  }
-
-  /**
-   * Removes the double quotes from the JSON string properties.
-   *
-   * For example, `{ "name": "John Smith" }` becomes `{ name: "John Smith" }`
-   *
-   * @param jsonObjectString  A regular JSON object string with property key double-quoted
-   *
-   * @returns the same object with it's key's double quotes being removed
-   */
-  private removeQuotesFromKey(jsonObjectString: string) {
-    return jsonObjectString.replace(/"([^"]+)":/g, "$1:");
+    return graph.id == undefined ? this.save(graph) : this.update(graph);
   }
 
   public getGraphById(graphId: number): Promise<Graph> {
     return this.postQuery(
       `
       {
-        Graph(id:${graphId}) {
+        Graph(id: ${graphId}) {
           id
-          user
           name
-          nodes
-          links
-          created_on
-          last_updated_on
+          nodes: Nodes {
+            id
+            onCanvasId
+            fields
+          }
+          links: Links {
+            id
+            onCanvasId
+            source
+            target
+            fields
+          }
         }
       }
       `
@@ -124,7 +77,7 @@ export class JsonGraphQLServerClient implements GraphClient {
     return this.postQuery(
       `
       mutation {
-        removeGraph(id: ${Number(graphId)}) {
+        removeGraph(id: ${graphId}) {
           id
         }
       }
@@ -137,7 +90,7 @@ export class JsonGraphQLServerClient implements GraphClient {
     return this.postQuery(
       `
       {
-        allGraphs(filter: {user:${Number(userId)}}) {
+        allGraphs(filter: {user_id:${Number(userId)}}) {
           id
           name
         }
@@ -160,5 +113,220 @@ export class JsonGraphQLServerClient implements GraphClient {
       .then((response) => {
         return response;
       });
+  }
+
+  private update(graph: Graph): Promise<Graph> {
+    this.postQuery(
+      `
+      mutation {
+        updateGraph(
+          id: ${graph.id},
+          name: "${graph.name}",
+        ) {
+          id
+          name
+          last_updated_on
+        }
+      }
+      `
+    );
+
+    graph.nodes.forEach((node) => {
+      if (node.id) {
+        this.postQuery(
+          `
+        mutation {
+          updateNode(
+            id: ${node.id},
+            onCanvasId: "${node.onCanvasId}",
+            fields: ${this.removeQuotesFromKey(JSON.stringify(node.fields))}
+          ) {
+            id
+            onCanvasId
+            fields
+          }
+        }
+        `
+        );
+      } else {
+        this.postQuery(
+          `
+          mutation {
+            createNode(
+              onCanvasId: "${node.onCanvasId}",
+              fields: ${this.removeQuotesFromKey(JSON.stringify(node.fields))},
+              graph_id: ${graph.id}
+            ) {
+              id
+              onCanvasId
+              fields
+              graph_id
+            }
+          }
+          `
+        );
+      }
+    });
+
+    graph.links.forEach((link) => {
+      if (link.id) {
+        this.postQuery(
+          `
+          mutation {
+            updateLink(
+              id: ${link.id},
+              onCanvasId: "${link.onCanvasId}",
+              source: "${link.source}",
+              target: "${link.target}",
+              fields: ${this.removeQuotesFromKey(JSON.stringify(link.fields))}
+            ) {
+              id
+              onCanvasId
+              source
+              target
+              fields
+              graph_id
+            }
+          }
+          `
+        );
+      } else {
+        this.postQuery(
+          `
+          mutation {
+            createLink(
+              onCanvasId: "${link.onCanvasId}",
+              source: "${link.source}",
+              target: "${link.target}",
+              fields: ${this.removeQuotesFromKey(JSON.stringify(link.fields))}
+              graph_id: ${graph.id}
+            ) {
+              id
+              onCanvasId
+              source
+              target
+              fields
+              graph_id
+            }
+          }
+          `
+        );
+      }
+    });
+
+    return this.getGraphById(graph.id as number);
+    // return new Promise((resolve) => resolve(graph));
+  }
+
+  private save(graph: Graph): Promise<Graph> {
+    return this.postQuery(
+      `
+      mutation {
+          createGraph(
+            user_id: ${Number(this._userId)},
+            name: "${graph.name}",
+            created_on: "${new Date()}",
+            last_updated_on: "${new Date()}"
+      ) {
+              id
+              name
+              created_on
+              last_updated_on
+          }
+      }
+      `
+    )
+      .then((response) => {
+        const savedGraph = this.extractEntity("createGraph", response.data) as Graph;
+        const graphId = savedGraph.id;
+
+        const nodes = graph.nodes.map((node) => {
+          return { ...node, graph_id: graphId };
+        });
+
+        return this.postQuery(
+          `
+          mutation {
+              createManyNode(data: ${this.removeQuotesFromKey(JSON.stringify(nodes))}) {
+                  id
+                  onCanvasId
+                  fields
+              }
+          }
+          `
+        )
+          .then((response) => {
+            const savedNodes = this.extractEntity("createManyNode", response.data) as Node[];
+
+            const links = graph.links.map((link) => {
+              return { ...link, graph_id: graphId };
+            });
+
+            return this.postQuery(
+              `
+          mutation {
+              createManyLink(data: ${this.removeQuotesFromKey(JSON.stringify(links))}) {
+                  id
+                  onCanvasId
+                  source
+                  target
+                  fields
+              }
+          }
+          `
+            )
+              .then((response) => {
+                const savedLinks = this.extractEntity("createManyLink", response.data) as Link[];
+
+                return {
+                  ...savedGraph,
+                  nodes: savedNodes,
+                  links: savedLinks,
+                };
+              })
+              .catch((error) => {
+                Sentry.captureException(error);
+                throw error;
+              });
+          })
+          .catch((error) => {
+            Sentry.captureException(error);
+            throw error;
+          });
+      })
+      .catch((error) => {
+        Sentry.captureException(error);
+        throw error;
+      });
+  }
+
+  /**
+   * Returns a graph ID from a specified response data of either "createGraph" or "updateGraph".
+   *
+   * @param entity   The operation that returns the provided response. Can be "createGraph" or "updateGraph"
+   * @param responseData  The value of `response.data`
+   *
+   * @returns the `id` field of the UPSERTed graph.
+   *
+   * @private
+   */
+  private extractEntity(operation: string, responseData: any): object {
+    const op = operation as keyof typeof responseData;
+    const entity = responseData.data[op];
+    entity.id = Number(entity.id);
+    return entity;
+  }
+
+  /**
+   * Removes the double quotes from the JSON string properties.
+   *
+   * For example, `{ "name": "John Smith" }` becomes `{ name: "John Smith" }`
+   *
+   * @param jsonObjectString  A regular JSON object string with property key double-quoted
+   *
+   * @returns the same object with it's key's double quotes being removed
+   */
+  private removeQuotesFromKey(jsonObjectString: string) {
+    return jsonObjectString.replace(/"([^"]+)":/g, "$1:");
   }
 }

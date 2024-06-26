@@ -33,7 +33,7 @@ import { useState } from "react";
 import { ThemeProvider } from "styled-components";
 import { v4 as uuidv4 } from "uuid";
 import { addLink, addNode, mutateLinkFieldById, mutateNodeFieldById } from "./immutable";
-import { mapToBasicNodes, mapToBasicRelationships } from "./mappers";
+import { mapToBasicNodes, mapToBasicRelationships, mapToCanvasId } from "./mappers";
 import { theme } from "./themes";
 
 /**
@@ -109,8 +109,8 @@ export default function GraphBrowser(): JSX.Element {
       const newGraph = addLink(displayedGraph, {
         id: undefined,
         onCanvasId: uuidv4(),
-        source: properties["sourceNodeId"],
-        target: properties["targetNodeId"],
+        source: mapToCanvasId(displayedGraph.nodes, Number(properties["sourceNodeId"])),
+        target: mapToCanvasId(displayedGraph.nodes, Number(properties["targetNodeId"])),
         fields: {
           type: properties["type"],
         },
@@ -199,7 +199,7 @@ export default function GraphBrowser(): JSX.Element {
             // getNeighbours={undefined}
             nodes={mapToBasicNodes(displayedGraph.nodes)}
             autocompleteRelationships={false}
-            relationships={mapToBasicRelationships(displayedGraph.links)}
+            relationships={mapToBasicRelationships(displayedGraph.links, displayedGraph.nodes)}
             isFullscreen={isFullscreen}
             assignVisElement={(svgElement: any, graphElement: any) => {
               setVisElement({ svgElement, graphElement, type: "graph" });

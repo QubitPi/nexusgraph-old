@@ -17,7 +17,6 @@
 describe("Graph visualization tests", () => {
   beforeEach(() => {
     cy.openApp();
-    cy;
   });
 
   it("double clicking the empty canvas should generate a fully-hydrated graph", () => {
@@ -33,7 +32,7 @@ describe("Graph visualization tests", () => {
       .should("exist");
   });
 
-  it("can create new node by double clicking the canvas", () => {
+  it("double clicking the canvas with an already existing graph generates a new node belonged to that graph", () => {
     cy.newGraph()
       .get('[data-testid="graphCanvas"]')
       .trigger("click", 200, 200, { force: true })

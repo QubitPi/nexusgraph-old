@@ -1,7 +1,10 @@
 ---
-sidebar_position: 4
+sidebar_position: 1
 title: Development
 ---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
 The following guide is intended to help developers who maintain or want to make changes to the Nexus Graph.
 
@@ -84,7 +87,7 @@ summarizes all of the variables Nexus Graph possibily needs:
   - `JsonGraphQLServerClient` is for dev and test
   - `AstraiosGraphClient` is our paid Graph API serivce
 
-- __GRAPH_API_ENDPOINT__ is the URL of the [Graph API service](design#graph-api). Define the endpoint that sends GraphQL
+- __GRAPH_API_ENDPOINT__ is the URL of the [Graph API service](../design#graph-api). Define the endpoint that sends GraphQL
   requests to Astraios in our paid service.
 
   :::tip
@@ -136,23 +139,26 @@ yarn start:ai
 
 NER data source is backed by [json-server] mock. They can be viewed by the following 3 links:
 
-1. `http://localhost:3001/nodes`
-2. `http://localhost:3001/links`
-3. `http://localhost:3001`
+1. http://localhost:3001/nodes
+2. http://localhost:3001/links
+3. http://localhost:3001
 
 ### Starting Graph API Services
+
+The schema is designed so that creating a new graph/node/link will auto generate a database ID. This is very important
+because we want to make surrogate key a read-only field on client side. 
 
 ```console
 yarn start:graph-api
 ```
 
-Entering `http://localhost:5000/` will open up the GraphiQL:
+Entering http://localhost:5000/ will open up the GraphiQL:
 
 ![Error loading json-graphql-server-graphiql.png)](img/json-graphql-server-graphiql.png)
 
 ### Starting Nexus Graph in Dev Mode
 
-Finally we can run the development server at `http://localhost:3000`:
+Finally we can run the development server at http://localhost:3000:
 
 ```console
 yarn start
@@ -210,7 +216,7 @@ We use [Cypress](https://cypress.qubitpi.org/) for E2E testing.
 
    :::tip
 
-   The E2E tests spins up an [in-memory database](design#json-graphql-server) to store the test graphs.
+   The E2E tests spins up an [in-memory database](../design#json-graphql-server) to store the test graphs.
 
    :::
 

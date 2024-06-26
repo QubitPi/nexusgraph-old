@@ -109,7 +109,7 @@ export default function App(): JSX.Element {
 
     graphClient
       .deleteGraphById(graphId)
-      .then((response) => {
+      .then(() => {
         const nextDisplayedGraphId = getNextDisplayedGraphId(graphList, graphId);
 
         if (nextDisplayedGraphId == null) {
@@ -154,7 +154,7 @@ export default function App(): JSX.Element {
           <SideBar onClick={setDisplayingGraphById} graphList={graphList} />
         </StyledSidebar>
         <StyledGraphBrowser id="graphBrowser">
-          {graphId && <DeleteButton graphId={graphId} onClick={deleteGraphById} />}
+          {graphId != null && <DeleteButton graphId={graphId} onClick={deleteGraphById} />}
           <GraphBrowser />
         </StyledGraphBrowser>
       </StyledBody>
