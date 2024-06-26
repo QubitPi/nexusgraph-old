@@ -19,6 +19,7 @@ import axios from "axios";
 import { NLPClient } from "./NLPClient";
 import { TheresaClient } from "./TheresaClient";
 
+import { v4 as uuidv4 } from "uuid";
 const theresaClient: NLPClient = new TheresaClient();
 
 jest.mock("axios");
@@ -33,6 +34,7 @@ describe("NLP delegates processing to remote WS", () => {
             type: "entity",
           },
           id: "China",
+          onCanvasId: uuidv4(),
         },
         {
           fields: {
@@ -40,6 +42,7 @@ describe("NLP delegates processing to remote WS", () => {
             type: "entity",
           },
           id: "Mandarin",
+          onCanvasId: uuidv4(),
         },
       ],
       links: [

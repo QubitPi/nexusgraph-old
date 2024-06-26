@@ -14,13 +14,17 @@
  * limitations under the License.
  */
 
+import { v4 as uuidv4 } from "uuid";
 import { mapToBasicNodes, mapToBasicRelationships } from "./mappers";
+
+const ON_CANVAS_ID = uuidv4();
 
 describe("mappers mapps between Redux representation of nodes/edges and Neo4J arc nodes/rels", () => {
   test("nodes", () => {
     const reduxNodes = [
       {
         id: "foo",
+        onCanvasId: ON_CANVAS_ID,
         fields: {
           name: "Jack",
           desc: "A person",
@@ -28,6 +32,7 @@ describe("mappers mapps between Redux representation of nodes/edges and Neo4J ar
       },
       {
         id: "bar",
+        onCanvasId: ON_CANVAS_ID,
         fields: {
           name: "Tom",
           desc: "Yet another person",
@@ -71,6 +76,7 @@ describe("mappers mapps between Redux representation of nodes/edges and Neo4J ar
     const reduxLinks = [
       {
         id: "bat",
+        onCanvasId: ON_CANVAS_ID,
         source: "node1",
         target: "node2",
         fields: {
@@ -79,6 +85,7 @@ describe("mappers mapps between Redux representation of nodes/edges and Neo4J ar
       },
       {
         id: "baz",
+        onCanvasId: ON_CANVAS_ID,
         source: "node3",
         target: "node4",
         fields: {

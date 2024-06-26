@@ -31,6 +31,7 @@ import { usePersistAndRenderGraph } from "nexusgraph-db";
 import { Link, Node, selectGraph } from "nexusgraph-redux";
 import { useState } from "react";
 import { ThemeProvider } from "styled-components";
+import { v4 as uuidv4 } from "uuid";
 import { addLink, addNode, mutateLinkFieldById, mutateNodeFieldById } from "./immutable";
 import { mapToBasicNodes, mapToBasicRelationships } from "./mappers";
 import { theme } from "./themes";
@@ -70,6 +71,7 @@ export default function GraphBrowser(): JSX.Element {
 
       const newGraph = addNode(displayedGraph, {
         id: Math.random().toString(36).slice(2),
+        onCanvasId: uuidv4(),
         fields: {
           name: properties["name"],
           description: properties["description"],
@@ -106,6 +108,7 @@ export default function GraphBrowser(): JSX.Element {
 
       const newGraph = addLink(displayedGraph, {
         id: properties["type"],
+        onCanvasId: uuidv4(),
         source: properties["sourceNodeId"],
         target: properties["targetNodeId"],
         fields: {
