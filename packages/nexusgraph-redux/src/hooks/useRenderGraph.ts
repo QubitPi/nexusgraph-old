@@ -55,7 +55,7 @@ const useRenderGraph = () => {
 
   const renderGraph = (graph: Graph | undefined) => {
     if (graph) {
-      const graphId = graph.id as string;
+      const graphId = graph.id as number;
       const graphName = graph.name as string;
 
       dispatch(updateGraph(graph));

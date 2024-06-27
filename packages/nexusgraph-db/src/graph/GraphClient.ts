@@ -34,7 +34,7 @@ export interface GraphClient {
    *
    * @returns the graph in database that matches the given ID
    */
-  getGraphById(graphId: string): Promise<Graph>;
+  getGraphById(graphId: number): Promise<Graph>;
 
   /**
    * Deletes a graph by {@link Graph.id}.
@@ -43,7 +43,7 @@ export interface GraphClient {
    *
    * @returns the graph info that has been deleted
    */
-  deleteGraphById(graphId: string): Promise<Graph>;
+  deleteGraphById(graphId: number): Promise<Graph>;
 
   /**
    * Returns a list of un-paginated graph metadata associated with a given OAuth user.

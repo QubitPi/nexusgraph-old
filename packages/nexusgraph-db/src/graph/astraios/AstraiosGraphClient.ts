@@ -92,7 +92,7 @@ export class AstraiosGraphClient implements GraphClient {
     });
   }
 
-  public getGraphById(graphId: string): Promise<Graph> {
+  public getGraphById(graphId: number): Promise<Graph> {
     return this.postGraphQuery(
       `
       {
@@ -108,7 +108,7 @@ export class AstraiosGraphClient implements GraphClient {
     });
   }
 
-  public deleteGraphById(graphId: string): Promise<Graph> {
+  public deleteGraphById(graphId: number): Promise<Graph> {
     return this.postGraphQuery(
       `
       mutation {
@@ -166,8 +166,8 @@ export class AstraiosGraphClient implements GraphClient {
     };
   }
 
-  private saveOrUpdateNodes(nodes: Node[]): Promise<Map<string, string>> {
-    const idMap: Map<string, string> = new Map();
+  private saveOrUpdateNodes(nodes: Node[]): Promise<Map<number, string>> {
+    const idMap: Map<number, string> = new Map();
     return this.postGraphQuery(
       `
       mutation {
@@ -186,24 +186,24 @@ export class AstraiosGraphClient implements GraphClient {
       });
 
       createdNodeIds.forEach((value: string, idx: number) => {
-        idMap.set(nodes[idx].id, value);
+        idMap.set(nodes[idx].id as number, value);
       });
 
       return idMap;
     });
   }
 
-  private saveOrUpdateLinks(links: Link[], nodeIdMap: Map<string, string>) {
+  private saveOrUpdateLinks(links: Link[], nodeIdMap: Map<number, string>) {
     const linkEntities = links.map((link) => {
       return {
         id: link.id,
-        sourceNode: { id: nodeIdMap.get(link.source) },
-        targetNode: { id: nodeIdMap.get(link.target) },
+        sourceNode: link.source,
+        targetNode: link.target,
         fields: link.fields,
       };
     });
 
-    const idMap: Map<string, string> = new Map();
+    const idMap: Map<number, string> = new Map();
     return this.postGraphQuery(
       `
       mutation {
@@ -225,14 +225,14 @@ export class AstraiosGraphClient implements GraphClient {
       });
 
       createdLinkIds.forEach((value: string, idx: number) => {
-        idMap.set(links[idx].id, value);
+        idMap.set(links[idx].id as number, value);
       });
 
       return idMap;
     });
   }
 
-  private saveOrUpdateGraph(graph: Graph, nodeIdMap: Map<string, string>, linkIdMap: Map<string, string>) {
+  private saveOrUpdateGraph(graph: Graph, nodeIdMap: Map<number, string>, linkIdMap: Map<number, string>) {
     const nodes = Array.from(nodeIdMap, ([key, dbId]) => {
       return {
         id: dbId,

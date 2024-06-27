@@ -32,8 +32,8 @@ export const mapToBasicNodes = (nodes: Node[]): BasicNode[] => {
     }
 
     return {
-      id: node["id"],
-      elementId: node["id"],
+      id: String(node["id"]),
+      elementId: node["onCanvasId"],
       labels: ["*"],
       properties: node.fields,
       propertyTypes: propertyTypes,
@@ -56,8 +56,8 @@ export const mapToBasicRelationships = (links: Link[]): BasicRelationship[] => {
     }
 
     return {
-      id: link["id"],
-      elementId: link["id"],
+      id: String(link["id"]),
+      elementId: link["onCanvasId"],
       startNodeId: link["source"],
       endNodeId: link["target"],
       type: link.fields["type"],
