@@ -70,7 +70,7 @@ export default function GraphBrowser(): JSX.Element {
       }
 
       const newGraph = addNode(displayedGraph, {
-        id: Math.random().toString(36).slice(2),
+        id: undefined,
         onCanvasId: uuidv4(),
         fields: {
           name: properties["name"],
@@ -107,7 +107,7 @@ export default function GraphBrowser(): JSX.Element {
       }
 
       const newGraph = addLink(displayedGraph, {
-        id: properties["type"],
+        id: undefined,
         onCanvasId: uuidv4(),
         source: properties["sourceNodeId"],
         target: properties["targetNodeId"],

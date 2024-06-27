@@ -31,7 +31,7 @@ const UPDATE_SINGLE_ITEM = GRAPH_LIST_STATE + "/UPDATE_SINGLE_ITEM";
  * 2. Display name of that graph
  */
 export interface GraphMetaData {
-  id: string;
+  id: number;
   name: string;
 }
 

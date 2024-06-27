@@ -100,7 +100,7 @@ export class JsonGraphQLServerClient implements GraphClient {
     return jsonObjectString.replace(/"([^"]+)":/g, "$1:");
   }
 
-  public getGraphById(graphId: string): Promise<Graph> {
+  public getGraphById(graphId: number): Promise<Graph> {
     return this.postQuery(
       `
       {
@@ -120,7 +120,7 @@ export class JsonGraphQLServerClient implements GraphClient {
     });
   }
 
-  public deleteGraphById(graphId: string): Promise<Graph> {
+  public deleteGraphById(graphId: number): Promise<Graph> {
     return this.postQuery(
       `
       mutation {

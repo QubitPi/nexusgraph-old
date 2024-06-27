@@ -20,7 +20,7 @@ import { v4 as uuidv4 } from "uuid";
 import { addLink, addNode, mutateLinkFieldById, mutateNodeFieldById } from "./immutable";
 
 const JACK: Node = {
-  id: "foo",
+  id: 1,
   onCanvasId: uuidv4(),
   fields: {
     name: "Jack",
@@ -28,7 +28,7 @@ const JACK: Node = {
   },
 };
 const TOM: Node = {
-  id: "bar",
+  id: 2,
   onCanvasId: uuidv4(),
   fields: {
     name: "Tom",
@@ -36,7 +36,7 @@ const TOM: Node = {
   },
 };
 const LINK1: Link = {
-  id: "bat",
+  id: 3,
   onCanvasId: uuidv4(),
   source: "node1",
   target: "node2",
@@ -45,7 +45,7 @@ const LINK1: Link = {
   },
 };
 const LINK2: Link = {
-  id: "baz",
+  id: 4,
   onCanvasId: uuidv4(),
   source: "node3",
   target: "node4",
@@ -53,19 +53,22 @@ const LINK2: Link = {
     type: "label2",
   },
 };
+const GRAPH_ID = 5;
+const GRAPH_NAME = "My Graph";
 
 const OLD_GRAPH_STATE = produce({} as Graph, (draft) => {
-  draft.id = "graph1";
-  draft.name = "My Graph";
+  draft.id = GRAPH_ID;
+  draft.name = GRAPH_NAME;
   draft.nodes = [JACK, TOM];
   draft.links = [LINK1, LINK2];
 });
 
 describe("Graph interactions", () => {
   test("adding a new node creates a deeply-new graph state object", () => {
+    const newNodeID = 6;
     expect(
       addNode(OLD_GRAPH_STATE, {
-        id: "newPerson",
+        id: newNodeID,
         onCanvasId: "newPerson",
         fields: {
           name: "Amy",
@@ -73,13 +76,13 @@ describe("Graph interactions", () => {
         },
       })
     ).toStrictEqual({
-      id: "graph1",
-      name: "My Graph",
+      id: GRAPH_ID,
+      name: GRAPH_NAME,
       nodes: [
         JACK,
         TOM,
         {
-          id: "newPerson",
+          id: newNodeID,
           onCanvasId: "newPerson",
           fields: {
             name: "Amy",
@@ -92,9 +95,10 @@ describe("Graph interactions", () => {
   });
 
   test("adding a new link creates a deeply-new graph state object", () => {
+    const newLinkId = 7;
     expect(
       addLink(OLD_GRAPH_STATE, {
-        id: "newLink",
+        id: newLinkId,
         onCanvasId: "newLink",
         source: "node10",
         target: "node11",
@@ -103,14 +107,14 @@ describe("Graph interactions", () => {
         },
       })
     ).toStrictEqual({
-      id: "graph1",
-      name: "My Graph",
+      id: GRAPH_ID,
+      name: GRAPH_NAME,
       nodes: [JACK, TOM],
       links: [
         LINK1,
         LINK2,
         {
-          id: "newLink",
+          id: newLinkId,
           onCanvasId: "newLink",
           source: "node10",
           target: "node11",
@@ -122,18 +126,18 @@ describe("Graph interactions", () => {
     });
   });
 
-  test("mutating node field by ID generates a deeply-new graph state object", () => {
-    expect(mutateNodeFieldById(OLD_GRAPH_STATE, "bar", "name", "Mike")).toStrictEqual({
-      id: "graph1",
-      name: "My Graph",
+  test("mutating node field by natural key generates a deeply-new graph state object", () => {
+    expect(mutateNodeFieldById(OLD_GRAPH_STATE, TOM.onCanvasId, "name", "Mike")).toStrictEqual({
+      id: GRAPH_ID,
+      name: GRAPH_NAME,
       nodes: [
         JACK,
         {
-          id: "bar",
+          id: TOM.id,
           onCanvasId: TOM.onCanvasId,
           fields: {
             name: "Mike",
-            desc: "Yet another person",
+            desc: TOM.fields.desc,
           },
         },
       ],
@@ -141,17 +145,17 @@ describe("Graph interactions", () => {
     });
   });
 
-  test("mutating link field by ID generates a deeply-new graph state object", () => {
-    expect(mutateLinkFieldById(OLD_GRAPH_STATE, "bat", "type", "new label")).toStrictEqual({
-      id: "graph1",
-      name: "My Graph",
+  test("mutating link field by natural key generates a deeply-new graph state object", () => {
+    expect(mutateLinkFieldById(OLD_GRAPH_STATE, LINK1.onCanvasId, "type", "new label")).toStrictEqual({
+      id: GRAPH_ID,
+      name: GRAPH_NAME,
       nodes: [JACK, TOM],
       links: [
         {
-          id: "bat",
+          id: LINK1.id,
           onCanvasId: LINK1.onCanvasId,
-          source: "node1",
-          target: "node2",
+          source: LINK1.source,
+          target: LINK1.target,
           fields: {
             type: "new label",
           },

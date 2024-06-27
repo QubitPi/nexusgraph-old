@@ -18,8 +18,8 @@ import { TrashIcon } from "@heroicons/react/24/outline";
 import { StyledDeleteButton } from "./styled";
 
 interface DeleteButtonProps {
-  graphId: string;
-  onClick: (graphId: string) => void;
+  graphId: number;
+  onClick: (graphId: number) => void;
 }
 
 /**

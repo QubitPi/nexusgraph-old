@@ -20,8 +20,8 @@ import { useTranslation } from "react-i18next";
 import { StyledInput } from "./styled";
 
 interface GraphTitleProps {
-  graphId: string;
-  onChange: (graphId: string, newTitle: string) => void;
+  graphId: number;
+  onChange: (graphId: number, newTitle: string) => void;
 }
 
 export default function GraphTitle(props: GraphTitleProps): JSX.Element {

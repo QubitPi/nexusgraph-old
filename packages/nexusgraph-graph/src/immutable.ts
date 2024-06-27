@@ -49,7 +49,7 @@ export const addLink = (oldGraph: Graph, link: Link): Graph => {
  * Updates a property of a node in a specified graph and returns the graph with the updated node.
  *
  * @param oldGraph  A Redux state of the provided graph
- * @param nodeId  The ID of the node to be modified
+ * @param onCanvasId  The natural key of the node to be modified
  * @param fieldName  The name of the field to modify
  * @param newFieldValue  The new value for the field
  *
@@ -57,13 +57,13 @@ export const addLink = (oldGraph: Graph, link: Link): Graph => {
  */
 export const mutateNodeFieldById = (
   oldGraph: Graph,
-  nodeId: string,
+  onCanvasId: string,
   fieldName: string,
   newFieldValue: string
 ): Graph => {
   return produce(oldGraph, (draft) => {
     draft.nodes.forEach((node) => {
-      if (node.id == nodeId) {
+      if (node.onCanvasId == onCanvasId) {
         node.fields[`${fieldName}`] = newFieldValue;
       }
     });
@@ -74,7 +74,7 @@ export const mutateNodeFieldById = (
  * Updates a property of a link in a specified graph and returns the graph with the updated link.
  *
  * @param oldGraph  A Redux state of the provided graph
- * @param linkId  The ID of the link to be modified
+ * @param onCanvasId  The natural key of the link to be modified
  * @param fieldName  The name of the field to modify
  * @param newFieldValue  The new value for the field
  *
@@ -82,13 +82,13 @@ export const mutateNodeFieldById = (
  */
 export const mutateLinkFieldById = (
   oldGraph: Graph,
-  linkId: string,
+  onCanvasId: string,
   fieldName: string,
   newFieldValue: string
 ): Graph => {
   return produce(oldGraph, (draft) => {
     draft.links.forEach((link) => {
-      if (link.id == linkId) {
+      if (link.onCanvasId == onCanvasId) {
         link.fields[`${fieldName}`] = newFieldValue;
       }
     });

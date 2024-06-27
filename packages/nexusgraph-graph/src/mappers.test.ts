@@ -23,7 +23,7 @@ describe("mappers mapps between Redux representation of nodes/edges and Neo4J ar
   test("nodes", () => {
     const reduxNodes = [
       {
-        id: "foo",
+        id: 1,
         onCanvasId: ON_CANVAS_ID,
         fields: {
           name: "Jack",
@@ -31,7 +31,7 @@ describe("mappers mapps between Redux representation of nodes/edges and Neo4J ar
         },
       },
       {
-        id: "bar",
+        id: 2,
         onCanvasId: ON_CANVAS_ID,
         fields: {
           name: "Tom",
@@ -42,8 +42,8 @@ describe("mappers mapps between Redux representation of nodes/edges and Neo4J ar
 
     const expectedBasicNodes = [
       {
-        id: "foo",
-        elementId: "foo",
+        id: "1",
+        elementId: ON_CANVAS_ID,
         labels: ["*"],
         properties: {
           name: "Jack",
@@ -55,8 +55,8 @@ describe("mappers mapps between Redux representation of nodes/edges and Neo4J ar
         },
       },
       {
-        id: "bar",
-        elementId: "bar",
+        id: "2",
+        elementId: ON_CANVAS_ID,
         labels: ["*"],
         properties: {
           name: "Tom",
@@ -75,7 +75,7 @@ describe("mappers mapps between Redux representation of nodes/edges and Neo4J ar
   test("links", () => {
     const reduxLinks = [
       {
-        id: "bat",
+        id: 1,
         onCanvasId: ON_CANVAS_ID,
         source: "node1",
         target: "node2",
@@ -84,7 +84,7 @@ describe("mappers mapps between Redux representation of nodes/edges and Neo4J ar
         },
       },
       {
-        id: "baz",
+        id: 2,
         onCanvasId: ON_CANVAS_ID,
         source: "node3",
         target: "node4",
@@ -96,8 +96,8 @@ describe("mappers mapps between Redux representation of nodes/edges and Neo4J ar
 
     const expectedBasicRels = [
       {
-        id: "bat",
-        elementId: "bat",
+        id: "1",
+        elementId: ON_CANVAS_ID,
         startNodeId: "node1",
         endNodeId: "node2",
         type: "label1",
@@ -109,8 +109,8 @@ describe("mappers mapps between Redux representation of nodes/edges and Neo4J ar
         },
       },
       {
-        id: "baz",
-        elementId: "baz",
+        id: "2",
+        elementId: ON_CANVAS_ID,
         startNodeId: "node3",
         endNodeId: "node4",
         type: "label2",

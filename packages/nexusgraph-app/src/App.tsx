@@ -61,7 +61,7 @@ export default function App(): JSX.Element {
   const graphId = graphSate.id;
   const graphList = selectGraphList();
 
-  const setDisplayingGraphById = (graphId: string | undefined) => {
+  const setDisplayingGraphById = (graphId: number | undefined) => {
     if (graphId == null) {
       return;
     }
@@ -78,7 +78,7 @@ export default function App(): JSX.Element {
     });
   };
 
-  const onTitleUpdate = (graphId: string, newTitle: string) => {
+  const onTitleUpdate = (graphId: number, newTitle: string) => {
     if (graphId == null) {
       const error = new Error("graphId is null");
       Sentry.captureException(error);
@@ -100,7 +100,7 @@ export default function App(): JSX.Element {
       });
   };
 
-  const deleteGraphById = (graphId: string) => {
+  const deleteGraphById = (graphId: number) => {
     if (graphId == null) {
       const error = new Error("graphId is null");
       Sentry.captureException(error);
@@ -169,7 +169,7 @@ export default function App(): JSX.Element {
   );
 }
 
-function getNextDisplayedGraphId(graphList: GraphMetaData[], deletedGraphId: string) {
+function getNextDisplayedGraphId(graphList: GraphMetaData[], deletedGraphId: number) {
   const listLen = graphList.length;
 
   if (listLen == 1) {

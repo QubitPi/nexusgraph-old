@@ -19,7 +19,7 @@ import { NewGraphButton } from "./new-graph-button";
 import { StyledGraphListItem } from "./styled";
 
 interface SideBarProps {
-  onClick: (graphId: string | undefined) => void;
+  onClick: (graphId: number | undefined) => void;
   graphList: GraphMetaData[];
 }
 
