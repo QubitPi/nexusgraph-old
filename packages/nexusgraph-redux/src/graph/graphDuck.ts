@@ -74,6 +74,8 @@ export interface Link {
 export interface Graph {
   id?: number;
   name?: string;
+  createdOn?: Date;
+  lastUpdatedOn?: Date;
 
   nodes: Node[];
   links: Link[];
