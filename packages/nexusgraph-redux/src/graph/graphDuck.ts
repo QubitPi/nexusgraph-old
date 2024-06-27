@@ -29,6 +29,7 @@ const UPDATE_GRAPH = GRAPH + "/UPDATE_GRAPH";
  */
 export interface Node {
   id: string;
+  onCanvasId: string;
   fields: Record<string, string>;
 }
 
@@ -43,6 +44,7 @@ export interface Node {
  */
 export interface Link {
   id: string;
+  onCanvasId: string;
   source: string;
   target: string;
   fields: Record<string, string>;

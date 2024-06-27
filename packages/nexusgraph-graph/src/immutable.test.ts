@@ -15,46 +15,50 @@
  */
 
 import { produce } from "immer";
-import { Graph } from "../../nexusgraph-redux";
+import { Graph, Link, Node } from "nexusgraph-redux";
+import { v4 as uuidv4 } from "uuid";
 import { addLink, addNode, mutateLinkFieldById, mutateNodeFieldById } from "./immutable";
+
+const JACK: Node = {
+  id: "foo",
+  onCanvasId: uuidv4(),
+  fields: {
+    name: "Jack",
+    desc: "A person",
+  },
+};
+const TOM: Node = {
+  id: "bar",
+  onCanvasId: uuidv4(),
+  fields: {
+    name: "Tom",
+    desc: "Yet another person",
+  },
+};
+const LINK1: Link = {
+  id: "bat",
+  onCanvasId: uuidv4(),
+  source: "node1",
+  target: "node2",
+  fields: {
+    type: "label1",
+  },
+};
+const LINK2: Link = {
+  id: "baz",
+  onCanvasId: uuidv4(),
+  source: "node3",
+  target: "node4",
+  fields: {
+    type: "label2",
+  },
+};
 
 const OLD_GRAPH_STATE = produce({} as Graph, (draft) => {
   draft.id = "graph1";
   draft.name = "My Graph";
-  draft.nodes = [
-    {
-      id: "foo",
-      fields: {
-        name: "Jack",
-        desc: "A person",
-      },
-    },
-    {
-      id: "bar",
-      fields: {
-        name: "Tom",
-        desc: "Yet another person",
-      },
-    },
-  ];
-  draft.links = [
-    {
-      id: "bat",
-      source: "node1",
-      target: "node2",
-      fields: {
-        type: "label1",
-      },
-    },
-    {
-      id: "baz",
-      source: "node3",
-      target: "node4",
-      fields: {
-        type: "label2",
-      },
-    },
-  ];
+  draft.nodes = [JACK, TOM];
+  draft.links = [LINK1, LINK2];
 });
 
 describe("Graph interactions", () => {
@@ -62,6 +66,7 @@ describe("Graph interactions", () => {
     expect(
       addNode(OLD_GRAPH_STATE, {
         id: "newPerson",
+        onCanvasId: "newPerson",
         fields: {
           name: "Amy",
           description: "New Person",
@@ -71,46 +76,18 @@ describe("Graph interactions", () => {
       id: "graph1",
       name: "My Graph",
       nodes: [
-        {
-          id: "foo",
-          fields: {
-            name: "Jack",
-            desc: "A person",
-          },
-        },
-        {
-          id: "bar",
-          fields: {
-            name: "Tom",
-            desc: "Yet another person",
-          },
-        },
+        JACK,
+        TOM,
         {
           id: "newPerson",
+          onCanvasId: "newPerson",
           fields: {
             name: "Amy",
             description: "New Person",
           },
         },
       ],
-      links: [
-        {
-          id: "bat",
-          source: "node1",
-          target: "node2",
-          fields: {
-            type: "label1",
-          },
-        },
-        {
-          id: "baz",
-          source: "node3",
-          target: "node4",
-          fields: {
-            type: "label2",
-          },
-        },
-      ],
+      links: [LINK1, LINK2],
     });
   });
 
@@ -118,6 +95,7 @@ describe("Graph interactions", () => {
     expect(
       addLink(OLD_GRAPH_STATE, {
         id: "newLink",
+        onCanvasId: "newLink",
         source: "node10",
         target: "node11",
         fields: {
@@ -127,41 +105,13 @@ describe("Graph interactions", () => {
     ).toStrictEqual({
       id: "graph1",
       name: "My Graph",
-      nodes: [
-        {
-          id: "foo",
-          fields: {
-            name: "Jack",
-            desc: "A person",
-          },
-        },
-        {
-          id: "bar",
-          fields: {
-            name: "Tom",
-            desc: "Yet another person",
-          },
-        },
-      ],
+      nodes: [JACK, TOM],
       links: [
-        {
-          id: "bat",
-          source: "node1",
-          target: "node2",
-          fields: {
-            type: "label1",
-          },
-        },
-        {
-          id: "baz",
-          source: "node3",
-          target: "node4",
-          fields: {
-            type: "label2",
-          },
-        },
+        LINK1,
+        LINK2,
         {
           id: "newLink",
+          onCanvasId: "newLink",
           source: "node10",
           target: "node11",
           fields: {
@@ -177,39 +127,17 @@ describe("Graph interactions", () => {
       id: "graph1",
       name: "My Graph",
       nodes: [
-        {
-          id: "foo",
-          fields: {
-            name: "Jack",
-            desc: "A person",
-          },
-        },
+        JACK,
         {
           id: "bar",
+          onCanvasId: TOM.onCanvasId,
           fields: {
             name: "Mike",
             desc: "Yet another person",
           },
         },
       ],
-      links: [
-        {
-          id: "bat",
-          source: "node1",
-          target: "node2",
-          fields: {
-            type: "label1",
-          },
-        },
-        {
-          id: "baz",
-          source: "node3",
-          target: "node4",
-          fields: {
-            type: "label2",
-          },
-        },
-      ],
+      links: [LINK1, LINK2],
     });
   });
 
@@ -217,39 +145,18 @@ describe("Graph interactions", () => {
     expect(mutateLinkFieldById(OLD_GRAPH_STATE, "bat", "type", "new label")).toStrictEqual({
       id: "graph1",
       name: "My Graph",
-      nodes: [
-        {
-          id: "foo",
-          fields: {
-            name: "Jack",
-            desc: "A person",
-          },
-        },
-        {
-          id: "bar",
-          fields: {
-            name: "Tom",
-            desc: "Yet another person",
-          },
-        },
-      ],
+      nodes: [JACK, TOM],
       links: [
         {
           id: "bat",
+          onCanvasId: LINK1.onCanvasId,
           source: "node1",
           target: "node2",
           fields: {
             type: "new label",
           },
         },
-        {
-          id: "baz",
-          source: "node3",
-          target: "node4",
-          fields: {
-            type: "label2",
-          },
-        },
+        LINK2,
       ],
     });
   });
