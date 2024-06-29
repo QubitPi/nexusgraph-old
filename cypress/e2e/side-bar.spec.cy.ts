@@ -19,10 +19,6 @@ describe("Side bar displays new graph button and graph list", () => {
     cy.openApp().deleteAllGraphs();
   });
 
-  afterEach(() => {
-    cy.deleteAllGraphs();
-  });
-
   it("displays new graph button all the time", () => {
     cy.get("button[id='newGraphButton']").should("exist");
   });

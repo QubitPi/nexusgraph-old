@@ -19,10 +19,6 @@ describe("Delete button removes displaying graph both from UI and database", () 
     cy.openApp();
   });
 
-  afterEach(() => {
-    cy.deleteAllGraphs();
-  });
-
   it("Putting everything together", () => {
     cy.get('[data-testid="deleteButton"]')
       .should("not.exist")
