@@ -21,10 +21,6 @@ describe("Argos tests", () => {
     cy.openApp().deleteAllGraphs();
   });
 
-  afterEach(() => {
-    cy.deleteAllGraphs();
-  });
-
   it("test", () => {
     const baseUrl = "http://localhost:3000";
     const pages = [{ name: "homepage", path: "/" }];

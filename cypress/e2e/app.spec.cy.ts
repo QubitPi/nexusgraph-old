@@ -19,10 +19,6 @@ describe("'Integration'-style tests", () => {
     cy.openApp().deleteAllGraphs();
   });
 
-  afterEach(() => {
-    cy.deleteAllGraphs();
-  });
-
   it("deleting graph when there is only 1 graph", () => {
     cy.newGraph()
       .get('[data-testid="deleteButton"]')

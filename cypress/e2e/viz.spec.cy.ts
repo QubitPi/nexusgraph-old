@@ -20,10 +20,6 @@ describe("Graph visualization tests", () => {
     cy.deleteAllGraphs();
   });
 
-  afterEach(() => {
-    cy.deleteAllGraphs();
-  });
-
   it("double clicking the empty canvas should generate a fully-hydrated graph", () => {
     cy.get('[data-testid="graphCanvas"]')
       .trigger("click", 200, 200, { force: true })
