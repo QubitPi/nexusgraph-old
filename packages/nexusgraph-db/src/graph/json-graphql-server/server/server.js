@@ -23,5 +23,5 @@ import initialData from "./initial-data.json" assert { type: "json" };
 const PORT = 5000;
 const app = express();
 app.use(cors());
-app.use("/", jsonGraphqlExpress.default({ graphs: initialData }));
+app.use("/", jsonGraphqlExpress.default(initialData));
 app.listen(PORT);

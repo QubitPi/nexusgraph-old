@@ -21,6 +21,7 @@ import { Button, Form, Modal } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { container } from "../../../../inversify.config";
 import TYPES from "../../../../types";
+import { mapFromTheresaGraph } from "../../../mappers";
 import { Method } from "./methods";
 
 const nlpClient: NLPClient = container.get<NLPClient>(TYPES.NLPClient);
@@ -61,7 +62,7 @@ export function MethodModal(props: MethodsSelectionModalProps): JSX.Element {
         return;
       }
 
-      persistAndRenderGraph(graph);
+      persistAndRenderGraph(mapFromTheresaGraph(graph));
     });
   };
 

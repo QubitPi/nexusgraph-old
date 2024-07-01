@@ -39,7 +39,7 @@ export default function DevApp(props: DevAppProps): JSX.Element {
   const dispatch = useDispatch();
 
   const devToken = "devToken";
-  const devUserId = initialData[0].user.toString();
+  const devUserId = initialData["users"][0].id.toString();
   const devUserInfo = { sub: devUserId };
 
   dispatch(

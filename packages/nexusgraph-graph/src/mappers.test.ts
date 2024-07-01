@@ -17,112 +17,75 @@
 import { v4 as uuidv4 } from "uuid";
 import { mapToBasicNodes, mapToBasicRelationships } from "./mappers";
 
-const ON_CANVAS_ID = uuidv4();
+const SOURCE_REDUX_NODE = {
+  id: 1,
+  onCanvasId: uuidv4(),
+  fields: {
+    name: "Jack",
+    desc: "A person",
+  },
+};
+const SOURCE_BASIC_NODE = {
+  id: `${SOURCE_REDUX_NODE.id}`,
+  elementId: SOURCE_REDUX_NODE.onCanvasId,
+  labels: ["*"],
+  properties: SOURCE_REDUX_NODE.fields,
+  propertyTypes: {
+    name: "string",
+    desc: "string",
+  },
+};
 
-describe("mappers mapps between Redux representation of nodes/edges and Neo4J arc nodes/rels", () => {
+const TARGET_REDUX_NODE = {
+  id: 2,
+  onCanvasId: uuidv4(),
+  fields: {
+    name: "Tom",
+    desc: "Yet another person",
+  },
+};
+const TARGET_BASIC_NODE = {
+  id: `${TARGET_REDUX_NODE.id}`,
+  elementId: TARGET_REDUX_NODE.onCanvasId,
+  labels: ["*"],
+  properties: TARGET_REDUX_NODE.fields,
+  propertyTypes: {
+    name: "string",
+    desc: "string",
+  },
+};
+
+const REDUX_LINK = {
+  id: 1,
+  onCanvasId: uuidv4(),
+  source: SOURCE_REDUX_NODE.onCanvasId,
+  target: TARGET_REDUX_NODE.onCanvasId,
+  fields: {
+    type: "label1",
+  },
+};
+const BASIC_REL = {
+  id: `${REDUX_LINK.id}`,
+  elementId: REDUX_LINK.onCanvasId,
+  startNodeId: `${SOURCE_BASIC_NODE.id}`,
+  endNodeId: `${TARGET_BASIC_NODE.id}`,
+  type: REDUX_LINK.fields.type,
+  properties: {
+    type: "label1",
+  },
+  propertyTypes: {
+    type: "string",
+  },
+};
+
+describe("mappers maps between Redux representation of nodes/edges and Neo4J arc nodes/rels", () => {
   test("nodes", () => {
-    const reduxNodes = [
-      {
-        id: 1,
-        onCanvasId: ON_CANVAS_ID,
-        fields: {
-          name: "Jack",
-          desc: "A person",
-        },
-      },
-      {
-        id: 2,
-        onCanvasId: ON_CANVAS_ID,
-        fields: {
-          name: "Tom",
-          desc: "Yet another person",
-        },
-      },
-    ];
-
-    const expectedBasicNodes = [
-      {
-        id: "1",
-        elementId: ON_CANVAS_ID,
-        labels: ["*"],
-        properties: {
-          name: "Jack",
-          desc: "A person",
-        },
-        propertyTypes: {
-          name: "string",
-          desc: "string",
-        },
-      },
-      {
-        id: "2",
-        elementId: ON_CANVAS_ID,
-        labels: ["*"],
-        properties: {
-          name: "Tom",
-          desc: "Yet another person",
-        },
-        propertyTypes: {
-          name: "string",
-          desc: "string",
-        },
-      },
-    ];
-
+    const reduxNodes = [SOURCE_REDUX_NODE, TARGET_REDUX_NODE];
+    const expectedBasicNodes = [SOURCE_BASIC_NODE, TARGET_BASIC_NODE];
     expect(mapToBasicNodes(reduxNodes)).toStrictEqual(expectedBasicNodes);
   });
 
   test("links", () => {
-    const reduxLinks = [
-      {
-        id: 1,
-        onCanvasId: ON_CANVAS_ID,
-        source: "node1",
-        target: "node2",
-        fields: {
-          type: "label1",
-        },
-      },
-      {
-        id: 2,
-        onCanvasId: ON_CANVAS_ID,
-        source: "node3",
-        target: "node4",
-        fields: {
-          type: "label2",
-        },
-      },
-    ];
-
-    const expectedBasicRels = [
-      {
-        id: "1",
-        elementId: ON_CANVAS_ID,
-        startNodeId: "node1",
-        endNodeId: "node2",
-        type: "label1",
-        properties: {
-          type: "label1",
-        },
-        propertyTypes: {
-          type: "string",
-        },
-      },
-      {
-        id: "2",
-        elementId: ON_CANVAS_ID,
-        startNodeId: "node3",
-        endNodeId: "node4",
-        type: "label2",
-        properties: {
-          type: "label2",
-        },
-        propertyTypes: {
-          type: "string",
-        },
-      },
-    ];
-
-    expect(mapToBasicRelationships(reduxLinks)).toStrictEqual(expectedBasicRels);
+    expect(mapToBasicRelationships([REDUX_LINK], [SOURCE_REDUX_NODE, TARGET_REDUX_NODE])).toStrictEqual([BASIC_REL]);
   });
 });

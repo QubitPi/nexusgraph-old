@@ -1,33 +1,38 @@
-[
-  {
-    "id": 1,
-    "user": 10000,
-    "name": "My First Graph",
-    "nodes": [
-      {
-        "id": 1000,
-        "fields": {
-          "name": "Nexus Graph"
-        }
+{
+  "graphs": [
+    {
+      "id": 1,
+      "name": "My Graph",
+      "created_on": "2023-12-21T00:00:00.000Z",
+      "last_updated_on": "2023-12-22T00:00:00.000Z",
+      "user_id": 10000
+    }
+  ],
+  "nodes": [
+    {
+      "id": 100,
+      "onCanvasId": "04308cf6-510c-4326-a6d6-2cae1850090d",
+      "fields": { "name": "Nexus Graph" },
+      "graph_id": 1
+    },
+    {
+      "id": 101,
+      "onCanvasId": "2e8a1c17-1d86-4896-aa6f-945c113ca4d2",
+      "fields": { "name": "People's lives" },
+      "graph_id": 1
+    }
+  ],
+  "links": [
+    {
+      "id": 1000,
+      "onCanvasId": "bf154640-0a86-42da-81ca-bbc21dad3e0c",
+      "source": "04308cf6-510c-4326-a6d6-2cae1850090d",
+      "target": "2e8a1c17-1d86-4896-aa6f-945c113ca4d2",
+      "fields": {
+        "type": "changes"
       },
-      {
-        "id": 1001,
-        "fields": {
-          "name": "People's lives"
-        }
-      }
-    ],
-    "links": [
-      {
-        "id": 2000,
-        "source": 1000,
-        "target": 1001,
-        "fields": {
-          "type": "changes"
-        }
-      }
-    ],
-    "created_on": "2023-12-21T00:00:00.000Z",
-    "last_updated_on": "2023-12-22T00:00:00.000Z"
-  }
-]
+      "graph_id": 1
+    }
+  ],
+  "users": [{ "id": 10000, "name": "Jack" }]
+}

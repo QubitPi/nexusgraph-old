@@ -106,32 +106,6 @@ purposes.
 
 :::
 
-### Graph API
-
-#### Separating Database's Primary Key and Business Object Identifier
-
-Each Node/Link/Graph is stored in database with a primary key. In Nexus Graph, however, we always use a [natural key]
-next to the primary key to identify between nodes and links. For example, if there are the following 2 nodes with a
-connecting link:
-
-|    Entity    | Primary Key | Natural Key | Source Node Key | Target Node |
-|:------------:|:-----------:|:-----------:|:---------------:|:-----------:|
-| Source Node  |   154436    | __hs7YGDf__ |       N/A       |     N/A     |
-| Target Node  |   634741    | __3rIH83f__ |       N/A       |     N/A     |
-|     Link     |    27256    |   df09%HI   |   __hs7YGDf__   | __3rIH83f__ |
-
-The two nodes (Source Node and Target Node) are connected by the two Natural Keys: `hs7YGDf` & `3rIH83f` instead of
-`154436` & `634741`, because ID's are fragile. We cannot really rely on them not changing. When we choose to move to
-another database platform, or a new version of the current platform, and we want to move all data using
-[`INSERT`](https://www.w3schools.com/sql/sql_insert.asp) statements, it is possible to lose the ID fields.
-
-Nexus Graph uses [UUID](https://www.npmjs.com/package/uuid) to generate the natural key on client side and then persists
-it to database.
-
-The database primary key in Nexus Graph is only used to distinguish a CREATE and UPDATE operation. If an object
-(node/link/graph) already exists (based on the provided primary key value) then it will be updated. Otherwise, it will
-be created.
-
 [astraios.io]: https://astraios.io
 
 [json-graphql-server]: https://github.com/QubitPi/json-graphql-server
@@ -141,8 +115,6 @@ be created.
 [Graph Node]: https://nexusgraph.qubitpi.org/api/interfaces/nexusgraph_redux_src_graph_graphDuck.Node.html
 
 [Inversify]:https://inversify.qubitpi.org/
-
-[natural key]: http://en.wikipedia.org/wiki/Natural_key
 
 [Redux Action Creators]: https://redux.qubitpi.org/style-guide/#use-action-creators
 [Redux Selector Functions]: https://redux.qubitpi.org/usage/deriving-data-selectors/#basic-selector-concepts
