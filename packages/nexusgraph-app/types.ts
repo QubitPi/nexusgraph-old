@@ -24,9 +24,14 @@ const TYPES = {
   accessToken: Symbol("accessToken"),
 
   /**
-   * The OIDC ID of the currently logged-in user.
+   * The OIDC ID (i.e. the Natural Key) of the currently logged-in user.
    */
   userId: Symbol("userId"),
+
+  /**
+   * The database Primary Key associated with user.
+   */
+  userPrimaryKey: Symbol("userPrimaryKey"),
 
   /**
    * The Graph client for Graph Data CRUD.

@@ -7,7 +7,8 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
 
-This page is a description on the CRUD data models (create, read, update, and delete) in the backend of Nexus Graph.
+This page is a description on the knowledge graph CRUD data models (create, read, update, and delete) in the backend of
+Nexus Graph.
 
 GraphQL
 -------
@@ -91,12 +92,11 @@ in one API call_:
   <TabItem value="request" label="Mutation" default>
     ```graphql
     mutation {
-       user(op: UPSERT, data: {oidcId: "sd9Jyud", name: "Jack"}) {
+       user(op: UPSERT, data: {oidcId: "sd9Jyud"}) {
           edges {
              node {
                 id
                 oidcId
-                name
                 graphs(op: UPSERT, data: {name: "My Graph"}) {
                    edges {
                       node {
@@ -156,48 +156,58 @@ in one API call_:
     ```json
     {
         "data":{
-            "graph":{
+            "user":{
                 "edges":[
                     {
                         "node":{
                             "id":"1",
-                            "links":{
+                            "oidcId":"sd9Jyud",
+                            "graphs":{
                                 "edges":[
                                     {
                                         "node":{
                                             "id":"1",
-                                            "source":{
+                                            "links":{
                                                 "edges":[
                                                     {
                                                         "node":{
                                                             "id":"1",
-                                                            "fields":"{\"name\": \"source node\", \"description\": \"my source node\", \"labels\": \"[\\\"label1\\\", \\\"[label2]\\\"]\"}",
-                                                            "onCanvasId":"kjGUgyf",
-                                                            "note":{
+                                                            "source":{
                                                                 "edges":[
                                                                     {
                                                                         "node":{
-                                                                            "noteId":"JHG&d2c"
+                                                                            "id":"1",
+                                                                            "fields":"{\"name\": \"source node\", \"description\": \"my source node\", \"labels\": \"[\\\"label1\\\", \\\"[label2]\\\"]\"}",
+                                                                            "onCanvasId":"kjGUgyf",
+                                                                            "note":{
+                                                                                "edges":[
+                                                                                    {
+                                                                                        "node":{
+                                                                                            "noteId":"JHG&d2c"
+                                                                                        }
+                                                                                    }
+                                                                                ]
+                                                                            }
                                                                         }
                                                                     }
                                                                 ]
-                                                            }
-                                                        }
-                                                    }
-                                                ]
-                                            },
-                                            "target":{
-                                                "edges":[
-                                                    {
-                                                        "node":{
-                                                            "id":"2",
-                                                            "fields":"{\"name\": \"target node\", \"description\": \"my target node\", \"labels\": \"[\\\"label1\\\", \\\"[label2]\\\"]\"}",
-                                                            "onCanvasId":"IuJeIf3",
-                                                            "note":{
+                                                            },
+                                                            "target":{
                                                                 "edges":[
                                                                     {
                                                                         "node":{
-                                                                            "noteId":"i87UGfd"
+                                                                            "id":"2",
+                                                                            "fields":"{\"name\": \"target node\", \"description\": \"my target node\", \"labels\": \"[\\\"label1\\\", \\\"[label2]\\\"]\"}",
+                                                                            "onCanvasId":"IuJeIf3",
+                                                                            "note":{
+                                                                                "edges":[
+                                                                                    {
+                                                                                        "node":{
+                                                                                            "noteId":"i87UGfd"
+                                                                                        }
+                                                                                    }
+                                                                                ]
+                                                                            }
                                                                         }
                                                                     }
                                                                 ]
@@ -246,66 +256,72 @@ The database primary key in Nexus Graph is only used to distinguish a CREATE and
 (node/link/graph) already exists (based on the provided primary key value) then it will be updated. Otherwise, it will
 be created.
 
-#### Preliminary Concerns
-
 Making Calls
 ------------
 
-### Creating a New Graph
+An Astraios client should support the following operations:
+
+### Fetching User by OAuth sub Field
+
+<Tabs>
+  <TabItem value="request" label="Request" default>
+    ```graphql
+    {
+       user(filter: "oidcId==\"sd9Jyud\"") {
+          edges {
+             node {
+                id
+                oidcId
+             }
+          }
+       }
+    }
+    ```
+  </TabItem>
+  <TabItem value="response-existing-user" label="Response (existing user)">
+    ```json
+    {
+        "data":{
+            "user":{
+                "edges":[
+                    {
+                        "node":{
+                            "id":"1",
+                            "oidcId":"sd9Jyud"
+                        }
+                    }
+                ]
+            }
+        }
+    }
+    ```
+  </TabItem>
+  <TabItem value="response-non-existing-user" label="Response (non-existing user)">
+    ```json
+    {
+       "data":{
+          "user":{
+             "edges":[]
+          }
+       }
+    }
+    ```
+  </TabItem>
+</Tabs>
+
+### Creating New User
 
 <Tabs>
   <TabItem value="request" label="Request" default>
     ```graphql
     mutation {
-        graph(op: UPSERT, data: {name: "My Graph"}) {
-            edges {
-                node {
-                    id
-                    links(op: UPSERT, data: [{onCanvasId: "HDdH3f3", fields: "{\"type\": \"my link\"}"}]) {
-                        edges {
-                            node {
-                                id
-                                source(op: UPSERT, data: {
-                                    onCanvasId: "kjGUgyf",
-                                    fields: "{\"name\": \"source node\", \"description\": \"my source node\", \"labels\": \"[\\\"label1\\\", \\\"[label2]\\\"]\"}",
-                                    note: {noteId: "JHG&d2c"}
-                                }) {
-                                    edges {
-                                        node {
-                                            ...nodeAttributes
-                                        }
-                                    }
-                                }
-                                target(op: UPSERT, data: {
-                                    onCanvasId: "IuJeIf3",
-                                    fields: "{\"name\": \"target node\", \"description\": \"my target node\", \"labels\": \"[\\\"label1\\\", \\\"[label2]\\\"]\"}",
-                                    note: {noteId: "i87UGfd"}
-                                }) {
-                                    edges {
-                                        node {
-                                            ...nodeAttributes
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    fragment nodeAttributes on Node {
-        id
-        fields
-        onCanvasId
-        note {
-            edges {
-                node {
-                    noteId
-                }
-            }
-        }
+       user(op: UPSERT, data: {oidcId: "*Gd03uhf"}) {
+          edges {
+             node {
+                id
+             }
+          }
+       }
     }
     ```
   </TabItem>
@@ -313,60 +329,11 @@ Making Calls
     ```json
     {
         "data":{
-            "graph":{
+            "user":{
                 "edges":[
                     {
                         "node":{
-                            "id":"1",
-                            "links":{
-                                "edges":[
-                                    {
-                                        "node":{
-                                            "id":"1",
-                                            "source":{
-                                                "edges":[
-                                                    {
-                                                        "node":{
-                                                            "id":"1",
-                                                            "fields":"{\"name\": \"source node\", \"description\": \"my source node\", \"labels\": \"[\\\"label1\\\", \\\"[label2]\\\"]\"}",
-                                                            "onCanvasId":"kjGUgyf",
-                                                            "note":{
-                                                                "edges":[
-                                                                    {
-                                                                        "node":{
-                                                                            "noteId":"JHG&d2c"
-                                                                        }
-                                                                    }
-                                                                ]
-                                                            }
-                                                        }
-                                                    }
-                                                ]
-                                            },
-                                            "target":{
-                                                "edges":[
-                                                    {
-                                                        "node":{
-                                                            "id":"2",
-                                                            "fields":"{\"name\": \"target node\", \"description\": \"my target node\", \"labels\": \"[\\\"label1\\\", \\\"[label2]\\\"]\"}",
-                                                            "onCanvasId":"IuJeIf3",
-                                                            "note":{
-                                                                "edges":[
-                                                                    {
-                                                                        "node":{
-                                                                            "noteId":"i87UGfd"
-                                                                        }
-                                                                    }
-                                                                ]
-                                                            }
-                                                        }
-                                                    }
-                                                ]
-                                            }
-                                        }
-                                    }
-                                ]
-                            }
+                            "id":"5"
                         }
                     }
                 ]
@@ -376,6 +343,19 @@ Making Calls
     ```
   </TabItem>
 </Tabs>
+
+
+:::tip["Duplicate entry" error]
+
+Double-creating a user with the same OIDC ID _should_ cause error, because this field is the
+[sub](https://www.oauth.com/oauth2-servers/signing-in-with-google/verifying-the-user-info/) field of OAuth
+mechanism.
+
+If our paid backend throws the following error, this means we are hitting the case describe above
+
+![Error loading duplicate-key-error.png](./img/duplicate-key-error.png)
+
+:::
 
 [GraphQL]: https://graphql.org/
 

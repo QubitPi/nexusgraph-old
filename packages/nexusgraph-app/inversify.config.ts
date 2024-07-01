@@ -51,9 +51,10 @@ if (process.env.NLP_CLIENT == "TheresaClient") {
  * client has already bound, this method does nothing.
  *
  * @param userId  The provided binding value for {@link TYPES.userId}
+ * @param userPrimaryKey  The provided binding value for {@link TYPES.userPrimaryKey}
  * @param accessToken  The provided binding value for {@link TYPES.accessToken}
  */
-const bindGraphClient = (userId: string, accessToken: string) => {
+const bindGraphClient = (userId: string, userPrimaryKey: number, accessToken: string) => {
   if (container.isBound(TYPES.GraphApiClient)) {
     // Re-binding causes "Ambiguous match found for serviceIdentifier: Symbol(GraphClient)" error,
     // so we bind it only once
@@ -61,6 +62,7 @@ const bindGraphClient = (userId: string, accessToken: string) => {
   }
 
   container.bind<string>(TYPES.userId).toConstantValue(userId);
+  container.bind<number>(TYPES.userPrimaryKey).toConstantValue(userPrimaryKey);
   container.bind<string>(TYPES.accessToken).toConstantValue(accessToken);
 
   if (process.env.GRAPH_API_CLIENT == "AstraiosGraphClient") {

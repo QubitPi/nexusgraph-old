@@ -49,7 +49,7 @@ export default function DevApp(props: DevAppProps): JSX.Element {
     })
   );
 
-  bindGraphClient(devUserId, devToken);
+  bindGraphClient(devUserId, Number(devUserId), devToken);
   const graphClient = container.get<GraphClient>(TYPES.GraphApiClient);
   props.initReduxStore(devUserId, graphClient, dispatch);
 
