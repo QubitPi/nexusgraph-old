@@ -19,7 +19,7 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 
 import * as Sentry from "@sentry/react";
-import { GraphClient } from "nexusgraph-db";
+import { GraphClient, postGraphQuery } from "nexusgraph-db";
 import { GraphClientContext } from "nexusgraph-db/src/Contexts";
 import { updateOAuthState } from "nexusgraph-redux";
 import { bindGraphClient, container } from "../inversify.config";
@@ -30,6 +30,48 @@ import { StyledSpinner } from "./styled";
 interface ProdAppProps {
   initReduxStore: (userId: string, graphClient: GraphClient, dispatch: any) => void;
 }
+
+const getUserPrimaryKeyId = (oidcId: string, accessToken: string): Promise<number | undefined> => {
+  return postGraphQuery(
+    `
+    {
+      user(filter: "oidcId==\"${oidcId}\"") {
+        edges {
+          node {
+            id
+          }
+        }
+      }
+    }
+    `,
+    accessToken
+  ).then((response) => {
+    if (response.data.data.user.edges[0] == null) {
+      return undefined;
+    }
+
+    return response.data.data.user.edges[0].node.id;
+  });
+};
+
+const createUser = (oidcId: string, accessToken: string): Promise<number> => {
+  return postGraphQuery(
+    `
+    mutation {
+       user(op: UPSERT, data: {oidcId: "oidcId==\"${oidcId}\""}) {
+          edges {
+             node {
+                id
+             }
+          }
+       }
+    }
+    `,
+    accessToken
+  ).then((response) => {
+    return response.data.data.user.edges[0].node.id;
+  });
+};
 
 /**
  * The {@link ProdApp} involves OAuth2 authentication and authorization.
@@ -58,23 +100,34 @@ export default function ProdApp(props: ProdAppProps): JSX.Element {
       if (isAuthenticated) {
         const logtoApiResource = process.env.LOGTO_API_RESOURCE_IDENTIFIER as string;
         getAccessToken(logtoApiResource)
-          .then((token: any) => {
+          .then((accessToken: any) => {
             fetchUserInfo().then((userInfo: any) => {
+              const userId = userInfo["sub"];
+
               dispatch(
                 updateOAuthState({
-                  accessToken: token,
-                  userInfo: { sub: userInfo["sub"] },
+                  accessToken: accessToken,
+                  userInfo: { sub: userId },
                 })
               );
 
-              const userId = userInfo["sub"];
-              const accessToken = token;
+              const initGraphClient = (userPK: number) => {
+                bindGraphClient(userId, userPK, accessToken);
+                const graphClient: GraphClient = container.get<GraphClient>(TYPES.GraphApiClient);
+                props.initReduxStore(userId, graphClient, dispatch);
 
-              bindGraphClient(userId, accessToken);
-              const graphClient: GraphClient = container.get<GraphClient>(TYPES.GraphApiClient);
-              props.initReduxStore(userId, graphClient, dispatch);
+                setGraphClient(graphClient);
+              };
 
-              setGraphClient(graphClient);
+              getUserPrimaryKeyId(userId, accessToken).then((userPK) => {
+                if (userPK == undefined) {
+                  createUser(userId, accessToken).then((userPK) => {
+                    initGraphClient(userPK);
+                  });
+                } else {
+                  initGraphClient(userPK);
+                }
+              });
             });
           })
           .catch((error) => {

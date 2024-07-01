@@ -72,13 +72,35 @@ const RESPONSE_SCHEMA = `
   }
 `;
 
+export const postGraphQuery = (query: string, accessToken: string): Promise<any> => {
+  return axios.post(GRAPH_API_ENDPOINT, { query: query }, getHeaders(accessToken)).then((response) => {
+    return response;
+  });
+};
+
+export const getHeaders = (accessToken: string): object => {
+  return {
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + accessToken,
+    },
+  };
+};
+
 @injectable()
 export class AstraiosGraphClient implements GraphClient {
+  private _userPrimaryKey: number;
   private _userId;
   private _accessToken;
 
-  public constructor(@inject(TYPES.userId) userId: string, @inject(TYPES.accessToken) accessToken: string) {
+  public constructor(
+    @inject(TYPES.userId) userId: string,
+    @inject(TYPES.userPrimaryKey) userPrimaryKey: number,
+    @inject(TYPES.accessToken) accessToken: string
+  ) {
     this._userId = userId;
+    this._userPrimaryKey = userPrimaryKey;
     this._accessToken = accessToken;
   }
 
@@ -93,7 +115,7 @@ export class AstraiosGraphClient implements GraphClient {
   }
 
   public getGraphById(graphId: number): Promise<Graph> {
-    return this.postGraphQuery(
+    return postGraphQuery(
       `
       {
         graph(ids:["${graphId}"]) {
@@ -102,14 +124,15 @@ export class AstraiosGraphClient implements GraphClient {
       }
     
       ${RESPONSE_FRAGMENT}
-      `
+      `,
+      this._accessToken
     ).then((response) => {
       return this.toGraph(response);
     });
   }
 
   public deleteGraphById(graphId: number): Promise<Graph> {
-    return this.postGraphQuery(
+    return postGraphQuery(
       `
       mutation {
         graph(op:DELETE, ids: ["${graphId}"]) {
@@ -121,12 +144,13 @@ export class AstraiosGraphClient implements GraphClient {
           }
         }
       }
-      `
+      `,
+      this._accessToken
     );
   }
 
   public getGraphListMetaDataByUserId(userId: string): Promise<GraphMetaData[]> {
-    return this.postGraphQuery(
+    return postGraphQuery(
       `
       query getGraphListMetaDataByUserId {
         graph(filter:"userId==${userId}") {
@@ -138,7 +162,8 @@ export class AstraiosGraphClient implements GraphClient {
           }
         }
       }
-      `
+      `,
+      this._accessToken
     ).then((response) => {
       return response.data.data.graph.edges.map((node: { node: any }) => {
         const metadata = node.node;
@@ -150,25 +175,9 @@ export class AstraiosGraphClient implements GraphClient {
     });
   }
 
-  private postGraphQuery(query: string): Promise<any> {
-    return axios.post(GRAPH_API_ENDPOINT, { query: query }, this.getHeaders()).then((response) => {
-      return response;
-    });
-  }
-
-  private getHeaders() {
-    return {
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + this._accessToken,
-      },
-    };
-  }
-
   private saveOrUpdateNodes(nodes: Node[]): Promise<Map<number, string>> {
     const idMap: Map<number, string> = new Map();
-    return this.postGraphQuery(
+    return postGraphQuery(
       `
       mutation {
           node(op:UPSERT data:${nodes}) {
@@ -179,7 +188,8 @@ export class AstraiosGraphClient implements GraphClient {
               }
           }
       }
-      `
+      `,
+      this._accessToken
     ).then((response) => {
       const createdNodeIds = response.data.data.node.edges.map((node: { node: { id: any } }) => {
         return node.node.id;
@@ -204,7 +214,7 @@ export class AstraiosGraphClient implements GraphClient {
     });
 
     const idMap: Map<number, string> = new Map();
-    return this.postGraphQuery(
+    return postGraphQuery(
       `
       mutation {
         link(
@@ -218,7 +228,8 @@ export class AstraiosGraphClient implements GraphClient {
             }
         }
     }
-      `
+      `,
+      this._accessToken
     ).then((response) => {
       const createdLinkIds = response.data.data.link.edges.map((node: { node: { id: any } }) => {
         return node.node.id;
@@ -245,7 +256,7 @@ export class AstraiosGraphClient implements GraphClient {
       };
     });
 
-    return this.postGraphQuery(
+    return postGraphQuery(
       `
       mutation {
         graph(
@@ -262,7 +273,8 @@ export class AstraiosGraphClient implements GraphClient {
       }
 
       ${RESPONSE_FRAGMENT}
-      `
+      `,
+      this._accessToken
     );
   }
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-export { AstraiosGraphClient } from "./src/graph/astraios/AstraiosGraphClient";
+export { AstraiosGraphClient, getHeaders, postGraphQuery } from "./src/graph/astraios/AstraiosGraphClient";
 export type { GraphClient } from "./src/graph/GraphClient";
 export { JsonGraphQLServerClient } from "./src/graph/json-graphql-server/JsonGraphQLServerClient";
 export { usePersistAndRenderGraph, usePersistGraph } from "./src/hooks";
