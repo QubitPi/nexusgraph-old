@@ -17,60 +17,11 @@
 import axios from "axios";
 import { inject, injectable } from "inversify";
 import TYPES from "nexusgraph-app/types";
-import { Graph, GraphMetaData, Link, Node } from "nexusgraph-redux";
+import { Graph, GraphMetaData } from "nexusgraph-redux";
 import "reflect-metadata";
 import { GraphClient } from "../GraphClient";
 
 const GRAPH_API_ENDPOINT = process.env.GRAPH_API_ENDPOINT as string;
-
-const RESPONSE_FRAGMENT = `
-  fragment nodeAttributes on Node {
-    id
-    noteId
-    fields
-  }
-`;
-
-const RESPONSE_SCHEMA = `
-  edges {
-    node {
-        id
-        userId
-        name
-        nodes {
-            edges {
-                node {
-                    ...nodeAttributes
-                }
-            }
-        }
-        links {
-            edges {
-                node {
-                    id
-                    sourceNode {
-                        edges {
-                            node {
-                                ...nodeAttributes
-                            }
-                        }
-                    }
-                    targetNode {
-                        edges {
-                            node {
-                                ...nodeAttributes
-                            }
-                        }
-                    }
-                    fields
-                }
-            }
-        }
-        dateCreated
-        dateUpdated
-    }
-  }
-`;
 
 export const postGraphQuery = (query: string, accessToken: string): Promise<any> => {
   return axios.post(GRAPH_API_ENDPOINT, { query: query }, getHeaders(accessToken)).then((response) => {
@@ -105,25 +56,60 @@ export class AstraiosGraphClient implements GraphClient {
   }
 
   public saveOrUpdate(graph: Graph): Promise<Graph> {
-    return this.saveOrUpdateNodes(graph.nodes).then((nodeIdMap) => {
-      return this.saveOrUpdateLinks(graph.links, nodeIdMap).then((linkIdMap) => {
-        return this.saveOrUpdateGraph(graph, nodeIdMap, linkIdMap).then((response) => {
-          return this.toGraph(response);
-        });
-      });
-    });
+    return graph.id == null ? this.create(graph) : this.update(graph);
   }
 
   public getGraphById(graphId: number): Promise<Graph> {
     return postGraphQuery(
       `
       {
-        graph(ids:["${graphId}"]) {
-            ${RESPONSE_SCHEMA}
+        graph(ids: ["${graphId}"]) {
+          edges {
+            node {
+              id
+              name
+              sourceNodes {
+                edges {
+                  node {
+                    id
+                    onCanvasId
+                    fields
+                    outgoingLinks {
+                      edges {
+                        node {
+                          id
+                          onCanvasId
+                          fields
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+              targetNodes {
+                edges {
+                  node {
+                    id
+                    onCanvasId
+                    fields
+                    incidentLinks {
+                      edges {
+                        node {
+                          id
+                          onCanvasId
+                          fields
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+              createTime
+              updateTime
+            }
+          }
         }
       }
-    
-      ${RESPONSE_FRAGMENT}
       `,
       this._accessToken
     ).then((response) => {
@@ -175,104 +161,169 @@ export class AstraiosGraphClient implements GraphClient {
     });
   }
 
-  private saveOrUpdateNodes(nodes: Node[]): Promise<Map<number, string>> {
-    const idMap: Map<number, string> = new Map();
+  private create(graph: Graph): Promise<Graph> {
+    const sourceNodes = graph.nodes.map((node) => {
+      return {
+        ...node,
+        outgoingLinks: graph.links
+          .filter((link) => link.source == node.onCanvasId)
+          .map((match) => {
+            return {
+              onCanvasId: match.onCanvasId,
+              fields: match.fields,
+            };
+          }),
+      };
+    });
+    const targetNodes = graph.nodes.map((node) => {
+      return {
+        ...node,
+        incidentLinks: graph.links
+          .filter((link) => link.target == node.onCanvasId)
+          .map((match) => {
+            return {
+              onCanvasId: match.onCanvasId,
+              fields: match.fields,
+            };
+          }),
+      };
+    });
     return postGraphQuery(
       `
       mutation {
-          node(op:UPSERT data:${nodes}) {
-              edges {
+        user(op: UPSERT, data: {id: ${this._userPrimaryKey}, oidcId: "${this._userId}"}) {
+          edges {
+            node {
+              graphs(op: UPSERT, data: {name: "${graph.name}"}) {
+                edges {
                   node {
-                      id
-                  }
-              }
-          }
-      }
-      `,
-      this._accessToken
-    ).then((response) => {
-      const createdNodeIds = response.data.data.node.edges.map((node: { node: { id: any } }) => {
-        return node.node.id;
-      });
-
-      createdNodeIds.forEach((value: string, idx: number) => {
-        idMap.set(nodes[idx].id as number, value);
-      });
-
-      return idMap;
-    });
-  }
-
-  private saveOrUpdateLinks(links: Link[], nodeIdMap: Map<number, string>) {
-    const linkEntities = links.map((link) => {
-      return {
-        id: link.id,
-        sourceNode: link.source,
-        targetNode: link.target,
-        fields: link.fields,
-      };
-    });
-
-    const idMap: Map<number, string> = new Map();
-    return postGraphQuery(
-      `
-      mutation {
-        link(
-            op:UPSERT
-            data:${linkEntities}
-        ) {
-            edges {
-                node {
                     id
+                    name
+                    sourceNodes(op: UPSERT, data: ${sourceNodes}) {
+                      edges {
+                        node {
+                          id
+                          onCanvasId
+                          fields
+                          outgoingLinks {
+                            edges {
+                              node {
+                                id
+                                onCanvasId
+                                fields
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                    targetNodes(op: UPSERT, data: ${targetNodes}) {
+                      edges {
+                        node {
+                          id
+                          onCanvasId
+                          fields
+                          incidentLinks {
+                            edges {
+                              node {
+                                id
+                                onCanvasId
+                                fields
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
                 }
+              }
             }
+          }
         }
-    }
+      }
       `,
       this._accessToken
-    ).then((response) => {
-      const createdLinkIds = response.data.data.link.edges.map((node: { node: { id: any } }) => {
-        return node.node.id;
-      });
-
-      createdLinkIds.forEach((value: string, idx: number) => {
-        idMap.set(links[idx].id as number, value);
-      });
-
-      return idMap;
-    });
+    );
   }
 
-  private saveOrUpdateGraph(graph: Graph, nodeIdMap: Map<number, string>, linkIdMap: Map<number, string>) {
-    const nodes = Array.from(nodeIdMap, ([key, dbId]) => {
+  private update(graph: Graph): Promise<Graph> {
+    const sourceNodes = graph.nodes.map((node) => {
       return {
-        id: dbId,
+        ...node,
+        outgoingLinks: graph.links
+          .filter((link) => link.source == node.onCanvasId)
+          .map((match) => {
+            return {
+              id: match.id,
+              onCanvasId: match.onCanvasId,
+              fields: match.fields,
+            };
+          }),
       };
     });
-
-    const links = Array.from(linkIdMap, ([key, dbId]) => {
+    const targetNodes = graph.nodes.map((node) => {
       return {
-        id: dbId,
+        ...node,
+        incidentLinks: graph.links
+          .filter((link) => link.target == node.onCanvasId)
+          .map((match) => {
+            return {
+              id: match.id,
+              onCanvasId: match.onCanvasId,
+              fields: match.fields,
+            };
+          }),
       };
     });
-
     return postGraphQuery(
       `
       mutation {
-        graph(
-            op: UPSERT
-            data:{
-                userId: "${this._userId}",
-                name: "${graph.name}",
-                nodes: ${nodes},
-                links: ${links}
+        graph(op: UPSERT, data: {id: ${graph.id}, name: "${graph.name}"}) {
+          edges {
+            node {
+              id
+              name
+              sourceNodes(op: UPSERT, data: ${sourceNodes}) {
+                edges {
+                  node {
+                    id
+                    onCanvasId
+                    fields
+                    outgoingLinks {
+                      edges {
+                        node {
+                          id
+                          onCanvasId
+                          fields
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+              targetNodes(op: UPSERT, data: ${targetNodes}) {
+                edges {
+                  node {
+                    id
+                    onCanvasId
+                    fields
+                    incidentLinks {
+                      edges {
+                        node {
+                          id
+                          onCanvasId
+                          fields
+                        }
+                      }
+                    }
+                  }
+                }
+              }
             }
-        ) {
-            ${RESPONSE_SCHEMA}
+          }
         }
       }
-
-      ${RESPONSE_FRAGMENT}
       `,
       this._accessToken
     );
@@ -281,20 +332,35 @@ export class AstraiosGraphClient implements GraphClient {
   private toGraph(response: any): Graph {
     return response.data.data.graph.edges.map((node: { node: any }) => {
       const graph = node.node;
-      const nodes: any[] = graph.nodes.edges.map((node: { node: any }) => {
+
+      const sourceNodes = graph.sourceNodes.edges.map((node: { node: any }) => {
         return {
           id: node.node.id,
+          onCanvasId: node.node.onCanvasId,
           fields: JSON.parse(node.node.fields),
         };
       });
-      const links: any[] = graph.links.edges.map((node: { node: any }) => {
-        const link = node.node;
+      const targetNodes = graph.sourceNodes.edges.map((node: { node: any }) => {
         return {
-          id: link.id,
-          source: link.sourceNode.edges[0].node.id,
-          target: link.targetNode.edges[0].node.id,
-          fields: JSON.parse(link.fields),
+          id: node.node.id,
+          onCanvasId: node.node.onCanvasId,
+          fields: JSON.parse(node.node.fields),
         };
+      });
+      const nodes = [...sourceNodes, ...targetNodes].filter((node, idx, self) => {
+        idx ===
+          self.findIndex((it) => {
+            it.onCanvasId === node.onCanvasId;
+          });
+      });
+
+      const outgoingLinks = graph.sourceNodes.edges.map((node: { outgoingLinks: any }) => node.outgoingLinks);
+      const incidentLinks = graph.targetNodes.edges.map((node: { incidentLinks: any }) => node.incidentLinks);
+      const links = [...outgoingLinks, ...incidentLinks].filter((link, idx, self) => {
+        idx ===
+          self.findIndex((it) => {
+            it.onCanvasId === link.onCanvasId;
+          });
       });
 
       return {
