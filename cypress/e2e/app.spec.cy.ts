@@ -16,7 +16,7 @@
 
 describe("'Integration'-style tests", () => {
   beforeEach(() => {
-    cy.openApp().deleteAllGraphs();
+    cy.openApp();
   });
 
   it("deleting graph when there is only 1 graph", () => {

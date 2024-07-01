@@ -16,7 +16,7 @@
 
 describe("Graph title", () => {
   beforeEach(() => {
-    cy.openApp().deleteAllGraphs();
+    cy.openApp();
   });
 
   it("if user has no graph (e.g. first-time login or graph list is empty), title section is not shown", () => {

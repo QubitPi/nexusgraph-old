@@ -17,7 +17,7 @@
 describe("Graph visualization tests", () => {
   beforeEach(() => {
     cy.openApp();
-    cy.deleteAllGraphs();
+    cy;
   });
 
   it("double clicking the empty canvas should generate a fully-hydrated graph", () => {

@@ -16,7 +16,7 @@
 
 describe("i18n", () => {
   beforeEach(() => {
-    cy.openApp().deleteAllGraphs();
+    cy.openApp();
   });
 
   it("supports English", () => {
