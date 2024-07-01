@@ -18,7 +18,7 @@ import "@argos-ci/cypress/support";
 
 describe("Argos tests", () => {
   beforeEach(() => {
-    cy.openApp().deleteAllGraphs();
+    cy.openApp();
   });
 
   it("test", () => {

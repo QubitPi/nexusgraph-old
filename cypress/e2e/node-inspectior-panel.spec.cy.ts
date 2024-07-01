@@ -16,7 +16,7 @@
 
 describe("Node Inspector Panel rendering", () => {
   beforeEach(() => {
-    cy.openApp().deleteAllGraphs();
+    cy.openApp();
   });
 
   it("Updating pane title instantly changes the corresponding node caption on canvas", () => {

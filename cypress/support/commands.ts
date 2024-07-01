@@ -55,18 +55,6 @@ Cypress.Commands.add("newGraph", () => {
     .should("exist");
 });
 
-Cypress.Commands.add("deleteAllGraphs", () => {
-  cy.get("body").then(($body) => {
-    const numGraphs = $body.find('[data-testid^="graphListItem-"]').length;
-
-    if (numGraphs > 0) {
-      for (let i = 0; i < numGraphs; i++) {
-        cy.get('[data-testid="deleteButton"]', { timeout: 2000 }).click({ force: true });
-      }
-    }
-  });
-});
-
 Cypress.Commands.add("setBrowserLanguage", (language, languages, acceptLanguages) => {
   cy.visit("http://localhost:3000/", {
     onBeforeLoad(win) {

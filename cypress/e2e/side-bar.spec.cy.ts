@@ -16,7 +16,7 @@
 
 describe("Side bar displays new graph button and graph list", () => {
   beforeEach(() => {
-    cy.openApp().deleteAllGraphs();
+    cy.openApp();
   });
 
   it("displays new graph button all the time", () => {
