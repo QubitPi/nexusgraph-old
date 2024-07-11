@@ -135,15 +135,21 @@ export class AstraiosGraphClient implements GraphClient {
     );
   }
 
-  public getGraphListMetaDataByUserId(userId: string): Promise<GraphMetaData[]> {
+  public getGraphListMetaDataByUserId(oidcId: string): Promise<GraphMetaData[]> {
     return postGraphQuery(
       `
-      query getGraphListMetaDataByUserId {
-        graph(filter:"userId==${userId}") {
+      {
+        user(filter: "oidcId==${oidcId}") {
           edges {
             node {
-              id
-              name
+              graphs {
+                edges {
+                  node {
+                    id
+                    name
+                  }
+                }
+              }
             }
           }
         }
@@ -151,8 +157,8 @@ export class AstraiosGraphClient implements GraphClient {
       `,
       this._accessToken
     ).then((response) => {
-      return response.data.data.graph.edges.map((node: { node: any }) => {
-        const metadata = node.node;
+      return response.data.data.user.edges[0].node.graphs.edges.map((graph: { node: any }) => {
+        const metadata = graph.node;
         return {
           id: metadata.id,
           name: metadata.name,
