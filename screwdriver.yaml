@@ -1,0 +1,63 @@
+# // Copyright 2024 Paion Data. All rights reserved.
+annotations:
+  screwdriver.cd/chainPR: false
+
+shared:
+  image: buildpack-deps:22.04-scm
+
+jobs:
+  test:
+    requires: [~pr, ~commit]
+    steps:
+      - install-node: sd-cmd exec paion-data/install-node@latest 18
+      - install-yarn: npm install -g yarn
+      - install-dependencies: yarn
+      - run-tests: yarn test
+
+  main:
+    requires: [~pr, ~commit]
+    template: paion-data/react-app-release-definition-template@latest
+    parameters:
+      ami-region:
+        value: "us-west-1"
+      ami-name:
+        value: "nexusgraph"
+      ami-build-instance-type:
+        value: "t2.micro"
+      aws-deploy-region:
+        value: "us-west-1"
+      aws-ec2-instance-type:
+        value: "t2.small"
+      instance-name:
+        value: "Paion Data Nexus Graph"
+      security-groups:
+        value: "[\"Paion Data Nexus Graph\"]"
+      domain:
+        value: "nexusgraph.io"
+      ssl-cert-base64:
+        value: "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURlVENDQXYrZ0F3SUJBZ0lTQTA2WmxpWUJvV0ZRZnQxQzhsTVRHR1MwTUFvR0NDcUdTTTQ5QkFNRE1ESXgKQ3pBSkJnTlZCQVlUQWxWVE1SWXdGQVlEVlFRS0V3MU1aWFFuY3lCRmJtTnllWEIwTVFzd0NRWURWUVFERXdKRgpOakFlRncweU5EQTNNVEF4TVRJeE5UbGFGdzB5TkRFd01EZ3hNVEl4TlRoYU1CZ3hGakFVQmdOVkJBTVREVzVsCmVIVnpaM0poY0dndWFXOHdXVEFUQmdjcWhrak9QUUlCQmdncWhrak9QUU1CQndOQ0FBUXFaUWs0b3cxNVlXbnQKWmZYdlFVMVF6emUwOGwxVzF1WHlOTHlBMTgrM05wWW91K2gzQnd0eXRma0Z6WCtNT0ZwV2JuWW92V1dBK05HbgpKb2kxV09DUW80SUNEVENDQWdrd0RnWURWUjBQQVFIL0JBUURBZ2VBTUIwR0ExVWRKUVFXTUJRR0NDc0dBUVVGCkJ3TUJCZ2dyQmdFRkJRY0RBakFNQmdOVkhSTUJBZjhFQWpBQU1CMEdBMVVkRGdRV0JCU0lGd3JmNEdKNjBHUlYKL2h4a3Z3SHg3b3lHU2pBZkJnTlZIU01FR0RBV2dCU1RKMGFZQTZsUmFJNlkxc1JDU05zanYxaVUwakJWQmdncgpCZ0VGQlFjQkFRUkpNRWN3SVFZSUt3WUJCUVVITUFHR0ZXaDBkSEE2THk5bE5pNXZMbXhsYm1OeUxtOXlaekFpCkJnZ3JCZ0VGQlFjd0FvWVdhSFIwY0RvdkwyVTJMbWt1YkdWdVkzSXViM0puTHpBWUJnTlZIUkVFRVRBUGdnMXUKWlhoMWMyZHlZWEJvTG1sdk1CTUdBMVVkSUFRTU1Bb3dDQVlHWjRFTUFRSUJNSUlCQWdZS0t3WUJCQUhXZVFJRQpBZ1NCOHdTQjhBRHVBSFVBU0xEamE5cW1SelFQNVdvQytwMHc2eHhTQWN0VzNTeUIyYnUvcXpuWWhITUFBQUdRCm5KZnFMd0FBQkFNQVJqQkVBaUFjWVlrSmVLcmtHQk15dVQxQ3lpMk10MG1GbUI4b09NZk9SczZjVndJM1dBSWcKT1lPU3NTa0JheEJ3dC9FdXZRS2xyb2xaTXpkbjEwLzZSV0dsOUo4azFpTUFkUUEvRjB0UDF5SkhXSlFkWlJ5RQp2ZzBTN1pBM2Z4K0ZhdXZCdnlpRjdQaGtiZ0FBQVpDY2wrb3ZBQUFFQXdCR01FUUNJRm10eHd4eGMySmpNUElGClVVeks4QWxvMmd4TXVlUXNBTHI3RGRMRzFnR25BaUJNemVtKzJ5cmsrWlFScXM3dkNSOVJzdE9nMmRRazdtZmkKTklidEtzQUdTakFLQmdncWhrak9QUVFEQXdOb0FEQmxBakFiaUtSOTIrOEsybVBDVWMzT083d1ZUU09lQjc4TgpweUFMb0s3UzUvUUVYQUFQSWVlekVVNTZUY1NTaDA5Q3BHQUNNUUNxYWJ6cmsyWk4xbFppaDl2azJIUjV1YWxTCmR6eCt6TXZYRW9LNldyUTVzbVdvK1Mya0tUM2t4Qnk1OVFoWGZrTT0KLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQotLS0tLUJFR0lOIENFUlRJRklDQVRFLS0tLS0KTUlJRVZ6Q0NBaitnQXdJQkFnSVJBTEJYUHBGemx5ZHcyN1NIeXpwRkt6Z3dEUVlKS29aSWh2Y05BUUVMQlFBdwpUekVMTUFrR0ExVUVCaE1DVlZNeEtUQW5CZ05WQkFvVElFbHVkR1Z5Ym1WMElGTmxZM1Z5YVhSNUlGSmxjMlZoCmNtTm9JRWR5YjNWd01SVXdFd1lEVlFRREV3eEpVMUpISUZKdmIzUWdXREV3SGhjTk1qUXdNekV6TURBd01EQXcKV2hjTk1qY3dNekV5TWpNMU9UVTVXakF5TVFzd0NRWURWUVFHRXdKVlV6RVdNQlFHQTFVRUNoTU5UR1YwSjNNZwpSVzVqY25sd2RERUxNQWtHQTFVRUF4TUNSVFl3ZGpBUUJnY3Foa2pPUFFJQkJnVXJnUVFBSWdOaUFBVFo4WjVHCmgvZ2hjV0NvSnV1aitybnEyaDI1RXFmVUp0bFJGTEZoZkhXV3Z5SUxPUi9WdnRFS1Jxb3RQRW9KaEM2K1FKVlYKNlJsQU4yWjE3VEpPZHdSSitIQjd3eGpuenZkeEVQNnNkTmdBMU8xdEhITVdNeENjT3JMcWJHTDB2YmlqZ2ZndwpnZlV3RGdZRFZSMFBBUUgvQkFRREFnR0dNQjBHQTFVZEpRUVdNQlFHQ0NzR0FRVUZCd01DQmdnckJnRUZCUWNECkFUQVNCZ05WSFJNQkFmOEVDREFHQVFIL0FnRUFNQjBHQTFVZERnUVdCQlNUSjBhWUE2bFJhSTZZMXNSQ1NOc2oKdjFpVTBqQWZCZ05WSFNNRUdEQVdnQlI1dEZubWU3Ymw1QUZ6Z0FpSXlCcFk5dW1iYmpBeUJnZ3JCZ0VGQlFjQgpBUVFtTUNRd0lnWUlLd1lCQlFVSE1BS0dGbWgwZEhBNkx5OTRNUzVwTG14bGJtTnlMbTl5Wnk4d0V3WURWUjBnCkJBd3dDakFJQmdabmdRd0JBZ0V3SndZRFZSMGZCQ0F3SGpBY29CcWdHSVlXYUhSMGNEb3ZMM2d4TG1NdWJHVnUKWTNJdWIzSm5MekFOQmdrcWhraUc5dzBCQVFzRkFBT0NBZ0VBZll0N1NpQTFzZ1dHQ0lwdW5rNDZyNEFFeElSYwpNeGtLZ1VoTmxycnYxQjIxaE9hWE4vNW1pRStMT1RicmNtVS9NOXl2QzZNVlk3MzBHTkZvTDhJaEo4ajh2ck9MCnBNWTIyT1A2YmFTMWs5WU1ydERUbHdKSG9HYnkwNFRoVFVlQkRrc1M5Uml1SHZpY1pxQmVkUWRJRjY1cFp1aHAKZURjR0JjTGlZYXNRci9FTzVneHh0THlUbWdzSFNPVlNCY0ZPbjlsZ3Y3TEVDUHE5aTdtZkgzbXB4Z3JSS1N4SApwT29aMEtYTWNCK2hIdXZsa2xIbnR2Y0kwbU1NUTBtaFlqNnF0TUZTdGtGMVJwQ0czSVBkSXdwVkNRcXU4R1Y3CnM4dWJrblJ6cyszQy9CbTE5UkZPb2lQcERrd3Z5TmZ2bVExNFhreXFxS0s1b1o4emhEMzJrRlJRa3hhOHVaU3UKaDRhVEltRnhrbnUzOXdhQnhJUlhFNGpLeGxBbVFjNFFqRlpvcTFLbVFxUWcwSi8xSkY4UmxGdkphczFWY2pMdgpZbHZVQjJ0Nm5wTzZvUWpCM2wrUE5mMERwUUg3aVV4M1d6NUFqUUNpNkwyNUZqeUUwNnE2QlovUWxtdFlkbC84ClpZYW80U1JxUEVzLzZjQWlGK1FmNXpnMlVrYVd0RHBobDFMS011VE5Mb3R2c1g5OUhQNjlWMmZhTnllZ29kUTAKTHlUQXByL3ZUMDFZUEU0NnZOc0RMZ0srNGNMNlRyekMvYTRXY21GNVNSSjkzOHpydi9kdUpITFhRSWt1NXYwKwpFd095NTlIZG0wUFQvRXIvODRkRFYwQ1NqZFIvMlh1Wk0za3B5c1NLTGdEMWNLaURBK0lSZ3VPREN4Zk85Y3lZCklnNDZ2OW1GbUJ2eUgwND0KLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo="
+      ssl-cert-key-base64:
+        value: "LS0tLS1CRUdJTiBQUklWQVRFIEtFWS0tLS0tCk1JR0hBZ0VBTUJNR0J5cUdTTTQ5QWdFR0NDcUdTTTQ5QXdFSEJHMHdhd0lCQVFRZzg4NnBnbTRJZ1F1ams2S3MKUC9OTURJdGdXVXRuK3dDOWgyV0s5M081Kzd1aFJBTkNBQVFxWlFrNG93MTVZV250WmZYdlFVMVF6emUwOGwxVwoxdVh5Tkx5QTE4KzNOcFlvdStoM0J3dHl0ZmtGelgrTU9GcFdibllvdldXQStOR25Kb2kxV09DUQotLS0tLUVORCBQUklWQVRFIEtFWS0tLS0tCg=="
+      route-53-zone-id:
+        value: "Z08521792247NCOO6R00S"
+      node-version:
+        value: "18"
+      logto-app-id:
+        value: "9pbqegk2jveej1maygwvj"
+      logto-endpoint-url:
+        value: "https://06n5lk.logto.app/"
+      logto-api-resource-identifier:
+        value: "https://api.nexusgraph.com"
+    steps:
+      - generate-dist: |
+          echo NLP_CLIENT=TheresaClient                                                                 >> .env
+          echo GRAPH_API_CLIENT=AstraiosGraphClient                                                     >> .env
+          echo GRAPH_API_ENDPOINT=https://api.nexusgraph.com/graph                                      >> .env
+          echo SKIP_SIGN_IN=false                                                                       >> .env
+          echo LOGTO_APP_ID=$(meta get parameters.logto-app-id.value)                                   >> .env
+          echo LOGTO_ENDPOINT_URL=$(meta get parameters.logto-endpoint-url.value)                       >> .env
+          echo LOGTO_API_RESOURCE_IDENTIFIER=$(meta get parameters.logto-api-resource-identifier.value) >> .env
+          echo LOGTO_SIGN_IN_CALLBACK_URL=https://$(meta get parameters.domain.value)/callback          >> .env
+          echo LOGTO_SIGN_OUT_REDIRECT_URL=https://$(meta get parameters.domain.value)                  >> .env
+          yarn
+          yarn build
