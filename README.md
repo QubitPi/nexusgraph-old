@@ -4,8 +4,6 @@ Nexus Graph <sup>![Node Version badge][node version badge] ![TS version badge][T
 <img src="https://raw.githubusercontent.com/QubitPi/nexusgraph/master/docs/static/img/logo.svg" height="300px" align="right"/>
 
 [![NPM badge][NPM badge]][NPM URL]
-[![GitHub Workflow Status][GitHub Workflow Status badge]][GitHub Workflow Status URL]
-![Last Commit][GitHub Last Commit badge]
 [![License Badge][license badge]][license badge URL]
 [![Covered by Argos Visual Testing][Argos badge]][Argos URL]
 
@@ -42,9 +40,5 @@ The use and distribution terms for [nexusgraph][nexusgraph documentation] are co
 [NPM badge]: https://img.shields.io/npm/v/nexusgraph?logo=npm&style=for-the-badge
 [NPM URL]: https://www.npmjs.com/package/nexusgraph
 [node version badge]: https://img.shields.io/badge/NODE-18-339933?logo=Node.js&logoColor=white&labelColor=66cc33&style=for-the-badge
-
-[GitHub Last Commit badge]: https://img.shields.io/github/last-commit/QubitPi/nexusgraph/master?logo=github&style=for-the-badge
-[GitHub Workflow Status badge]: https://img.shields.io/github/actions/workflow/status/QubitPi/nexusgraph/ci-cd.yml?branch=master&logo=github&style=for-the-badge
-[GitHub Workflow Status URL]: https://github.com/QubitPi/nexusgraph/actions/workflows/ci-cd.yml
 
 [TS version badge]: https://img.shields.io/badge/TypeScript-≥4.6.2-3178C6?style=for-the-badge&logo=typescript&logoColor=white&labelColor=358EF1
