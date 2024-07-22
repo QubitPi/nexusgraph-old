@@ -35,7 +35,7 @@ const getUserPrimaryKeyId = (oidcId: string, accessToken: string): Promise<numbe
   return postGraphQuery(
     `
     {
-      user(filter: "oidcId==\"${oidcId}\"") {
+      user(filter: "oidcId==${oidcId}") {
         edges {
           node {
             id
@@ -46,7 +46,7 @@ const getUserPrimaryKeyId = (oidcId: string, accessToken: string): Promise<numbe
     `,
     accessToken
   ).then((response) => {
-    if (response.data.data.user.edges[0] == null) {
+    if (response.data.data.user.edges[0] == undefined) {
       return undefined;
     }
 
@@ -58,7 +58,7 @@ const createUser = (oidcId: string, accessToken: string): Promise<number> => {
   return postGraphQuery(
     `
     mutation {
-       user(op: UPSERT, data: {oidcId: "oidcId==\"${oidcId}\""}) {
+       user(op: UPSERT, data: {oidcId: "${oidcId}"}) {
           edges {
              node {
                 id
