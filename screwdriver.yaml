@@ -1,0 +1,14 @@
+# // Copyright 2024 Paion Data. All rights reserved.
+annotations:
+  screwdriver.cd/chainPR: true
+
+shared:
+  image: buildpack-deps:22.04-scm
+
+jobs:
+  tests:
+    requires: [~pr, ~commit]
+    steps:
+      - install-node: sd-cmd exec paion-data/install-node@latest 18
+      - install-yarn: npm install -g yarn
+      - run-unit-tests: yarn && yarn test
