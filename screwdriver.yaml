@@ -38,7 +38,7 @@ jobs:
           yarn start &
           yarn wait-on-dev
           yarn e2e
-      - run-e2e-in-dev-mode: |
+      - run-e2e-in-prod-mode: |
           yarn build
           npm install -g serve
           serve -s dist -l 3000 &
