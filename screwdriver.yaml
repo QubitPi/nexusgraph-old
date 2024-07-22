@@ -4,27 +4,31 @@ annotations:
 
 shared:
   image: buildpack-deps:22.04-scm
-  steps:
-    - install-node: sd-cmd exec paion-data/install-node@latest 18
-    - install-yarn: npm install -g yarn
-    - install-dependencies: yarn
 
 jobs:
   code-style:
     requires: [~pr, ~commit]
     steps:
+      - install-node: sd-cmd exec paion-data/install-node@latest 18
+      - install-yarn: npm install -g yarn
+      - install-dependencies: yarn
       - run-prettier: yarn prettier . --check
       - run-eslint: yarn eslint .
 
   tests:
     requires: [code-style]
     steps:
+      - install-node: sd-cmd exec paion-data/install-node@latest 18
+      - install-yarn: npm install -g yarn
+      - install-dependencies: yarn
       - run-unit-tests: yarn test
 
   e2e-tests:
     requires: [~pr, ~commit]
-    image: cypress/browsers:node-18.20.3-chrome-125.0.6422.141-1-ff-126.0.1-edge-125.0.2535.85-1
     steps:
+      - install-node: sd-cmd exec paion-data/install-node@latest 18
+      - install-yarn: npm install -g yarn
+      - install-dependencies: yarn
       - load-env-file: mv .env.test .env
       - start-test-nlp-service: |
           yarn start:ai &
