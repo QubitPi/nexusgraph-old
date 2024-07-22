@@ -25,6 +25,7 @@ jobs:
 
   e2e-tests:
     # requires: [tests]
+    requires: [~pr, ~commit]
     steps:
       - install-node: sd-cmd exec paion-data/install-node@latest 18
       - install-yarn: npm install -g yarn
