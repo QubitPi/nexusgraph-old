@@ -6,8 +6,17 @@ shared:
   image: buildpack-deps:22.04-scm
 
 jobs:
-  tests:
+  code-style:
     requires: [~pr, ~commit]
+    steps:
+      - install-node: sd-cmd exec paion-data/install-node@latest 18
+      - install-yarn: npm install -g yarn
+      - install-dependencies: yarn
+      - run-prettier: yarn prettier . --check
+      - run-eslint: yarn eslint .
+
+  tests:
+    requires: [code-style]
     steps:
       - install-node: sd-cmd exec paion-data/install-node@latest 18
       - install-yarn: npm install -g yarn
