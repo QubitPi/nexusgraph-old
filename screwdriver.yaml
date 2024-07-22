@@ -4,32 +4,27 @@ annotations:
 
 shared:
   image: buildpack-deps:22.04-scm
+  steps:
+    - install-node: sd-cmd exec paion-data/install-node@latest 18
+    - install-yarn: npm install -g yarn
+    - install-dependencies: yarn
 
 jobs:
   code-style:
     requires: [~pr, ~commit]
     steps:
-      - install-node: sd-cmd exec paion-data/install-node@latest 18
-      - install-yarn: npm install -g yarn
-      - install-dependencies: yarn
       - run-prettier: yarn prettier . --check
       - run-eslint: yarn eslint .
 
   tests:
     requires: [code-style]
     steps:
-      - install-node: sd-cmd exec paion-data/install-node@latest 18
-      - install-yarn: npm install -g yarn
-      - install-dependencies: yarn
       - run-unit-tests: yarn test
 
   e2e-tests:
-    # requires: [tests]
     requires: [~pr, ~commit]
+    image: cypress/browsers:node-18.20.3-chrome-125.0.6422.141-1-ff-126.0.1-edge-125.0.2535.85-1
     steps:
-      - install-node: sd-cmd exec paion-data/install-node@latest 18
-      - install-yarn: npm install -g yarn
-      - install-dependencies: yarn
       - load-env-file: mv .env.test .env
       - start-test-nlp-service: |
           yarn start:ai &
@@ -39,7 +34,13 @@ jobs:
           cd scripts
           timeout 1m bash -c 'until ./remove-graph.sh; do sleep 3; done'
           cd ../
-      - run-e2e: |
+      - run-e2e-in-dev-mode: |
           yarn start &
           yarn wait-on-dev
-          yarn e2e --spec cypress/e2e/app.spec.cy.ts
+          yarn e2e
+      - run-e2e-in-dev-mode: |
+          yarn build
+          npm install -g serve
+          serve -s dist -l 3000 &
+          yarn wait-on-prod
+          yarn e2e
