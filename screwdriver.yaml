@@ -20,4 +20,25 @@ jobs:
     steps:
       - install-node: sd-cmd exec paion-data/install-node@latest 18
       - install-yarn: npm install -g yarn
-      - run-unit-tests: yarn && yarn test
+      - install-dependencies: yarn
+      - run-unit-tests: yarn test
+
+  e2e-tests:
+    # requires: [tests]
+    steps:
+      - install-node: sd-cmd exec paion-data/install-node@latest 18
+      - install-yarn: npm install -g yarn
+      - install-dependencies: yarn
+      - load-env-file: mv .env.test .env
+      - start-test-nlp-service: |
+          yarn start:ai &
+          yarn wait-on-ai
+      - start-test-graph-api-service: |
+          yarn start:graph-api &
+          cd scripts
+          timeout 1m bash -c 'until ./remove-graph.sh; do sleep 3; done'
+          cd ../
+      - run-e2e: |
+          yarn start &
+          yarn wait-on-dev
+          yarn e2e --spec cypress/e2e/app.spec.cy.ts
