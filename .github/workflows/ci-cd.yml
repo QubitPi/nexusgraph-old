@@ -39,18 +39,18 @@ jobs:
           access_token: ${{ github.token }}
 
   yml-md-style:
-    uses: QubitPi/hashicorp-aws/.github/workflows/yml-md-style-and-link-checks.yml@master
+    uses: QubitPi/hashistack/.github/workflows/yml-md-style-and-link-checks.yml@master
 
   code-style:
     name: React & TS Code Style Check
-    uses: QubitPi/hashicorp-aws/.github/workflows/ui-code-style.yml@master
+    uses: QubitPi/hashistack/.github/workflows/ui-code-style.yml@master
     with:
       node-version: 18
 
   unit-tests:
     name: Unit Tests
     needs: [yml-md-style, code-style]
-    uses: QubitPi/hashicorp-aws/.github/workflows/ui-unit-test.yml@master
+    uses: QubitPi/hashistack/.github/workflows/ui-unit-test.yml@master
     with:
       node-version: 18
 
@@ -126,7 +126,7 @@ jobs:
           cd scripts
           timeout 1m bash -c 'until ./remove-graph.sh; do sleep 3; done'
           cd ../
-      - uses: QubitPi/hashicorp-aws/.github/actions/cypress-e2e@master
+      - uses: QubitPi/hashistack/.github/actions/cypress-e2e@master
         with:
           node-version: ${{ env.NODE_VERSION }}
           start-strategy: ${{ matrix.start_strategy }}
@@ -229,7 +229,7 @@ jobs:
     if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     steps:
-      - uses: QubitPi/hashicorp-aws/.github/actions/npm-release@master
+      - uses: QubitPi/hashistack/.github/actions/npm-release@master
         with:
           user: ${{ env.USER }}
           email: ${{ env.EMAIL }}
