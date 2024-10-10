@@ -23,7 +23,7 @@ const config: Config = {
   tagline: "A Machine-Learning-Backed Knowledge Management Tool",
   favicon: "img/favicon.ico",
 
-  url: "https://nexusgraph.qubitpi.org/",
+  url: "https://docs.nexusgraph.com/",
   baseUrl: "/",
   organizationName: "QubitPi",
   projectName: "nexusgraph",
@@ -79,7 +79,7 @@ const config: Config = {
           label: "Documentations",
         },
         {
-          href: "https://nexusgraph.qubitpi.org/api",
+          href: "https://docs.nexusgraph.com/api",
           label: "API",
           position: "left",
         },

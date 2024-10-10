@@ -30,7 +30,7 @@ const UPDATE_GRAPH = GRAPH + "/UPDATE_GRAPH";
  *   value the property value
  *
  * See
- * [documentation](https://nexusgraph.qubitpi.org/docs/data-model#separating-databases-primary-key-and-business-object-identifier)
+ * [documentation](https://docs.nexusgraph.com/docs/data-model#separating-databases-primary-key-and-business-object-identifier)
  * for more details on Primary Key v.s. Natural Key
  */
 export interface Node {
@@ -51,7 +51,7 @@ export interface Node {
  *   respectively
  *
  * See
- * [documentation](https://nexusgraph.qubitpi.org/docs/data-model#separating-databases-primary-key-and-business-object-identifier)
+ * [documentation](https://docs.nexusgraph.com/docs/data-model#separating-databases-primary-key-and-business-object-identifier)
  * for more details on Primary Key v.s. Natural Key
  */
 export interface Link {
