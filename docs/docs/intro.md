@@ -19,7 +19,7 @@ In addition, to make development of nexusgraph a better experience, we've also d
 TypeDoc. Developers of nexusgraph can find useful info at ourAPI documentation page
 
 [documentation source]: https://github.com/QubitPi/nexusgraph/tree/master/docs
-[documentation]: https://nexusgraph.qubitpi.org/
+[documentation]: https://docs.nexusgraph.com/
 [Docusaurus]: https://docusaurus.io/
 [Docusaurus Build]: https://docusaurus.io/docs/cli#docusaurus-build-sitedir
 
